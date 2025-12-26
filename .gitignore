@@ -23,3 +23,7 @@ data.json
 
 # Claude Code
 !.mcp.json
+!.claude/**/*
+.claude/*.local.json
+!CLAUDE.md
+CLAUDE.local.md
