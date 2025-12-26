@@ -2,6 +2,50 @@
 
 import type { SupportedLanguage } from './i18n';
 
+// ==================== Quick Actions ====================
+
+/**
+ * Quick Action 사용자 설정 인터페이스
+ * 각 빠른 액션 버튼의 활성화 상태와 커스텀 프롬프트를 저장
+ */
+export interface QuickActionConfig {
+	id: string;
+	enabled: boolean;
+	customPrompt?: string;
+}
+
+/**
+ * Quick Action 정의 인터페이스 (읽기 전용)
+ * 빠른 액션 버튼의 정적 정의 정보
+ */
+export interface QuickActionDefinition {
+	id: string;
+	icon: string;
+	labelKey: string;
+	promptKey: string;
+}
+
+/**
+ * 빠른 액션 정의 목록
+ * 4개의 기본 빠른 액션 버튼 정의
+ */
+export const QUICK_ACTION_DEFINITIONS: QuickActionDefinition[] = [
+	{ id: 'summarize', icon: 'file-text', labelKey: 'quickAction.summarize', promptKey: 'quickAction.summarizePrompt' },
+	{ id: 'improve', icon: 'edit', labelKey: 'quickAction.improve', promptKey: 'quickAction.improvePrompt' },
+	{ id: 'analyze', icon: 'search', labelKey: 'quickAction.analyze', promptKey: 'quickAction.analyzePrompt' },
+	{ id: 'translate', icon: 'languages', labelKey: 'quickAction.translate', promptKey: 'quickAction.translatePrompt' },
+];
+
+/**
+ * Quick Actions 기본 설정 생성
+ * 모든 버튼이 활성화된 상태로 시작
+ */
+export const DEFAULT_QUICK_ACTIONS: QuickActionConfig[] = QUICK_ACTION_DEFINITIONS.map(def => ({
+	id: def.id,
+	enabled: true,
+	customPrompt: undefined,
+}));
+
 export interface NoteSageSettings {
 	apiKey?: string;
 	model?: string;
@@ -19,6 +63,8 @@ export interface NoteSageSettings {
 	conversationSavePath?: string;
 	// 다국어 지원 설정
 	language?: SupportedLanguage;
+	// Quick Actions 설정
+	quickActions?: QuickActionConfig[];
 }
 
 export const DEFAULT_SETTINGS: NoteSageSettings = {
@@ -37,7 +83,9 @@ export const DEFAULT_SETTINGS: NoteSageSettings = {
 	autoSaveConversations: false,
 	conversationSavePath: 'AI-Chats',
 	// 다국어 지원 기본값
-	language: 'auto'
+	language: 'auto',
+	// Quick Actions 기본값
+	quickActions: DEFAULT_QUICK_ACTIONS
 };
 
 // 사용 가능한 모델 목록 (4.5 시리즈만)

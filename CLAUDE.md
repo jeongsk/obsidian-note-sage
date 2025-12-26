@@ -225,3 +225,10 @@ This plugin is desktop-only (`isDesktopOnly: true` in manifest) as it relies on 
 ### Build Output
 - `main.js` - Bundled plugin code (generated, do not edit)
 - Source maps are inline in development, disabled in production
+
+## Active Technologies
+- TypeScript 5.7+ + Obsidian API, @anthropic-ai/claude-agent-sdk (001-quick-action-buttons)
+- Obsidian Plugin Settings (JSON file in `.obsidian/plugins/` folder) (001-quick-action-buttons)
+
+## Recent Changes
+- 001-quick-action-buttons: Added TypeScript 5.7+ + Obsidian API, @anthropic-ai/claude-agent-sdk
