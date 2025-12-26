@@ -23,6 +23,7 @@ See the [roadmap](#roadmap) for upcoming features I'm looking to incorporate.
 ## Installation
 
 ### Prerequisites
+- **Anthropic Account** - Required for Claude API access ([console.anthropic.com](https://console.anthropic.com))
 - **Node.js** - Required for plugin execution
 - **Claude Code CLI** - Get it from [Anthropic's Claude Code](https://www.anthropic.com/claude-code)
 
@@ -83,3 +84,28 @@ echo "$(sed -n 's/^exec "\([^"]*\)".*/\1/p' $(which claude))"
 - [ ] **Selection-based context** - Include selected text in conversations
 - [ ] **Enhanced copy/paste** - Smart context copy/paste (similar to Cursor)
 - [ ] **Quick commands** - Quick commands for sending re-usable context to your AI
+
+## Privacy & Data Handling
+
+### Remote Services
+This plugin uses the **Anthropic Claude API** to process your requests. When you send a message:
+- Your prompt text is sent to Anthropic's servers
+- If "Current page" context is enabled, file contents are also sent
+- Data is processed according to [Anthropic's Privacy Policy](https://www.anthropic.com/privacy)
+
+### Account Requirements
+- **Anthropic API Key**: Required for API access
+  - Get one at [console.anthropic.com](https://console.anthropic.com)
+  - Stored locally in your vault's plugin data (not encrypted)
+
+### File System Access
+This plugin accesses locations outside your Obsidian vault:
+- **Claude CLI detection**: Searches system paths to locate the Claude executable
+  - macOS/Linux: `~/.local/bin/`, `/usr/local/bin/`, `/opt/homebrew/bin/`
+  - Windows: `%USERPROFILE%\AppData\`, `C:\Program Files\`
+- **Agent permissions**: Uses elevated permissions (`bypassPermissions`) allowing the AI to read/edit files in your vault
+
+### Local Data Storage
+- Chat messages are stored in memory only (cleared on restart)
+- Settings stored in `.obsidian/plugins/obsidian-note-sage/data.json`
+- Conversations can be manually saved to your vault as markdown files
