@@ -1,31 +1,37 @@
-import { Plugin, WorkspaceLeaf, MarkdownView } from 'obsidian';
+import { Plugin, WorkspaceLeaf } from 'obsidian';
 import { NoteSageView, VIEW_TYPE_NOTE_SAGE } from './ChatView';
 import { NoteSageSettingTab } from './SettingsTab';
 import { NoteSageSettings, DEFAULT_SETTINGS } from './types';
+import { t, setLanguage } from './i18n';
 
 // 빠른 프롬프트 타입
 interface QuickPrompt {
 	id: string;
-	name: string;
-	prompt: string;
+	nameKey: string;
+	promptKey: string;
 	icon?: string;
 }
 
 export default class NoteSagePlugin extends Plugin {
 	settings: NoteSageSettings;
 
-	// Phase 1-D: 빠른 프롬프트 정의
+	// Phase 1-D: 빠른 프롬프트 정의 (i18n 키 사용)
 	private quickPrompts: QuickPrompt[] = [
-		{ id: 'summarize', name: 'Note Sage: Summarize document', prompt: 'Please summarize this document concisely.', icon: 'file-text' },
-		{ id: 'explain', name: 'Note Sage: Explain selection', prompt: 'Please explain the selected text in detail.', icon: 'help-circle' },
-		{ id: 'improve', name: 'Note Sage: Improve writing', prompt: 'Please improve the writing style and fix any grammar or spelling errors.', icon: 'edit' },
-		{ id: 'translate-ko', name: 'Note Sage: Translate to Korean', prompt: 'Please translate this text to Korean.', icon: 'languages' },
-		{ id: 'translate-en', name: 'Note Sage: Translate to English', prompt: 'Please translate this text to English.', icon: 'languages' },
-		{ id: 'code-review', name: 'Note Sage: Review code', prompt: 'Please review this code and suggest improvements.', icon: 'code' },
+		{ id: 'summarize', nameKey: 'commands.summarizeDocument', promptKey: 'prompts.summarize', icon: 'file-text' },
+		{ id: 'explain', nameKey: 'commands.explainSelection', promptKey: 'prompts.explain', icon: 'help-circle' },
+		{ id: 'improve', nameKey: 'commands.improveWriting', promptKey: 'prompts.improve', icon: 'edit' },
+		{ id: 'translate-ko', nameKey: 'commands.translateToKorean', promptKey: 'prompts.translateKo', icon: 'languages' },
+		{ id: 'translate-en', nameKey: 'commands.translateToEnglish', promptKey: 'prompts.translateEn', icon: 'languages' },
+		{ id: 'code-review', nameKey: 'commands.reviewCode', promptKey: 'prompts.codeReview', icon: 'code' },
 	];
 
 	async onload() {
 		await this.loadSettings();
+
+		// Initialize language from settings
+		if (this.settings.language) {
+			setLanguage(this.settings.language);
+		}
 
 		// Register the custom view
 		this.registerView(
@@ -54,19 +60,19 @@ export default class NoteSagePlugin extends Plugin {
 		// 기본 명령어
 		this.addCommand({
 			id: 'open-note-sage',
-			name: 'Open Note Sage',
+			name: t('commands.openNoteSage'),
 			callback: () => this.activateView()
 		});
 
 		this.addCommand({
 			id: 'new-chat',
-			name: 'Start new chat',
+			name: t('commands.startNewChat'),
 			callback: () => this.startNewChat()
 		});
 
 		this.addCommand({
 			id: 'save-conversation',
-			name: 'Save current conversation',
+			name: t('commands.saveConversation'),
 			callback: () => this.saveCurrentConversation()
 		});
 
@@ -74,10 +80,10 @@ export default class NoteSagePlugin extends Plugin {
 		for (const prompt of this.quickPrompts) {
 			this.addCommand({
 				id: `quick-${prompt.id}`,
-				name: prompt.name,
+				name: t(prompt.nameKey),
 				editorCallback: (editor) => {
 					const selection = editor.getSelection();
-					this.sendQuickPrompt(prompt.prompt, selection);
+					this.sendQuickPrompt(t(prompt.promptKey), selection);
 				}
 			});
 		}
