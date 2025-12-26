@@ -95,8 +95,8 @@ export const ko: TranslationKeys = {
 		title: 'Note Sage 설정',
 
 		// API Key
-		apiKey: 'Anthropic API 키',
-		apiKeyDesc: 'Claude용 Anthropic API 키입니다. console.anthropic.com에서 발급받으세요',
+		apiKey: 'Anthropic API 키 (선택사항)',
+		apiKeyDesc: '선택사항. Claude용 Anthropic API 키입니다. console.anthropic.com에서 발급받으세요',
 		apiKeyPlaceholder: 'sk-ant-...',
 
 		// Model

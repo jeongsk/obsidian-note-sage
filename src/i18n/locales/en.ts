@@ -205,8 +205,8 @@ export const en: TranslationKeys = {
 		title: 'Note Sage Settings',
 
 		// API Key
-		apiKey: 'Anthropic API Key',
-		apiKeyDesc: 'Your Anthropic API key for Claude. Get one at console.anthropic.com',
+		apiKey: 'Anthropic API Key (Optional)',
+		apiKeyDesc: 'Optional. Your Anthropic API key for Claude. Get one at console.anthropic.com',
 		apiKeyPlaceholder: 'sk-ant-...',
 
 		// Model
