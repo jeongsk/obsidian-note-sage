@@ -1,0 +1,544 @@
+/* Global / scrollbar styles */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--background-modifier-border);
+	border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--background-modifier-border-hover);
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; transform: translateY(10px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+/* Container styles */
+.sage-chat-container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	padding: 12px !important;
+}
+
+.sage-chat-header {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	padding-bottom: 4px;
+	background: var(--background-secondary);
+}
+
+.sage-chat-messages {
+	flex: 1;
+	row-gap: 12px;
+	overflow-y: auto;
+	padding: 12px 0 96px;
+	display: flex;
+	font-size: var(--font-small);
+	line-height: 1.5;
+	flex-direction: column;
+	user-select: text;
+	-webkit-user-select: text;
+	-moz-user-select: text;
+	-ms-user-select: text;
+}
+
+.sage-chat-body {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	padding: 0;
+}
+
+
+/* Chat area header */
+.sage-chat-title{
+	margin-right: auto;
+    font-size: var(--font-smallest);
+	color: var(--text-muted);
+	opacity: 0.8;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.sage-header-buttons{
+	display: flex;
+	gap: 2px;
+}
+
+/* New chat button */
+.sage-new-chat-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	min-height: 1.4rem;
+	min-width: 1.4rem;
+	max-height: 1.4rem;
+	max-width: 1.4rem;
+	padding: 0;
+	background-color: transparent !important;
+	box-shadow: none !important;
+	transition: all 0.2s ease-in-out;
+}
+
+.sage-new-chat-button svg {
+	width: var(--font-small);
+	height: var(--font-small);
+}
+
+.sage-new-chat-button:hover {
+	background-color: var(--background-modifier-hover) !important;
+}
+
+.sage-new-chat-button:active, .sage-new-chat-button:focus {
+	transform: scale(0.95);
+}
+
+/* Examples button */
+.sage-examples-button {
+	display: none;
+	cursor: pointer;
+	height: 1.4rem !important;
+	box-shadow: none !important;
+	margin-right: 0.5rem;
+}
+
+/* Settings button */
+.sage-settings-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	min-height: 1.4rem;
+	min-width: 1.4rem;
+	max-height: 1.4rem;
+	max-width: 1.4rem;
+	padding: 0;
+	background-color: transparent !important;
+	box-shadow: none !important;
+	transition: all 0.2s ease-in-out;
+}
+
+.sage-settings-button svg {
+	width: var(--font-small);
+	height: var(--font-small);
+}
+
+.sage-settings-button:hover {
+	background-color: var(--background-modifier-hover) !important;
+}
+
+.sage-settings-button:active, .sage-settings-button:focus {
+	transform: scale(0.95);
+}
+
+/* File context header */
+.sage-file-context-header {
+	display: flex;
+	align-items: center;
+	padding: 6px;
+	background: var(--background-primary);
+	border-top: 1px solid var(--background-modifier-border);
+	border-left: 1px solid var(--background-modifier-border);
+	border-right: 1px solid var(--background-modifier-border);
+	border-top-left-radius: var(--radius);
+	border-top-right-radius: var(--radius);
+}
+
+.sage-file-context-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 2px 4px;
+	border-radius: var(--radius);
+	border: 1px solid var(--background-modifier-border);
+	color: var(--text-muted);
+	cursor: pointer;
+	transition: all 0.2s ease;
+	font-size: var(--font-smaller);
+	opacity: 0.4;
+	font-weight: 500;
+}
+
+.sage-file-context-toggle:hover {
+	opacity: 0.5;
+	color: var(--text-normal);
+}
+
+.sage-file-context-toggle.active {
+	color: var(--text-muted);
+	opacity: 1;
+}
+
+.sage-file-context-toggle.active .sage-file-context-icon svg {
+	color: var(--interactive-accent);
+}
+
+
+.sage-file-context-icon {
+	display: flex;
+}
+
+.sage-file-context-icon svg {
+	width: 14px;
+	height: 14px;
+}
+
+.sage-file-context-text {
+	font-size: var(--font-smaller);
+}
+
+/* Chat input container */
+.sage-chat-input {
+	width: 100%;
+	min-height: 2.5rem;
+	max-height: 180px;
+	padding: 3px 6px;
+	border-top: 0;
+	border-bottom: 0;
+	border-left: 1px solid var(--background-modifier-border);
+	border-right: 1px solid var(--background-modifier-border);
+	border-radius: 0;
+	background: var(--background-primary);
+	resize: none;
+	line-height: 1.5;
+	font-family: inherit;
+	overflow-y: auto;
+}
+.sage-chat-input:focus {
+	box-shadow: none !important;
+	border-left: 1px solid var(--background-modifier-border);
+	border-right: 1px solid var(--background-modifier-border);
+}
+
+/* Chat send button */
+.sage-chat-button-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: -4px;
+	background: var(--background-primary);
+	border-left: 1px solid var(--background-modifier-border);
+	border-right: 1px solid var(--background-modifier-border);
+	border-bottom: 1px solid var(--background-modifier-border);
+	border-bottom-right-radius: var(--radius);
+	border-bottom-left-radius: var(--radius);
+    padding: 6px;
+}
+
+.sage-chat-send-button {
+	border-radius: 100%;
+	font-size: var(--font-smaller);
+	min-height: 1.4rem;
+	min-width: 1.4rem;
+	max-height: 1.4rem;
+	max-width: 1.4rem;
+	padding: 0;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	background: var(--text-normal) !important;
+	/* color: var(--text-normal) !important;
+	filter: invert(1); */
+	box-shadow: none !important;
+}
+
+.sage-chat-send-button svg {
+	width: var(--font-small);
+	height: var(--font-small);
+	stroke-width: 3px !important;
+	color: var(--text-normal) !important;
+	filter: invert(1);
+}
+
+.sage-chat-send-button:hover {
+	opacity: 0.9;
+}
+
+.sage-chat-send-button:active, .sage-chat-send-button:focus {
+	transform: scale(0.95);
+}
+
+/* Loading indicator */
+.sage-loading-indicator {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-left: 6px;
+}
+
+.sage-loading-indicator.hidden {
+	opacity: 0;
+}
+
+.sage-loading-spinner {
+	width: 14px;
+	height: 14px;
+	border: 2px solid var(--background-modifier-border);
+	border-top-color: var(--interactive-accent);
+	border-radius: 50%;
+	animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+	to { transform: rotate(360deg); }
+}
+
+/* Message styles */
+.sage-chat-message {
+	display: flex;
+	flex-direction: column;
+	animation: fadeIn 0.3s ease-in;
+}
+
+.sage-chat-message-user {
+	align-self: flex-start;
+	width: 100%;
+	padding: 6px;
+	background: var(--background-primary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius);
+}
+
+.sage-chat-message-assistant {
+	align-self: flex-start;
+	width: 100%;
+	font-size: var(--font-smaller);
+	color: var(--text-muted);
+}
+
+.sage-message-content {
+	word-wrap: break-word;
+}
+
+.sage-message-timestamp {
+	color: var(--text-muted);
+	font-size: var(--font-smallest);
+	margin-top: 2px;
+}
+
+/* System init styles */
+.sage-system-init {
+	color: var(--text-muted);
+	opacity: 0.8;
+}
+
+/* Self thought styles */
+.sage-self-thought {
+	color: var(--text-muted);
+}
+
+/* Todo card styles */
+.sage-todo-card {
+	padding: 6px;
+	border: 1px solid var(--background-modifier-border);
+	background: var(--background-primary);
+	border-radius: var(--radius);
+}
+
+.sage-todo-header {
+	margin-bottom: 4px;
+}
+
+.sage-todo-title {
+	font-weight: 500;
+}
+
+.sage-todos-list {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.sage-todo-item {
+	display: flex;
+	align-items: flex-start;
+	gap: 4px;
+}
+
+.sage-todo-status {
+	width: 14px;
+	padding-top: 1.5px;
+	text-align: center;
+}
+
+.sage-todo-status svg {
+	color: var(--interactive-accent);
+	width: 13px;
+	height: 13px;
+}
+
+.sage-todo-content {
+	flex: 1;
+}
+
+/* Collapsible content styles */
+.collapsed {
+	display: none !important;
+}
+
+/* Thinking message styles */
+.sage-thinking-header {
+	display: flex;
+	align-items: center;
+	background: var(--background-secondary);
+	transition: background 0.2s ease;
+}
+
+.sage-thinking-label, .sage-tool-name {
+	color: var(--text-muted);
+	opacity: 0.8;
+	cursor: pointer;
+}
+
+.sage-thinking-label:hover {
+	opacity: 1;
+}
+
+.sage-thinking-content, .sage-tool-content{
+	border-left: 1px solid var(--background-modifier-border);
+	margin-left: 4px;
+	padding-left: 6px;
+}
+
+.sage-thinking-content, .sage-tool-content, .sage-tool-result {
+	margin-top: 2px;
+}
+
+.sage-tool-result pre, .sage-tool-content pre{
+	font-size: var(--font-smaller);
+	margin: 0;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+/* Final response styles */
+.sage-chat-message-final-response {
+	align-self: flex-start;
+	width: 100%;
+}
+
+/* ==================== Phase 2-F: Quick Actions ==================== */
+.sage-quick-actions {
+	display: flex;
+	gap: 4px;
+	padding: 6px;
+	flex-wrap: wrap;
+}
+
+.sage-quick-action-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 4px 8px;
+	border-radius: var(--radius);
+	border: 1px solid var(--background-modifier-border);
+	background: var(--background-primary);
+	color: var(--text-muted);
+	font-size: var(--font-smaller);
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-shadow: none !important;
+}
+
+.sage-quick-action-button:hover {
+	background: var(--background-modifier-hover);
+	color: var(--text-normal);
+	border-color: var(--interactive-accent);
+}
+
+.sage-quick-action-button:active {
+	transform: scale(0.98);
+}
+
+.sage-quick-action-icon {
+	display: flex;
+	align-items: center;
+}
+
+.sage-quick-action-icon svg {
+	width: 12px;
+	height: 12px;
+}
+
+.sage-quick-action-label {
+	font-weight: 500;
+}
+
+/* ==================== Phase 2-G: Code Block Styles ==================== */
+.sage-code-block {
+	margin: 8px 0;
+	border-radius: var(--radius);
+	border: 1px solid var(--background-modifier-border);
+	overflow: hidden;
+}
+
+.sage-code-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 4px 8px;
+	background: var(--background-secondary);
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.sage-code-language {
+	font-size: var(--font-smallest);
+	color: var(--text-muted);
+	text-transform: uppercase;
+	font-weight: 500;
+}
+
+.sage-copy-button {
+	padding: 2px 8px;
+	font-size: var(--font-smallest);
+	border-radius: var(--radius);
+	border: 1px solid var(--background-modifier-border);
+	background: var(--background-primary);
+	color: var(--text-muted);
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.sage-copy-button:hover {
+	background: var(--background-modifier-hover);
+	color: var(--text-normal);
+}
+
+.sage-copy-button.copied {
+	background: var(--interactive-success);
+	color: var(--text-on-accent);
+	border-color: var(--interactive-success);
+}
+
+.sage-code-block pre {
+	margin: 0;
+	padding: 8px;
+	overflow-x: auto;
+	background: var(--background-primary);
+}
+
+.sage-code-block code {
+	font-family: var(--font-monospace);
+	font-size: var(--font-smaller);
+	line-height: 1.4;
+}
+
+.sage-inline-code {
+	padding: 1px 4px;
+	border-radius: 3px;
+	background: var(--background-secondary);
+	font-family: var(--font-monospace);
+	font-size: 0.9em;
+}
