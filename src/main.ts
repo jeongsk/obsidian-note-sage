@@ -145,6 +145,25 @@ export default class NoteSagePlugin extends Plugin {
 
 	async loadSettings() {
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+
+		// 마이그레이션: 기존 모델을 4.5 시리즈로 업데이트
+		const oldModels = [
+			'claude-sonnet-4-20250514',
+			'claude-opus-4-5-20251101',
+			'claude-sonnet-4-5-20250929',
+			'claude-haiku-4-5-20251001'
+		];
+		if (this.settings.model && oldModels.includes(this.settings.model)) {
+			// 날짜가 붙은 모델명을 짧은 형식으로 변환
+			if (this.settings.model.includes('opus')) {
+				this.settings.model = 'claude-opus-4-5';
+			} else if (this.settings.model.includes('haiku')) {
+				this.settings.model = 'claude-haiku-4-5';
+			} else {
+				this.settings.model = 'claude-sonnet-4-5';
+			}
+			await this.saveSettings();
+		}
 	}
 
 	async saveSettings() {

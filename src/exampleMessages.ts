@@ -52,7 +52,7 @@ export function createExampleMessages(): ChatMessage[] {
 					type: 'text',
 					text: "I'll help you find the current datetime. Let me create a plan and execute it."
 				}],
-				model: 'claude-sonnet-4-20250514',
+				model: 'claude-sonnet-4-5',
 				usage: {
 					input_tokens: 4,
 					output_tokens: 7,
@@ -89,7 +89,7 @@ export function createExampleMessages(): ChatMessage[] {
 						]
 					}
 				}],
-				model: 'claude-sonnet-4-20250514'
+				model: 'claude-sonnet-4-5'
 			},
 			session_id: EXAMPLE_SESSION_ID,
 			uuid: 'todo-tool-001',
@@ -128,7 +128,7 @@ export function createExampleMessages(): ChatMessage[] {
 						description: 'Get current date and time'
 					}
 				}],
-				model: 'claude-sonnet-4-20250514'
+				model: 'claude-sonnet-4-5'
 			},
 			session_id: EXAMPLE_SESSION_ID,
 			uuid: 'bash-tool-001',
@@ -178,7 +178,7 @@ export function createExampleMessages(): ChatMessage[] {
 						]
 					}
 				}],
-				model: 'claude-sonnet-4-20250514'
+				model: 'claude-sonnet-4-5'
 			},
 			session_id: EXAMPLE_SESSION_ID,
 			uuid: 'todo-update-001',

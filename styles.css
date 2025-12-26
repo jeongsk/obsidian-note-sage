@@ -77,6 +77,55 @@
 	gap: 2px;
 }
 
+/* Model selector */
+.sage-model-selector-container {
+	display: flex;
+	align-items: center;
+	margin-left: auto;
+	margin-right: 8px;
+}
+
+.sage-model-selector {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	background: var(--background-primary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius);
+	padding: 2px 20px 2px 6px;
+	font-size: var(--font-smallest);
+	color: var(--text-muted);
+	cursor: pointer;
+	transition: all 0.2s ease;
+	max-width: 160px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+	/* Custom dropdown arrow */
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 4px center;
+	background-size: 12px;
+}
+
+.sage-model-selector:hover {
+	border-color: var(--interactive-accent);
+	color: var(--text-normal);
+}
+
+.sage-model-selector:focus {
+	outline: none;
+	border-color: var(--interactive-accent);
+	box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+}
+
+.sage-model-selector option {
+	background: var(--background-primary);
+	color: var(--text-normal);
+	padding: 4px;
+}
+
 /* New chat button */
 .sage-new-chat-button {
 	display: flex;

@@ -179,7 +179,7 @@ export class AgentService {
 
 	private buildQueryOptions(workingDirectory: string, sessionId: string | null | undefined, claudePath: string): Record<string, unknown> {
 		const options: Record<string, unknown> = {
-			model: this.settings.model || 'claude-sonnet-4-20250514',
+			model: this.settings.model || 'claude-sonnet-4-5',
 			cwd: workingDirectory,
 			permissionMode: 'bypassPermissions' as const,
 			allowDangerouslySkipPermissions: true,

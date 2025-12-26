@@ -1,5 +1,6 @@
 import { ItemView, WorkspaceLeaf, setIcon, MarkdownView, TFile } from 'obsidian';
 import type { NoteSageSettings, ChatMessage } from './types';
+import { AVAILABLE_MODELS } from './types';
 import { AgentService } from './AgentService';
 import { ChatRenderer } from './ChatRenderer';
 import { MessageFactory } from './MessageFactory';
@@ -36,6 +37,7 @@ export class NoteSageView extends ItemView {
 	private sendButton: HTMLButtonElement;
 	private loadingIndicator: HTMLElement;
 	private fileContextHeader: HTMLElement;
+	private modelSelector: HTMLSelectElement;
 
 	constructor(leaf: WorkspaceLeaf, settings: NoteSageSettings) {
 		super(leaf);
@@ -86,6 +88,9 @@ export class NoteSageView extends ItemView {
 			cls: 'sage-chat-title'
 		});
 
+		// 모델 선택기
+		this.createModelSelector(headerEl);
+
 		const buttonGroupEl = headerEl.createEl('div', { cls: 'sage-header-buttons' });
 
 		// Examples 버튼
@@ -110,6 +115,53 @@ export class NoteSageView extends ItemView {
 		});
 		setIcon(newChatButton, 'plus');
 		this.registerDomEvent(newChatButton, 'click', () => this.startNewChat());
+	}
+
+	private createModelSelector(headerEl: HTMLElement): void {
+		const selectorContainer = headerEl.createEl('div', { cls: 'sage-model-selector-container' });
+
+		this.modelSelector = selectorContainer.createEl('select', {
+			cls: 'sage-model-selector',
+			attr: { 'aria-label': 'Select Claude model' }
+		}) as HTMLSelectElement;
+
+		// AVAILABLE_MODELS에서 옵션 생성
+		for (const model of AVAILABLE_MODELS) {
+			this.modelSelector.createEl('option', {
+				text: model.label,
+				attr: { value: model.value }
+			});
+		}
+
+		// 현재 설정값으로 선택
+		this.modelSelector.value = this.settings.model || AVAILABLE_MODELS[0].value;
+
+		// 변경 이벤트 핸들러
+		this.registerDomEvent(this.modelSelector, 'change', () => {
+			this.handleModelChange(this.modelSelector.value);
+		});
+	}
+
+	private async handleModelChange(newModel: string): Promise<void> {
+		this.settings.model = newModel;
+
+		// 플러그인 설정에 저장
+		const app = this.app as unknown as {
+			plugins: { plugins: Record<string, { settings: NoteSageSettings; saveSettings: () => Promise<void> }> }
+		};
+
+		const plugin = app.plugins.plugins['obsidian-note-sage'];
+		if (plugin) {
+			plugin.settings.model = newModel;
+			await plugin.saveSettings();
+		}
+
+		// AgentService 설정 업데이트
+		this.agentService.updateSettings(this.settings);
+
+		if (this.settings.debugContext) {
+			console.log('[NoteSageView] Model changed to:', newModel);
+		}
 	}
 
 	private createChatBody(container: HTMLElement): void {
@@ -487,6 +539,11 @@ export class NoteSageView extends ItemView {
 	updateSettings(settings: NoteSageSettings): void {
 		this.settings = settings;
 		this.agentService.updateSettings(settings);
+
+		// 모델 선택기 동기화
+		if (this.modelSelector && settings.model) {
+			this.modelSelector.value = settings.model;
+		}
 	}
 
 	// Phase 1-D: 외부에서 메시지 전송

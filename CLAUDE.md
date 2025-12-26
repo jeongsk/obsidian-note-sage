@@ -173,10 +173,9 @@ interface NoteSageSettings {
 ```
 
 ### Available Models (`src/types.ts`)
-- `claude-opus-4-5-20251101` - Most capable
-- `claude-sonnet-4-20250514` - Balanced (default)
-- `claude-sonnet-4-5-20250929` - Latest
-- `claude-haiku-4-5-20251001` - Fastest
+- `claude-opus-4-5` - Most capable
+- `claude-sonnet-4-5` - Default
+- `claude-haiku-4-5` - Fastest
 
 ## Common Tasks
 

@@ -39,7 +39,7 @@ export class NoteSageSettingTab extends PluginSettingTab {
 					dropdown.addOption(model.value, model.label);
 				});
 				dropdown
-					.setValue(this.plugin.settings.model || 'claude-sonnet-4-20250514')
+					.setValue(this.plugin.settings.model || 'claude-sonnet-4-5')
 					.onChange(async (value) => {
 						this.plugin.settings.model = value;
 						await this.plugin.saveSettings();

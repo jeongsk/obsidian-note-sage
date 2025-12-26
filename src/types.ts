@@ -19,7 +19,7 @@ export interface NoteSageSettings {
 
 export const DEFAULT_SETTINGS: NoteSageSettings = {
 	apiKey: '',
-	model: 'claude-sonnet-4-20250514',
+	model: 'claude-sonnet-4-5',
 	debugContext: false,
 	// Claude CLI 경로 (빈 값이면 자동 탐지)
 	claudeExecutablePath: '',
@@ -34,12 +34,11 @@ export const DEFAULT_SETTINGS: NoteSageSettings = {
 	conversationSavePath: 'AI-Chats'
 };
 
-// 사용 가능한 모델 목록
+// 사용 가능한 모델 목록 (4.5 시리즈만)
 export const AVAILABLE_MODELS = [
-	{ value: 'claude-opus-4-5-20251101', label: 'Claude Opus 4.5 (Most capable)' },
-	{ value: 'claude-sonnet-4-20250514', label: 'Claude Sonnet 4 (Balanced)' },
-	{ value: 'claude-sonnet-4-5-20250929', label: 'Claude Sonnet 4.5 (Latest)' },
-	{ value: 'claude-haiku-4-5-20251001', label: 'Claude Haiku 4.5 (Fastest)' }
+	{ value: 'claude-opus-4-5', label: 'Claude Opus 4.5' },
+	{ value: 'claude-sonnet-4-5', label: 'Claude Sonnet 4.5' },
+	{ value: 'claude-haiku-4-5', label: 'Claude Haiku 4.5' }
 ] as const;
 
 // ==================== 콘텐츠 블록 타입 ====================
