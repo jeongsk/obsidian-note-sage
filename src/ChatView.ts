@@ -1,6 +1,6 @@
 import { ItemView, WorkspaceLeaf, setIcon, MarkdownView, TFile } from 'obsidian';
-import type { NoteSageSettings, ChatMessage } from './types';
-import { AVAILABLE_MODELS } from './types';
+import type { NoteSageSettings, ChatMessage, QuickActionConfig } from './types';
+import { AVAILABLE_MODELS, QUICK_ACTION_DEFINITIONS, DEFAULT_QUICK_ACTIONS } from './types';
 import { AgentService } from './AgentService';
 import { ChatRenderer } from './ChatRenderer';
 import { MessageFactory } from './MessageFactory';
@@ -39,6 +39,7 @@ export class NoteSageView extends ItemView {
 	private loadingIndicator: HTMLElement;
 	private fileContextHeader: HTMLElement;
 	private modelSelector: HTMLSelectElement;
+	private quickActionsContainer: HTMLElement;
 
 	constructor(leaf: WorkspaceLeaf, settings: NoteSageSettings) {
 		super(leaf);
@@ -184,19 +185,42 @@ export class NoteSageView extends ItemView {
 		this.createButtonContainer();
 	}
 
-	// Phase 2-F: 빠른 액션 버튼 생성
+	// Quick Actions 설정 헬퍼
+	private getQuickActionConfig(id: string): QuickActionConfig {
+		const config = this.settings.quickActions?.find(c => c.id === id);
+		return config || DEFAULT_QUICK_ACTIONS.find(c => c.id === id) || { id, enabled: true, customPrompt: undefined };
+	}
+
+	// Phase 2-F: 빠른 액션 버튼 생성 (설정 기반)
 	private createQuickActions(): void {
-		const quickActionsEl = this.inputContainer.createEl('div', { cls: 'sage-quick-actions' });
+		this.quickActionsContainer = this.inputContainer.createEl('div', { cls: 'sage-quick-actions' });
+		this.renderQuickActions();
+	}
 
-		const actions = [
-			{ icon: 'file-text', labelKey: 'quickAction.summarize', promptKey: 'quickAction.summarizePrompt' },
-			{ icon: 'edit', labelKey: 'quickAction.improve', promptKey: 'quickAction.improvePrompt' },
-			{ icon: 'search', labelKey: 'quickAction.analyze', promptKey: 'quickAction.analyzePrompt' },
-			{ icon: 'languages', labelKey: 'quickAction.translate', promptKey: 'quickAction.translatePrompt' },
-		];
+	// Quick Actions 버튼 렌더링 (설정 변경 시 재호출)
+	private renderQuickActions(): void {
+		this.quickActionsContainer.empty();
 
-		for (const action of actions) {
-			const button = quickActionsEl.createEl('button', {
+		// 활성화된 버튼만 필터링
+		const enabledActions = QUICK_ACTION_DEFINITIONS.filter(def => {
+			const config = this.getQuickActionConfig(def.id);
+			return config.enabled;
+		});
+
+		// 모든 버튼이 비활성화되면 컨테이너 숨김
+		if (enabledActions.length === 0) {
+			this.quickActionsContainer.addClass('hidden');
+			return;
+		}
+
+		this.quickActionsContainer.removeClass('hidden');
+
+		for (const action of enabledActions) {
+			const config = this.getQuickActionConfig(action.id);
+			// customPrompt가 있으면 사용, 없으면 기본 프롬프트 사용
+			const prompt = config.customPrompt || t(action.promptKey);
+
+			const button = this.quickActionsContainer.createEl('button', {
 				cls: 'sage-quick-action-button',
 				attr: { 'aria-label': t(action.labelKey) }
 			});
@@ -208,7 +232,7 @@ export class NoteSageView extends ItemView {
 
 			this.registerDomEvent(button, 'click', () => {
 				if (!this.isProcessing) {
-					this.sendMessage(t(action.promptKey));
+					this.sendMessage(prompt);
 				}
 			});
 		}
@@ -554,6 +578,11 @@ export class NoteSageView extends ItemView {
 		// 모델 선택기 동기화
 		if (this.modelSelector && settings.model) {
 			this.modelSelector.value = settings.model;
+		}
+
+		// Quick Actions 다시 렌더링 (설정 변경 반영)
+		if (this.quickActionsContainer) {
+			this.renderQuickActions();
 		}
 	}
 
