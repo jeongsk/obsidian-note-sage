@@ -41,6 +41,7 @@ interface SettingsTranslations {
 	model: string;
 	modelDesc: string;
 	claudeCli: string;
+	claudeCliAdvanced: string;
 	claudeCliPath: string;
 	claudeCliPathDesc: string;
 	claudeCliPathPlaceholder: string;
@@ -215,6 +216,7 @@ export const en: TranslationKeys = {
 
 		// Claude CLI
 		claudeCli: 'Claude CLI',
+		claudeCliAdvanced: 'Advanced Options',
 		claudeCliPath: 'Claude CLI path',
 		claudeCliPathDesc: 'Path to the claude executable. Leave empty to auto-detect from common installation paths.',
 		claudeCliPathPlaceholder: 'Auto-detect (leave empty)',

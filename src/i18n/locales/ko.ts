@@ -105,6 +105,7 @@ export const ko: TranslationKeys = {
 
 		// Claude CLI
 		claudeCli: 'Claude CLI',
+		claudeCliAdvanced: '고급(Advanced) 옵션',
 		claudeCliPath: 'Claude CLI 경로',
 		claudeCliPathDesc: 'claude 실행 파일의 경로입니다. 비워두면 일반적인 설치 경로에서 자동 탐지합니다.',
 		claudeCliPathPlaceholder: '자동 탐지 (비워두기)',

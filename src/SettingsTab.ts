@@ -38,19 +38,6 @@ export class NoteSageSettingTab extends PluginSettingTab {
 					});
 			});
 
-		// API Key setting
-		new Setting(containerEl)
-			.setName(t('settings.apiKey'))
-			.setDesc(t('settings.apiKeyDesc'))
-			.addText(text => text
-				.setPlaceholder(t('settings.apiKeyPlaceholder'))
-				.setValue(this.plugin.settings.apiKey || '')
-				.onChange(async (value) => {
-					this.plugin.settings.apiKey = value;
-					await this.plugin.saveSettings();
-					this.updateViews();
-				}));
-
 		// Model selection
 		new Setting(containerEl)
 			.setName(t('settings.model'))
@@ -67,40 +54,6 @@ export class NoteSageSettingTab extends PluginSettingTab {
 						this.updateViews();
 					});
 			});
-
-		// ==================== Claude CLI 설정 ====================
-		containerEl.createEl('h3', { text: t('settings.claudeCli') });
-
-		new Setting(containerEl)
-			.setName(t('settings.claudeCliPath'))
-			.setDesc(t('settings.claudeCliPathDesc'))
-			.addText(text => text
-				.setPlaceholder(t('settings.claudeCliPathPlaceholder'))
-				.setValue(this.plugin.settings.claudeExecutablePath || '')
-				.onChange(async (value) => {
-					this.plugin.settings.claudeExecutablePath = value;
-					await this.plugin.saveSettings();
-					this.updateViews();
-				}));
-
-		const cliInfoEl = containerEl.createEl('div', { cls: 'setting-item-description' });
-		cliInfoEl.createEl('small', {
-			text: t('settings.claudeCliPathInfo')
-		});
-		cliInfoEl.style.marginTop = '-10px';
-		cliInfoEl.style.marginBottom = '10px';
-
-		// Debug context
-		new Setting(containerEl)
-			.setName(t('settings.debugMode'))
-			.setDesc(t('settings.debugModeDesc'))
-			.addToggle(toggle => toggle
-				.setValue(this.plugin.settings.debugContext || false)
-				.onChange(async (value) => {
-					this.plugin.settings.debugContext = value;
-					await this.plugin.saveSettings();
-					this.updateViews();
-				}));
 
 		// ==================== Phase 1-A: 파일 컨텍스트 설정 ====================
 		containerEl.createEl('h3', { text: t('settings.fileContext') });
@@ -181,6 +134,53 @@ export class NoteSageSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.conversationSavePath || 'AI-Chats')
 				.onChange(async (value) => {
 					this.plugin.settings.conversationSavePath = value || 'AI-Chats';
+					await this.plugin.saveSettings();
+					this.updateViews();
+				}));
+
+		// ==================== Claude CLI 고급 설정 ====================
+		containerEl.createEl('h3', { text: `${t('settings.claudeCli')} - ${t('settings.claudeCliAdvanced')}` });
+
+		// API Key setting
+		new Setting(containerEl)
+			.setName(t('settings.apiKey'))
+			.setDesc(t('settings.apiKeyDesc'))
+			.addText(text => text
+				.setPlaceholder(t('settings.apiKeyPlaceholder'))
+				.setValue(this.plugin.settings.apiKey || '')
+				.onChange(async (value) => {
+					this.plugin.settings.apiKey = value;
+					await this.plugin.saveSettings();
+					this.updateViews();
+				}));
+
+		new Setting(containerEl)
+			.setName(t('settings.claudeCliPath'))
+			.setDesc(t('settings.claudeCliPathDesc'))
+			.addText(text => text
+				.setPlaceholder(t('settings.claudeCliPathPlaceholder'))
+				.setValue(this.plugin.settings.claudeExecutablePath || '')
+				.onChange(async (value) => {
+					this.plugin.settings.claudeExecutablePath = value;
+					await this.plugin.saveSettings();
+					this.updateViews();
+				}));
+
+		const cliInfoEl = containerEl.createEl('div', { cls: 'setting-item-description' });
+		cliInfoEl.createEl('small', {
+			text: t('settings.claudeCliPathInfo')
+		});
+		cliInfoEl.style.marginTop = '-10px';
+		cliInfoEl.style.marginBottom = '10px';
+
+		// Debug context
+		new Setting(containerEl)
+			.setName(t('settings.debugMode'))
+			.setDesc(t('settings.debugModeDesc'))
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.debugContext || false)
+				.onChange(async (value) => {
+					this.plugin.settings.debugContext = value;
 					await this.plugin.saveSettings();
 					this.updateViews();
 				}));
