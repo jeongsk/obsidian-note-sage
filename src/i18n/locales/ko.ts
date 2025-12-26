@@ -92,8 +92,6 @@ export const ko: TranslationKeys = {
 
 	// Settings
 	settings: {
-		title: 'Note Sage 설정',
-
 		// API Key
 		apiKey: 'Anthropic API 키 (선택사항)',
 		apiKeyDesc: '선택사항. Claude용 Anthropic API 키입니다. console.anthropic.com에서 발급받으세요',
@@ -105,7 +103,7 @@ export const ko: TranslationKeys = {
 
 		// Claude CLI
 		claudeCli: 'Claude CLI',
-		claudeCliAdvanced: '고급(Advanced) 옵션',
+		claudeCliAdvanced: '고급 옵션',
 		claudeCliPath: 'Claude CLI 경로',
 		claudeCliPathDesc: 'claude 실행 파일의 경로입니다. 비워두면 일반적인 설치 경로에서 자동 탐지합니다.',
 		claudeCliPathPlaceholder: '자동 탐지 (비워두기)',

@@ -34,7 +34,6 @@ interface PromptsTranslations {
 }
 
 interface SettingsTranslations {
-	title: string;
 	apiKey: string;
 	apiKeyDesc: string;
 	apiKeyPlaceholder: string;
@@ -203,8 +202,6 @@ export const en: TranslationKeys = {
 
 	// Settings
 	settings: {
-		title: 'Note Sage Settings',
-
 		// API Key
 		apiKey: 'Anthropic API Key (Optional)',
 		apiKeyDesc: 'Optional. Your Anthropic API key for Claude. Get one at console.anthropic.com',
@@ -216,7 +213,7 @@ export const en: TranslationKeys = {
 
 		// Claude CLI
 		claudeCli: 'Claude CLI',
-		claudeCliAdvanced: 'Advanced Options',
+		claudeCliAdvanced: 'Advanced',
 		claudeCliPath: 'Claude CLI path',
 		claudeCliPathDesc: 'Path to the claude executable. Leave empty to auto-detect from common installation paths.',
 		claudeCliPathPlaceholder: 'Auto-detect (leave empty)',
@@ -227,7 +224,7 @@ export const en: TranslationKeys = {
 		debugModeDesc: 'Enable debug logging for troubleshooting (logs to browser console)',
 
 		// File Context
-		fileContext: 'File Context',
+		fileContext: 'File context',
 		includeFileContent: 'Include file content',
 		includeFileContentDesc: 'Include the content of the current file in the context sent to Claude',
 		preferSelectedText: 'Prefer selected text',
@@ -236,13 +233,13 @@ export const en: TranslationKeys = {
 		maxContentLengthDesc: 'Maximum number of characters to include from the file (to save tokens)',
 
 		// System Prompt
-		systemPrompt: 'System Prompt',
+		systemPrompt: 'System prompt',
 		customSystemPrompt: 'Custom system prompt',
 		customSystemPromptDesc: 'Custom instructions for Claude. Leave empty to use defaults.',
 		customSystemPromptPlaceholder: 'You are a helpful assistant specialized in...',
 
 		// Conversation Saving
-		conversationSaving: 'Conversation Saving',
+		conversationSaving: 'Conversation saving',
 		autoSave: 'Auto-save conversations',
 		autoSaveDesc: 'Automatically save conversations to your vault as markdown files',
 		savePath: 'Save path',

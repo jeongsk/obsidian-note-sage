@@ -16,8 +16,6 @@ export class NoteSageSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', { text: t('settings.title') });
-
 		// Language setting (placed first for better UX)
 		new Setting(containerEl)
 			.setName(t('settings.language'))
@@ -56,7 +54,9 @@ export class NoteSageSettingTab extends PluginSettingTab {
 			});
 
 		// ==================== Phase 1-A: 파일 컨텍스트 설정 ====================
-		containerEl.createEl('h3', { text: t('settings.fileContext') });
+		new Setting(containerEl)
+			.setName(t('settings.fileContext'))
+			.setHeading();
 
 		new Setting(containerEl)
 			.setName(t('settings.includeFileContent'))
@@ -94,7 +94,9 @@ export class NoteSageSettingTab extends PluginSettingTab {
 				}));
 
 		// ==================== Phase 1-E: 시스템 프롬프트 설정 ====================
-		containerEl.createEl('h3', { text: t('settings.systemPrompt') });
+		new Setting(containerEl)
+			.setName(t('settings.systemPrompt'))
+			.setHeading();
 
 		new Setting(containerEl)
 			.setName(t('settings.customSystemPrompt'))
@@ -113,7 +115,9 @@ export class NoteSageSettingTab extends PluginSettingTab {
 			});
 
 		// ==================== Phase 2-B: 대화 저장 설정 ====================
-		containerEl.createEl('h3', { text: t('settings.conversationSaving') });
+		new Setting(containerEl)
+			.setName(t('settings.conversationSaving'))
+			.setHeading();
 
 		new Setting(containerEl)
 			.setName(t('settings.autoSave'))
@@ -139,7 +143,9 @@ export class NoteSageSettingTab extends PluginSettingTab {
 				}));
 
 		// ==================== Claude CLI 고급 설정 ====================
-		containerEl.createEl('h3', { text: `${t('settings.claudeCli')} - ${t('settings.claudeCliAdvanced')}` });
+		new Setting(containerEl)
+			.setName(t('settings.claudeCliAdvanced'))
+			.setHeading();
 
 		// API Key setting
 		new Setting(containerEl)
@@ -186,7 +192,10 @@ export class NoteSageSettingTab extends PluginSettingTab {
 				}));
 
 		// Info section
-		containerEl.createEl('h3', { text: t('settings.about') });
+		new Setting(containerEl)
+			.setName(t('settings.about'))
+			.setHeading();
+
 		const infoEl = containerEl.createEl('div', { cls: 'sage-settings-info' });
 		infoEl.createEl('p', {
 			text: t('settings.aboutText1')
