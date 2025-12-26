@@ -127,7 +127,7 @@ export class NoteSageView extends ItemView {
 		const selectorContainer = headerEl.createEl('div', { cls: 'sage-model-selector-container' });
 
 		this.modelSelector = selectorContainer.createEl('select', {
-			cls: 'sage-model-selector',
+			cls: 'sage-model-selector dropdown',
 			attr: { 'aria-label': t('selectModel') }
 		}) as HTMLSelectElement;
 
