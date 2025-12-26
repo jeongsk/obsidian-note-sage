@@ -1,7 +1,7 @@
 import { Plugin, WorkspaceLeaf } from 'obsidian';
 import { NoteSageView, VIEW_TYPE_NOTE_SAGE } from './ChatView';
 import { NoteSageSettingTab } from './SettingsTab';
-import { NoteSageSettings, DEFAULT_SETTINGS } from './types';
+import { NoteSageSettings, DEFAULT_SETTINGS, DEFAULT_QUICK_ACTIONS } from './types';
 import { t, setLanguage } from './i18n';
 
 // 빠른 프롬프트 타입
@@ -168,6 +168,12 @@ export default class NoteSagePlugin extends Plugin {
 			} else {
 				this.settings.model = 'claude-sonnet-4-5';
 			}
+			await this.saveSettings();
+		}
+
+		// 마이그레이션: quickActions가 없는 기존 사용자를 위해 기본값 설정
+		if (!this.settings.quickActions) {
+			this.settings.quickActions = [...DEFAULT_QUICK_ACTIONS];
 			await this.saveSettings();
 		}
 	}
