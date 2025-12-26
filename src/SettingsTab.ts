@@ -1,6 +1,6 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
 import type NoteSagePlugin from './main';
-import { AVAILABLE_MODELS } from './types';
+import { AVAILABLE_MODELS, QUICK_ACTION_DEFINITIONS, DEFAULT_QUICK_ACTIONS, QuickActionConfig } from './types';
 import { t, setLanguage, AVAILABLE_LANGUAGES, SupportedLanguage } from './i18n';
 
 export class NoteSageSettingTab extends PluginSettingTab {
@@ -122,6 +122,14 @@ export class NoteSageSettingTab extends PluginSettingTab {
 					this.updateViews();
 				}));
 
+		// ==================== Quick Actions 설정 ====================
+		new Setting(containerEl)
+			.setName(t('settings.quickActions'))
+			.setDesc(t('settings.quickActionsDesc'))
+			.setHeading();
+
+		this.renderQuickActionsSettings(containerEl);
+
 		// ==================== Claude CLI 고급 설정 ====================
 		new Setting(containerEl)
 			.setName(t('settings.claudeCliAdvanced'))
@@ -213,5 +221,81 @@ export class NoteSageSettingTab extends PluginSettingTab {
 				(view as { updateSettings: (settings: typeof this.plugin.settings) => void }).updateSettings(this.plugin.settings);
 			}
 		});
+	}
+
+	// Quick Action 설정 헬퍼
+	private getQuickActionConfig(id: string): QuickActionConfig {
+		const config = this.plugin.settings.quickActions?.find(c => c.id === id);
+		return config || DEFAULT_QUICK_ACTIONS.find(c => c.id === id) || { id, enabled: true, customPrompt: undefined };
+	}
+
+	// Quick Action 설정 업데이트
+	private async updateQuickActionConfig(id: string, updates: Partial<QuickActionConfig>): Promise<void> {
+		// quickActions 배열이 없으면 기본값으로 초기화
+		if (!this.plugin.settings.quickActions) {
+			this.plugin.settings.quickActions = [...DEFAULT_QUICK_ACTIONS];
+		}
+
+		const index = this.plugin.settings.quickActions.findIndex(c => c.id === id);
+		if (index >= 0) {
+			this.plugin.settings.quickActions[index] = {
+				...this.plugin.settings.quickActions[index],
+				...updates
+			};
+		} else {
+			// 해당 id가 없으면 새로 추가
+			this.plugin.settings.quickActions.push({
+				id,
+				enabled: true,
+				customPrompt: undefined,
+				...updates
+			});
+		}
+
+		await this.plugin.saveSettings();
+		this.updateViews();
+	}
+
+	// Quick Actions 설정 UI 렌더링
+	private renderQuickActionsSettings(containerEl: HTMLElement): void {
+		for (const def of QUICK_ACTION_DEFINITIONS) {
+			const config = this.getQuickActionConfig(def.id);
+
+			const setting = new Setting(containerEl)
+				.setName(t(def.labelKey))
+				.addToggle(toggle => {
+					toggle
+						.setValue(config.enabled)
+						.onChange(async (value) => {
+							await this.updateQuickActionConfig(def.id, { enabled: value });
+						});
+				})
+				.addTextArea(text => {
+					text
+						.setPlaceholder(t(def.promptKey))
+						.setValue(config.customPrompt || '')
+						.onChange(async (value) => {
+							// 빈 문자열은 undefined로 처리
+							await this.updateQuickActionConfig(def.id, {
+								customPrompt: value.trim() || undefined
+							});
+						});
+					text.inputEl.rows = 2;
+					text.inputEl.style.width = '100%';
+				})
+				.addExtraButton(button => {
+					button
+						.setIcon('reset')
+						.setTooltip(t('settings.resetToDefault'))
+						.onClick(async () => {
+							await this.updateQuickActionConfig(def.id, { customPrompt: undefined });
+							// 설정 탭 다시 렌더링하여 UI 업데이트
+							this.display();
+						});
+				});
+
+			// 설정 컨테이너에 클래스 추가
+			setting.settingEl.addClass('sage-quick-action-setting');
+		}
 	}
 }
