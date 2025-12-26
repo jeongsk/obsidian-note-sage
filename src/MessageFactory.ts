@@ -7,6 +7,7 @@ import type {
 	AssistantChatMessage,
 	ResultChatMessage
 } from './types';
+import { t } from './i18n';
 
 /**
  * MessageFactory - 메시지 생성을 담당하는 팩토리 클래스
@@ -68,7 +69,7 @@ export class MessageFactory {
 		return {
 			...this.createBaseMessage(sessionId, 'error'),
 			type: 'system',
-			result: `Error: ${errorText}`,
+			result: `${t('error')}: ${errorText}`,
 			subtype: 'error'
 		};
 	}
@@ -80,7 +81,7 @@ export class MessageFactory {
 		return {
 			...this.createBaseMessage(sessionId, 'cancel'),
 			type: 'system',
-			result: 'Message execution cancelled'
+			result: t('executionCancelled')
 		};
 	}
 

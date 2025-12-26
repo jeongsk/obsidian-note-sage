@@ -1,6 +1,7 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
 import type NoteSagePlugin from './main';
 import { AVAILABLE_MODELS } from './types';
+import { t, setLanguage, AVAILABLE_LANGUAGES, SupportedLanguage } from './i18n';
 
 export class NoteSageSettingTab extends PluginSettingTab {
 	plugin: NoteSagePlugin;
@@ -15,14 +16,34 @@ export class NoteSageSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', { text: 'Note Sage Settings' });
+		containerEl.createEl('h2', { text: t('settings.title') });
+
+		// Language setting (placed first for better UX)
+		new Setting(containerEl)
+			.setName(t('settings.language'))
+			.setDesc(t('settings.languageDesc'))
+			.addDropdown(dropdown => {
+				AVAILABLE_LANGUAGES.forEach(lang => {
+					dropdown.addOption(lang.value, lang.label);
+				});
+				dropdown
+					.setValue(this.plugin.settings.language || 'auto')
+					.onChange(async (value) => {
+						this.plugin.settings.language = value as SupportedLanguage;
+						setLanguage(value as SupportedLanguage);
+						await this.plugin.saveSettings();
+						this.updateViews();
+						// Refresh the settings display with new language
+						this.display();
+					});
+			});
 
 		// API Key setting
 		new Setting(containerEl)
-			.setName('Anthropic API Key')
-			.setDesc('Your Anthropic API key for Claude. Get one at console.anthropic.com')
+			.setName(t('settings.apiKey'))
+			.setDesc(t('settings.apiKeyDesc'))
 			.addText(text => text
-				.setPlaceholder('sk-ant-...')
+				.setPlaceholder(t('settings.apiKeyPlaceholder'))
 				.setValue(this.plugin.settings.apiKey || '')
 				.onChange(async (value) => {
 					this.plugin.settings.apiKey = value;
@@ -32,8 +53,8 @@ export class NoteSageSettingTab extends PluginSettingTab {
 
 		// Model selection
 		new Setting(containerEl)
-			.setName('Model')
-			.setDesc('Select the Claude model to use')
+			.setName(t('settings.model'))
+			.setDesc(t('settings.modelDesc'))
 			.addDropdown(dropdown => {
 				AVAILABLE_MODELS.forEach(model => {
 					dropdown.addOption(model.value, model.label);
@@ -48,13 +69,13 @@ export class NoteSageSettingTab extends PluginSettingTab {
 			});
 
 		// ==================== Claude CLI 설정 ====================
-		containerEl.createEl('h3', { text: 'Claude CLI' });
+		containerEl.createEl('h3', { text: t('settings.claudeCli') });
 
 		new Setting(containerEl)
-			.setName('Claude CLI path')
-			.setDesc('Path to the claude executable. Leave empty to auto-detect from common installation paths.')
+			.setName(t('settings.claudeCliPath'))
+			.setDesc(t('settings.claudeCliPathDesc'))
 			.addText(text => text
-				.setPlaceholder('Auto-detect (leave empty)')
+				.setPlaceholder(t('settings.claudeCliPathPlaceholder'))
 				.setValue(this.plugin.settings.claudeExecutablePath || '')
 				.onChange(async (value) => {
 					this.plugin.settings.claudeExecutablePath = value;
@@ -64,15 +85,15 @@ export class NoteSageSettingTab extends PluginSettingTab {
 
 		const cliInfoEl = containerEl.createEl('div', { cls: 'setting-item-description' });
 		cliInfoEl.createEl('small', {
-			text: 'Common paths: ~/.local/bin/claude (macOS/Linux), %USERPROFILE%\\.local\\bin\\claude.exe (Windows)'
+			text: t('settings.claudeCliPathInfo')
 		});
 		cliInfoEl.style.marginTop = '-10px';
 		cliInfoEl.style.marginBottom = '10px';
 
 		// Debug context
 		new Setting(containerEl)
-			.setName('Debug mode')
-			.setDesc('Enable debug logging for troubleshooting (logs to browser console)')
+			.setName(t('settings.debugMode'))
+			.setDesc(t('settings.debugModeDesc'))
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.debugContext || false)
 				.onChange(async (value) => {
@@ -82,11 +103,11 @@ export class NoteSageSettingTab extends PluginSettingTab {
 				}));
 
 		// ==================== Phase 1-A: 파일 컨텍스트 설정 ====================
-		containerEl.createEl('h3', { text: 'File Context' });
+		containerEl.createEl('h3', { text: t('settings.fileContext') });
 
 		new Setting(containerEl)
-			.setName('Include file content')
-			.setDesc('Include the content of the current file in the context sent to Claude')
+			.setName(t('settings.includeFileContent'))
+			.setDesc(t('settings.includeFileContentDesc'))
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.includeFileContent ?? true)
 				.onChange(async (value) => {
@@ -96,8 +117,8 @@ export class NoteSageSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Prefer selected text')
-			.setDesc('When text is selected, include only the selection instead of the entire file')
+			.setName(t('settings.preferSelectedText'))
+			.setDesc(t('settings.preferSelectedTextDesc'))
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.includeSelection ?? true)
 				.onChange(async (value) => {
@@ -107,8 +128,8 @@ export class NoteSageSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Max content length')
-			.setDesc('Maximum number of characters to include from the file (to save tokens)')
+			.setName(t('settings.maxContentLength'))
+			.setDesc(t('settings.maxContentLengthDesc'))
 			.addText(text => text
 				.setPlaceholder('10000')
 				.setValue(String(this.plugin.settings.maxContentLength || 10000))
@@ -120,14 +141,14 @@ export class NoteSageSettingTab extends PluginSettingTab {
 				}));
 
 		// ==================== Phase 1-E: 시스템 프롬프트 설정 ====================
-		containerEl.createEl('h3', { text: 'System Prompt' });
+		containerEl.createEl('h3', { text: t('settings.systemPrompt') });
 
 		new Setting(containerEl)
-			.setName('Custom system prompt')
-			.setDesc('Custom instructions for Claude. Leave empty to use defaults.')
+			.setName(t('settings.customSystemPrompt'))
+			.setDesc(t('settings.customSystemPromptDesc'))
 			.addTextArea(text => {
 				text
-					.setPlaceholder('You are a helpful assistant specialized in...')
+					.setPlaceholder(t('settings.customSystemPromptPlaceholder'))
 					.setValue(this.plugin.settings.systemPrompt || '')
 					.onChange(async (value) => {
 						this.plugin.settings.systemPrompt = value;
@@ -139,11 +160,11 @@ export class NoteSageSettingTab extends PluginSettingTab {
 			});
 
 		// ==================== Phase 2-B: 대화 저장 설정 ====================
-		containerEl.createEl('h3', { text: 'Conversation Saving' });
+		containerEl.createEl('h3', { text: t('settings.conversationSaving') });
 
 		new Setting(containerEl)
-			.setName('Auto-save conversations')
-			.setDesc('Automatically save conversations to your vault as markdown files')
+			.setName(t('settings.autoSave'))
+			.setDesc(t('settings.autoSaveDesc'))
 			.addToggle(toggle => toggle
 				.setValue(this.plugin.settings.autoSaveConversations ?? false)
 				.onChange(async (value) => {
@@ -153,8 +174,8 @@ export class NoteSageSettingTab extends PluginSettingTab {
 				}));
 
 		new Setting(containerEl)
-			.setName('Save path')
-			.setDesc('Folder path in your vault where conversations will be saved')
+			.setName(t('settings.savePath'))
+			.setDesc(t('settings.savePathDesc'))
 			.addText(text => text
 				.setPlaceholder('AI-Chats')
 				.setValue(this.plugin.settings.conversationSavePath || 'AI-Chats')
@@ -165,13 +186,13 @@ export class NoteSageSettingTab extends PluginSettingTab {
 				}));
 
 		// Info section
-		containerEl.createEl('h3', { text: 'About' });
+		containerEl.createEl('h3', { text: t('settings.about') });
 		const infoEl = containerEl.createEl('div', { cls: 'sage-settings-info' });
 		infoEl.createEl('p', {
-			text: 'This plugin uses the Claude Agent SDK to provide AI-powered assistance directly within Obsidian.'
+			text: t('settings.aboutText1')
 		});
 		infoEl.createEl('p', {
-			text: 'The agent can read files, execute commands, and help with various tasks in your vault.'
+			text: t('settings.aboutText2')
 		});
 	}
 

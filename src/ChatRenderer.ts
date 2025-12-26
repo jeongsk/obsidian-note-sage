@@ -8,6 +8,7 @@ import type {
 	UserChatMessage,
 	AssistantChatMessage
 } from './types';
+import { t } from './i18n';
 
 /**
  * ChatRenderer - 채팅 메시지 렌더링을 담당하는 클래스
@@ -106,13 +107,13 @@ export class ChatRenderer {
 				} else if (chatMessage.result) {
 					this.renderResult(container, chatMessage.result);
 				} else if (chatMessage.subtype) {
-					container.createEl('div', { text: `System: ${chatMessage.subtype}` });
+					container.createEl('div', { text: `${t('system')}: ${chatMessage.subtype}` });
 				}
 			}
 		} catch (error) {
 			console.warn('Error rendering message content:', error, chatMessage);
 			container.createEl('div', {
-				text: 'Error rendering message content',
+				text: t('errorRenderingMessage'),
 				cls: 'sage-error-message'
 			});
 		}
@@ -170,7 +171,7 @@ export class ChatRenderer {
 
 						// 버튼 텍스트 변경
 						const originalText = target.textContent;
-						target.textContent = 'Copied!';
+						target.textContent = t('copied');
 						target.classList.add('copied');
 
 						window.setTimeout(() => {
@@ -212,7 +213,7 @@ export class ChatRenderer {
 		const resultEl = container.createEl('div', { cls: 'sage-tool-result' });
 		const pre = resultEl.createEl('pre');
 		const resultContent = content.content;
-		const resultText = resultContent || 'No content';
+		const resultText = resultContent || t('noContent');
 		pre.createEl('code', {
 			text: typeof resultText === 'string' ? resultText : JSON.stringify(resultText, null, 2)
 		});
@@ -232,7 +233,7 @@ export class ChatRenderer {
 	 */
 	private renderInitMessage(container: HTMLElement): void {
 		container.createEl('div', {
-			text: 'Cooking...',
+			text: t('cooking'),
 			cls: 'sage-system-init'
 		});
 	}
@@ -243,7 +244,7 @@ export class ChatRenderer {
 	renderTodoCard(container: HTMLElement, content: ToolUseBlock): void {
 		const cardEl = container.createEl('div', { cls: 'sage-todo-card' });
 		const headerEl = cardEl.createEl('div', { cls: 'sage-todo-header' });
-		headerEl.createEl('span', { text: 'Tasks', cls: 'sage-todo-title' });
+		headerEl.createEl('span', { text: t('tasks'), cls: 'sage-todo-title' });
 
 		const input = content.input as { todos?: Array<{ status: string; content: string }> };
 		if (input?.todos) {
@@ -289,7 +290,7 @@ export class ChatRenderer {
 		const headerEl = toolEl.createEl('div', { cls: 'sage-tool-header clickable' });
 
 		headerEl.createEl('span', {
-			text: `Using tool: ${content.name || 'Unknown'}`,
+			text: `${t('usingTool')}: ${content.name || 'Unknown'}`,
 			cls: 'sage-tool-name'
 		});
 
@@ -309,7 +310,7 @@ export class ChatRenderer {
 		const hasToolResults = chatMessage.message.content.some(
 			content => content.type === 'tool_result'
 		);
-		const headerText = hasToolResults ? 'Tool result' : 'Thinking...';
+		const headerText = hasToolResults ? t('toolResult') : t('thinking');
 
 		const headerEl = messageEl.createEl('div', { cls: 'sage-thinking-header clickable' });
 		headerEl.createEl('span', { text: headerText, cls: 'sage-thinking-label' });
@@ -360,7 +361,7 @@ export class ChatRenderer {
 			return `<div class="sage-code-block" data-code-id="${codeId}">
 				<div class="sage-code-header">
 					<span class="sage-code-language">${languageLabel}</span>
-					<button class="sage-copy-button" data-code="${this.escapeForAttribute(code.trim())}">Copy</button>
+					<button class="sage-copy-button" data-code="${this.escapeForAttribute(code.trim())}">${t('copy')}</button>
 				</div>
 				<pre><code class="language-${lang}">${escapedCode}</code></pre>
 			</div>`;

@@ -1,5 +1,7 @@
 // ==================== 설정 ====================
 
+import type { SupportedLanguage } from './i18n';
+
 export interface NoteSageSettings {
 	apiKey?: string;
 	model?: string;
@@ -15,6 +17,8 @@ export interface NoteSageSettings {
 	// Phase 2-B: 대화 저장 설정
 	autoSaveConversations?: boolean;
 	conversationSavePath?: string;
+	// 다국어 지원 설정
+	language?: SupportedLanguage;
 }
 
 export const DEFAULT_SETTINGS: NoteSageSettings = {
@@ -31,7 +35,9 @@ export const DEFAULT_SETTINGS: NoteSageSettings = {
 	systemPrompt: '',
 	// Phase 2-B: 대화 저장 기본값
 	autoSaveConversations: false,
-	conversationSavePath: 'AI-Chats'
+	conversationSavePath: 'AI-Chats',
+	// 다국어 지원 기본값
+	language: 'auto'
 };
 
 // 사용 가능한 모델 목록 (4.5 시리즈만)

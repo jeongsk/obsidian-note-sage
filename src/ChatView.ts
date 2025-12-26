@@ -5,6 +5,7 @@ import { AgentService } from './AgentService';
 import { ChatRenderer } from './ChatRenderer';
 import { MessageFactory } from './MessageFactory';
 import { createExampleMessages } from './exampleMessages';
+import { t, setLanguage } from './i18n';
 
 export const VIEW_TYPE_NOTE_SAGE = 'note-sage-view';
 
@@ -43,6 +44,11 @@ export class NoteSageView extends ItemView {
 		super(leaf);
 		this.settings = settings;
 		this.agentService = new AgentService(settings);
+
+		// Initialize language from settings
+		if (settings.language) {
+			setLanguage(settings.language);
+		}
 	}
 
 	getViewType(): string {
@@ -50,7 +56,7 @@ export class NoteSageView extends ItemView {
 	}
 
 	getDisplayText(): string {
-		return 'Note Sage';
+		return t('appTitle');
 	}
 
 	getIcon(): string {
@@ -84,7 +90,7 @@ export class NoteSageView extends ItemView {
 		const headerEl = container.createEl('div', { cls: 'sage-chat-header' });
 
 		headerEl.createEl('div', {
-			text: 'Note Sage',
+			text: t('appTitle'),
 			cls: 'sage-chat-title'
 		});
 
@@ -95,7 +101,7 @@ export class NoteSageView extends ItemView {
 
 		// Examples 버튼
 		const examplesButton = buttonGroupEl.createEl('button', {
-			text: 'Examples',
+			text: t('examples'),
 			cls: 'sage-examples-button'
 		});
 		this.registerDomEvent(examplesButton, 'click', () => this.showExamples());
@@ -103,7 +109,7 @@ export class NoteSageView extends ItemView {
 		// Settings 버튼
 		const settingsButton = buttonGroupEl.createEl('button', {
 			cls: 'sage-settings-button',
-			attr: { 'aria-label': 'Plugin settings' }
+			attr: { 'aria-label': t('pluginSettings') }
 		});
 		setIcon(settingsButton, 'settings');
 		this.registerDomEvent(settingsButton, 'click', () => this.openSettings());
@@ -111,7 +117,7 @@ export class NoteSageView extends ItemView {
 		// New Chat 버튼
 		const newChatButton = buttonGroupEl.createEl('button', {
 			cls: 'sage-new-chat-button',
-			attr: { 'aria-label': 'New chat' }
+			attr: { 'aria-label': t('newChat') }
 		});
 		setIcon(newChatButton, 'plus');
 		this.registerDomEvent(newChatButton, 'click', () => this.startNewChat());
@@ -122,7 +128,7 @@ export class NoteSageView extends ItemView {
 
 		this.modelSelector = selectorContainer.createEl('select', {
 			cls: 'sage-model-selector',
-			attr: { 'aria-label': 'Select Claude model' }
+			attr: { 'aria-label': t('selectModel') }
 		}) as HTMLSelectElement;
 
 		// AVAILABLE_MODELS에서 옵션 생성
@@ -183,26 +189,26 @@ export class NoteSageView extends ItemView {
 		const quickActionsEl = this.inputContainer.createEl('div', { cls: 'sage-quick-actions' });
 
 		const actions = [
-			{ icon: 'file-text', label: 'Summarize', prompt: 'Please summarize this document concisely.' },
-			{ icon: 'edit', label: 'Improve', prompt: 'Please improve the writing style and fix any errors.' },
-			{ icon: 'search', label: 'Analyze', prompt: 'Please analyze this document and provide insights.' },
-			{ icon: 'languages', label: 'Translate', prompt: 'Please translate this text to English. If already in English, translate to Korean.' },
+			{ icon: 'file-text', labelKey: 'quickAction.summarize', promptKey: 'quickAction.summarizePrompt' },
+			{ icon: 'edit', labelKey: 'quickAction.improve', promptKey: 'quickAction.improvePrompt' },
+			{ icon: 'search', labelKey: 'quickAction.analyze', promptKey: 'quickAction.analyzePrompt' },
+			{ icon: 'languages', labelKey: 'quickAction.translate', promptKey: 'quickAction.translatePrompt' },
 		];
 
 		for (const action of actions) {
 			const button = quickActionsEl.createEl('button', {
 				cls: 'sage-quick-action-button',
-				attr: { 'aria-label': action.label }
+				attr: { 'aria-label': t(action.labelKey) }
 			});
 
 			const iconEl = button.createEl('span', { cls: 'sage-quick-action-icon' });
 			setIcon(iconEl, action.icon);
 
-			button.createEl('span', { text: action.label, cls: 'sage-quick-action-label' });
+			button.createEl('span', { text: t(action.labelKey), cls: 'sage-quick-action-label' });
 
 			this.registerDomEvent(button, 'click', () => {
 				if (!this.isProcessing) {
-					this.sendMessage(action.prompt);
+					this.sendMessage(t(action.promptKey));
 				}
 			});
 		}
@@ -212,14 +218,14 @@ export class NoteSageView extends ItemView {
 		this.fileContextHeader = this.inputContainer.createEl('div', { cls: 'sage-file-context-header' });
 		const fileContextToggle = this.fileContextHeader.createEl('div', {
 			cls: 'sage-file-context-toggle',
-			attr: { 'aria-label': "Add current page's context to message" }
+			attr: { 'aria-label': t('addCurrentPageContext') }
 		});
 
 		const fileIcon = fileContextToggle.createEl('span', { cls: 'sage-file-context-icon' });
 		setIcon(fileIcon, 'file-text');
 
 		const fileContextText = fileContextToggle.createEl('span', { cls: 'sage-file-context-text' });
-		fileContextText.setText('Current page');
+		fileContextText.setText(t('currentPage'));
 
 		fileContextToggle.toggleClass('active', this.includeFileContext);
 
@@ -233,7 +239,7 @@ export class NoteSageView extends ItemView {
 		this.inputField = this.inputContainer.createEl('textarea', {
 			cls: 'sage-chat-input',
 			attr: {
-				placeholder: 'Type your message (press Enter to send and Shift+Enter for a new line)...',
+				placeholder: t('inputPlaceholder'),
 				rows: '3'
 			}
 		}) as HTMLTextAreaElement;
@@ -257,7 +263,7 @@ export class NoteSageView extends ItemView {
 
 		this.sendButton = buttonContainer.createEl('button', {
 			cls: 'sage-chat-send-button',
-			attr: { 'aria-label': 'Send message' }
+			attr: { 'aria-label': t('sendMessage') }
 		}) as HTMLButtonElement;
 		setIcon(this.sendButton, 'corner-down-right');
 		this.registerDomEvent(this.sendButton, 'click', () => this.handleButtonClick());
@@ -271,14 +277,14 @@ export class NoteSageView extends ItemView {
 		if (processing) {
 			this.sendButton.empty();
 			setIcon(this.sendButton, 'square');
-			this.sendButton.setAttribute('aria-label', 'Cancel processing');
+			this.sendButton.setAttribute('aria-label', t('cancelProcessing'));
 			this.sendButton.addClass('sage-cancel-button');
 			this.loadingIndicator.removeClass('hidden');
 			this.inputField.disabled = true;
 		} else {
 			this.sendButton.empty();
 			setIcon(this.sendButton, 'corner-down-right');
-			this.sendButton.setAttribute('aria-label', 'Send message');
+			this.sendButton.setAttribute('aria-label', t('sendMessage'));
 			this.sendButton.removeClass('sage-cancel-button');
 			this.loadingIndicator.addClass('hidden');
 			this.inputField.disabled = false;
@@ -333,7 +339,7 @@ export class NoteSageView extends ItemView {
 		const filePath = vaultPath ? `${vaultPath}/${activeFile.path}` : activeFile.path;
 
 		// 파일 경로 추가
-		contextParts.push(`Current file: ${filePath}`);
+		contextParts.push(`${t('currentFile')}: ${filePath}`);
 
 		// Phase 1-A: 파일 내용 컨텍스트
 		if (this.settings.includeFileContent) {
@@ -342,19 +348,19 @@ export class NoteSageView extends ItemView {
 				if (this.settings.includeSelection) {
 					const selection = this.getActiveSelection();
 					if (selection) {
-						contextParts.push(`\nSelected text:\n\`\`\`\n${selection}\n\`\`\``);
+						contextParts.push(`\n${t('selectedText')}:\n\`\`\`\n${selection}\n\`\`\``);
 					} else {
 						// 선택 영역이 없으면 전체 파일 내용 포함
 						const content = await this.getFileContent(activeFile);
 						if (content) {
-							contextParts.push(`\nFile content:\n\`\`\`\n${content}\n\`\`\``);
+							contextParts.push(`\n${t('fileContent')}:\n\`\`\`\n${content}\n\`\`\``);
 						}
 					}
 				} else {
 					// 선택 영역 옵션이 비활성화된 경우 전체 파일 내용 포함
 					const content = await this.getFileContent(activeFile);
 					if (content) {
-						contextParts.push(`\nFile content:\n\`\`\`\n${content}\n\`\`\``);
+						contextParts.push(`\n${t('fileContent')}:\n\`\`\`\n${content}\n\`\`\``);
 					}
 				}
 			} catch (error) {
@@ -384,7 +390,7 @@ export class NoteSageView extends ItemView {
 			const maxLength = this.settings.maxContentLength || 10000;
 
 			if (content.length > maxLength) {
-				return content.substring(0, maxLength) + `\n\n... (truncated, ${content.length - maxLength} characters omitted)`;
+				return content.substring(0, maxLength) + `\n\n... (${t('truncated')}, ${content.length - maxLength} ${t('charactersOmitted')})`;
 			}
 
 			return content;
@@ -414,7 +420,7 @@ export class NoteSageView extends ItemView {
 		const vaultPath = this.getVaultBasePath();
 		if (!vaultPath) {
 			const errorMessage = MessageFactory.createErrorMessage(
-				new Error('Unable to determine vault path. This plugin requires a local vault.'),
+				new Error(t('vaultPathError')),
 				this.currentSessionId
 			);
 			this.addMessage(errorMessage);
@@ -540,6 +546,11 @@ export class NoteSageView extends ItemView {
 		this.settings = settings;
 		this.agentService.updateSettings(settings);
 
+		// Update language if changed
+		if (settings.language) {
+			setLanguage(settings.language);
+		}
+
 		// 모델 선택기 동기화
 		if (this.modelSelector && settings.model) {
 			this.modelSelector.value = settings.model;
@@ -606,13 +617,13 @@ export class NoteSageView extends ItemView {
 		}
 		lines.push('---');
 		lines.push('');
-		lines.push(`# AI Chat - ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`);
+		lines.push(`# ${t('aiChatTitle')} - ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`);
 		lines.push('');
 
 		// 메시지 변환
 		for (const msg of this.messages) {
 			if (msg.type === 'user' && 'isUserInput' in msg && msg.isUserInput) {
-				lines.push('## User');
+				lines.push(`## ${t('user')}`);
 				const content = msg.message.content;
 				for (const block of content) {
 					if (block.type === 'text') {
@@ -621,22 +632,22 @@ export class NoteSageView extends ItemView {
 				}
 				lines.push('');
 			} else if (msg.type === 'assistant') {
-				lines.push('## Assistant');
+				lines.push(`## ${t('assistant')}`);
 				const content = msg.message.content;
 				for (const block of content) {
 					if (block.type === 'text') {
 						lines.push(block.text);
 					} else if (block.type === 'tool_use') {
-						lines.push(`> Using tool: ${block.name}`);
+						lines.push(`> ${t('usingTool')}: ${block.name}`);
 					}
 				}
 				lines.push('');
 			} else if (msg.type === 'result' && msg.result) {
-				lines.push('## Result');
+				lines.push(`## ${t('result')}`);
 				lines.push(msg.result);
 				lines.push('');
 				if (msg.duration_ms) {
-					lines.push(`*Duration: ${(msg.duration_ms / 1000).toFixed(2)}s*`);
+					lines.push(`*${t('duration')}: ${(msg.duration_ms / 1000).toFixed(2)}s*`);
 				}
 				lines.push('');
 			}
