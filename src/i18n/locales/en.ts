@@ -66,6 +66,11 @@ interface SettingsTranslations {
 	language: string;
 	languageDesc: string;
 	languageAuto: string;
+	// Quick Actions
+	quickActions: string;
+	quickActionsDesc: string;
+	customPromptPlaceholder: string;
+	resetToDefault: string;
 	about: string;
 	aboutText1: string;
 	aboutText2: string;
@@ -249,6 +254,12 @@ export const en: TranslationKeys = {
 		language: 'Language',
 		languageDesc: 'Select the interface language',
 		languageAuto: 'Auto (System)',
+
+		// Quick Actions
+		quickActions: 'Quick Actions',
+		quickActionsDesc: 'Configure quick action buttons above the chat input',
+		customPromptPlaceholder: 'Enter custom prompt (leave empty for default)',
+		resetToDefault: 'Reset to default',
 
 		// About
 		about: 'About',

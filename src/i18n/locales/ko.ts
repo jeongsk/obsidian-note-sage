@@ -140,6 +140,12 @@ export const ko: TranslationKeys = {
 		languageDesc: '인터페이스 언어를 선택하세요',
 		languageAuto: '자동 (시스템)',
 
+		// Quick Actions
+		quickActions: '빠른 액션',
+		quickActionsDesc: '채팅 입력창 위의 빠른 액션 버튼을 설정합니다',
+		customPromptPlaceholder: '사용자 지정 프롬프트 입력 (기본값 사용 시 비워두세요)',
+		resetToDefault: '기본값으로 리셋',
+
 		// About
 		about: '정보',
 		aboutText1: '이 플러그인은 Claude Agent SDK를 사용하여 Obsidian 내에서 AI 지원 기능을 제공합니다.',
