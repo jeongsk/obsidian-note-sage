@@ -16,26 +16,6 @@ export class NoteSageSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		// Language setting (placed first for better UX)
-		new Setting(containerEl)
-			.setName(t('settings.language'))
-			.setDesc(t('settings.languageDesc'))
-			.addDropdown(dropdown => {
-				AVAILABLE_LANGUAGES.forEach(lang => {
-					dropdown.addOption(lang.value, lang.label);
-				});
-				dropdown
-					.setValue(this.plugin.settings.language || 'auto')
-					.onChange(async (value) => {
-						this.plugin.settings.language = value as SupportedLanguage;
-						setLanguage(value as SupportedLanguage);
-						await this.plugin.saveSettings();
-						this.updateViews();
-						// Refresh the settings display with new language
-						this.display();
-					});
-			});
-
 		// Model selection
 		new Setting(containerEl)
 			.setName(t('settings.model'))
@@ -141,6 +121,26 @@ export class NoteSageSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 					this.updateViews();
 				}));
+
+		// Language setting
+		new Setting(containerEl)
+			.setName(t('settings.language'))
+			.setDesc(t('settings.languageDesc'))
+			.addDropdown(dropdown => {
+				AVAILABLE_LANGUAGES.forEach(lang => {
+					dropdown.addOption(lang.value, lang.label);
+				});
+				dropdown
+					.setValue(this.plugin.settings.language || 'auto')
+					.onChange(async (value) => {
+						this.plugin.settings.language = value as SupportedLanguage;
+						setLanguage(value as SupportedLanguage);
+						await this.plugin.saveSettings();
+						this.updateViews();
+						// Refresh the settings display with new language
+						this.display();
+					});
+			});
 
 		// ==================== Claude CLI 고급 설정 ====================
 		new Setting(containerEl)
