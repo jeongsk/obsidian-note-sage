@@ -61,7 +61,7 @@ export class NoteSageView extends ItemView {
 		container.addClass('sage-chat-container');
 
 		this.createChatInterface(container);
-		this.renderer = new ChatRenderer(this.messagesContainer);
+		this.renderer = new ChatRenderer(this.messagesContainer, this);
 	}
 
 	async onClose(): Promise<void> {
@@ -93,7 +93,7 @@ export class NoteSageView extends ItemView {
 			text: 'Examples',
 			cls: 'sage-examples-button'
 		});
-		examplesButton.addEventListener('click', () => this.showExamples());
+		this.registerDomEvent(examplesButton, 'click', () => this.showExamples());
 
 		// Settings 버튼
 		const settingsButton = buttonGroupEl.createEl('button', {
@@ -101,7 +101,7 @@ export class NoteSageView extends ItemView {
 			attr: { 'aria-label': 'Plugin settings' }
 		});
 		setIcon(settingsButton, 'settings');
-		settingsButton.addEventListener('click', () => this.openSettings());
+		this.registerDomEvent(settingsButton, 'click', () => this.openSettings());
 
 		// New Chat 버튼
 		const newChatButton = buttonGroupEl.createEl('button', {
@@ -109,7 +109,7 @@ export class NoteSageView extends ItemView {
 			attr: { 'aria-label': 'New chat' }
 		});
 		setIcon(newChatButton, 'plus');
-		newChatButton.addEventListener('click', () => this.startNewChat());
+		this.registerDomEvent(newChatButton, 'click', () => this.startNewChat());
 	}
 
 	private createChatBody(container: HTMLElement): void {
@@ -148,7 +148,7 @@ export class NoteSageView extends ItemView {
 
 			button.createEl('span', { text: action.label, cls: 'sage-quick-action-label' });
 
-			button.addEventListener('click', () => {
+			this.registerDomEvent(button, 'click', () => {
 				if (!this.isProcessing) {
 					this.sendMessage(action.prompt);
 				}
@@ -171,7 +171,7 @@ export class NoteSageView extends ItemView {
 
 		fileContextToggle.toggleClass('active', this.includeFileContext);
 
-		fileContextToggle.addEventListener('click', () => {
+		this.registerDomEvent(fileContextToggle, 'click', () => {
 			this.includeFileContext = !this.includeFileContext;
 			fileContextToggle.toggleClass('active', this.includeFileContext);
 		});
@@ -186,14 +186,14 @@ export class NoteSageView extends ItemView {
 			}
 		}) as HTMLTextAreaElement;
 
-		this.inputField.addEventListener('keydown', (e: KeyboardEvent) => {
+		this.registerDomEvent(this.inputField, 'keydown', (e: KeyboardEvent) => {
 			if (e.key === 'Enter' && !e.shiftKey) {
 				e.preventDefault();
 				this.handleButtonClick();
 			}
 		});
 
-		this.inputField.addEventListener('input', () => this.autoResizeTextarea());
+		this.registerDomEvent(this.inputField, 'input', () => this.autoResizeTextarea());
 		this.autoResizeTextarea();
 	}
 
@@ -208,7 +208,7 @@ export class NoteSageView extends ItemView {
 			attr: { 'aria-label': 'Send message' }
 		}) as HTMLButtonElement;
 		setIcon(this.sendButton, 'corner-down-right');
-		this.sendButton.addEventListener('click', () => this.handleButtonClick());
+		this.registerDomEvent(this.sendButton, 'click', () => this.handleButtonClick());
 	}
 
 	// ==================== 상태 관리 ====================

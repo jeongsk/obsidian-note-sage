@@ -1,4 +1,4 @@
-import { setIcon } from 'obsidian';
+import { Component, sanitizeHTMLToDom, setIcon } from 'obsidian';
 import type {
 	ChatMessage,
 	ContentBlock,
@@ -19,9 +19,11 @@ import type {
  */
 export class ChatRenderer {
 	private messagesContainer: HTMLElement;
+	private component: Component;
 
-	constructor(messagesContainer: HTMLElement) {
+	constructor(messagesContainer: HTMLElement, component: Component) {
 		this.messagesContainer = messagesContainer;
+		this.component = component;
 	}
 
 	/**
@@ -140,7 +142,8 @@ export class ChatRenderer {
 	 */
 	private renderTextBlock(container: HTMLElement, content: TextBlock): void {
 		const textEl = container.createEl('div', { cls: 'sage-message-text' });
-		textEl.innerHTML = this.formatText(content.text);
+		const sanitizedDom = sanitizeHTMLToDom(this.formatText(content.text));
+		textEl.appendChild(sanitizedDom);
 
 		// Phase 2-G: 복사 버튼 이벤트 리스너 추가
 		this.attachCopyButtonListeners(textEl);
@@ -152,7 +155,7 @@ export class ChatRenderer {
 	private attachCopyButtonListeners(container: HTMLElement): void {
 		const copyButtons = container.querySelectorAll('.sage-copy-button');
 		copyButtons.forEach(button => {
-			button.addEventListener('click', async (e) => {
+			this.component.registerDomEvent(button as HTMLElement, 'click', async (e) => {
 				e.preventDefault();
 				e.stopPropagation();
 
@@ -170,7 +173,7 @@ export class ChatRenderer {
 						target.textContent = 'Copied!';
 						target.classList.add('copied');
 
-						setTimeout(() => {
+						window.setTimeout(() => {
 							target.textContent = originalText;
 							target.classList.remove('copied');
 						}, 2000);
@@ -186,9 +189,9 @@ export class ChatRenderer {
 	 * HTML 엔티티 디코딩
 	 */
 	private decodeHtmlEntities(text: string): string {
-		const textarea = document.createElement('textarea');
-		textarea.innerHTML = text;
-		return textarea.value;
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(`<!DOCTYPE html><body>${text}</body>`, 'text/html');
+		return doc.body.textContent || '';
 	}
 
 	/**
@@ -220,7 +223,8 @@ export class ChatRenderer {
 	 */
 	private renderResult(container: HTMLElement, result: string): void {
 		const resultEl = container.createEl('div', { cls: 'sage-final-result' });
-		resultEl.innerHTML = this.formatText(result);
+		const sanitizedDom = sanitizeHTMLToDom(this.formatText(result));
+		resultEl.appendChild(sanitizedDom);
 	}
 
 	/**
@@ -336,7 +340,7 @@ export class ChatRenderer {
 	 * 접기/펼치기 토글 이벤트 추가
 	 */
 	private addCollapseToggle(headerEl: HTMLElement, contentEl: HTMLElement): void {
-		headerEl.addEventListener('click', () => {
+		this.component.registerDomEvent(headerEl, 'click', () => {
 			contentEl.toggleClass('collapsed', !contentEl.hasClass('collapsed'));
 		});
 	}
@@ -396,8 +400,11 @@ export class ChatRenderer {
 	/**
 	 * 메시지 컨테이너 업데이트
 	 */
-	updateContainer(messagesContainer: HTMLElement): void {
+	updateContainer(messagesContainer: HTMLElement, component?: Component): void {
 		this.messagesContainer = messagesContainer;
+		if (component) {
+			this.component = component;
+		}
 	}
 
 	/**
