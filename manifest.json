@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-note-sage",
 	"name": "Note Sage",
-	"version": "0.4.13",
+	"version": "0.4.14",
 	"minAppVersion": "0.15.0",
 	"description": "An intelligent AI assistant plugin for Obsidian that helps you work with your notes.",
 	"author": "Jeongsk",
