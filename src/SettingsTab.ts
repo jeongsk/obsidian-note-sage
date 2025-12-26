@@ -122,6 +122,11 @@ export class NoteSageSettingTab extends PluginSettingTab {
 					this.updateViews();
 				}));
 
+		// ==================== Claude CLI 고급 설정 ====================
+		new Setting(containerEl)
+			.setName(t('settings.claudeCliAdvanced'))
+			.setHeading();
+
 		// Language setting
 		new Setting(containerEl)
 			.setName(t('settings.language'))
@@ -141,11 +146,6 @@ export class NoteSageSettingTab extends PluginSettingTab {
 						this.display();
 					});
 			});
-
-		// ==================== Claude CLI 고급 설정 ====================
-		new Setting(containerEl)
-			.setName(t('settings.claudeCliAdvanced'))
-			.setHeading();
 
 		// API Key setting
 		new Setting(containerEl)
