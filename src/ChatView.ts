@@ -6,6 +6,7 @@ import { ChatRenderer } from './ChatRenderer';
 import { MessageFactory } from './MessageFactory';
 import { createExampleMessages } from './exampleMessages';
 import { t, setLanguage } from './i18n';
+import type NoteSagePlugin from './main';
 
 export const VIEW_TYPE_NOTE_SAGE = 'note-sage-view';
 
@@ -19,7 +20,8 @@ export const VIEW_TYPE_NOTE_SAGE = 'note-sage-view';
  * - AgentService와의 통신 조율
  */
 export class NoteSageView extends ItemView {
-	// 설정 및 서비스
+	// 플러그인 및 서비스
+	private plugin: NoteSagePlugin;
 	private settings: NoteSageSettings;
 	private agentService: AgentService;
 	private renderer: ChatRenderer;
@@ -41,14 +43,15 @@ export class NoteSageView extends ItemView {
 	private modelSelector: HTMLSelectElement;
 	private quickActionsContainer: HTMLElement;
 
-	constructor(leaf: WorkspaceLeaf, settings: NoteSageSettings) {
+	constructor(leaf: WorkspaceLeaf, plugin: NoteSagePlugin) {
 		super(leaf);
-		this.settings = settings;
-		this.agentService = new AgentService(settings);
+		this.plugin = plugin;
+		this.settings = plugin.settings;
+		this.agentService = new AgentService(this.settings);
 
 		// Initialize language from settings
-		if (settings.language) {
-			setLanguage(settings.language);
+		if (this.settings.language) {
+			setLanguage(this.settings.language);
 		}
 	}
 
@@ -451,6 +454,9 @@ export class NoteSageView extends ItemView {
 			return;
 		}
 
+		// 에이전트 실행 시작 - 파일 수정 시 에디터 재렌더링 활성화
+		this.plugin.setAgentExecuting(true);
+
 		try {
 			const sessionId = await this.agentService.execute({
 				prompt,
@@ -494,6 +500,9 @@ export class NoteSageView extends ItemView {
 				this.currentSessionId
 			);
 			this.addMessage(errorMessage);
+		} finally {
+			// 에이전트 실행 완료 - 파일 수정 시 에디터 재렌더링 비활성화
+			this.plugin.setAgentExecuting(false);
 		}
 	}
 

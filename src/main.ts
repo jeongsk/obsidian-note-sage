@@ -14,6 +14,11 @@ interface QuickPrompt {
 
 export default class NoteSagePlugin extends Plugin {
 	settings: NoteSageSettings;
+	isAgentExecuting: boolean = false;
+
+	setAgentExecuting(value: boolean): void {
+		this.isAgentExecuting = value;
+	}
 
 	// Phase 1-D: 빠른 프롬프트 정의 (i18n 키 사용)
 	private quickPrompts: QuickPrompt[] = [
@@ -34,8 +39,11 @@ export default class NoteSagePlugin extends Plugin {
 		}
 
 		// 파일 변경 감지: Agent SDK가 fs로 직접 수정한 파일을 에디터에 반영
+		// 에이전트 실행 중일 때만 rebuildView() 호출 (사용자 직접 수정 시에는 무시)
 		this.registerEvent(
 			this.app.vault.on('modify', (file) => {
+				if (!this.isAgentExecuting) return;
+
 				const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
 				if (activeView && activeView.file?.path === file.path) {
 					// rebuildView()는 내부 API이므로 타입 단언 사용
@@ -47,7 +55,7 @@ export default class NoteSagePlugin extends Plugin {
 		// Register the custom view
 		this.registerView(
 			VIEW_TYPE_NOTE_SAGE,
-			(leaf) => new NoteSageView(leaf, this.settings)
+			(leaf) => new NoteSageView(leaf, this)
 		);
 
 		// Open the view in the right sidebar by default
