@@ -1,4 +1,4 @@
-# Obsidian AI Agent - User Manual
+# Note Sage - User Manual
 
 ## Table of Contents
 
@@ -10,8 +10,10 @@
   - [Chat Interface](#chat-interface)
   - [Sending Messages](#sending-messages)
   - [File Context](#file-context)
+  - [Quick Actions](#quick-actions)
   - [Session Management](#session-management)
 - [Settings](#settings)
+- [MCP Servers](#mcp-servers)
 - [Available Models](#available-models)
 - [Features](#features)
 - [Troubleshooting](#troubleshooting)
@@ -21,7 +23,7 @@
 
 ## Introduction
 
-**Obsidian AI Agent** is an Obsidian plugin that integrates Claude AI directly into your Obsidian workspace. Using the Claude Agent SDK, it provides an AI chat interface in Obsidian's right sidebar, allowing you to interact with Claude while working in your vault.
+**Note Sage** is an Obsidian plugin that integrates Claude AI directly into your Obsidian workspace. Using the Claude Agent SDK, it provides an AI chat interface in Obsidian's right sidebar, allowing you to interact with Claude while working in your vault.
 
 ### Key Capabilities
 
@@ -31,6 +33,9 @@
 - Real-time streaming of AI responses
 - Support for multiple Claude models
 - File reading and command execution through the AI agent
+- **MCP server integration** for connecting external tools
+- **11 language support** with RTL support (Arabic)
+- **Customizable quick actions** for common tasks
 
 ---
 
@@ -48,16 +53,16 @@
 
 1. Open Obsidian Settings
 2. Go to **Community Plugins**
-3. Click **Browse** and search for "Obsidian AI Agent"
+3. Click **Browse** and search for "Note Sage"
 4. Click **Install**
 5. Enable the plugin
 
 ### Manual Installation
 
 1. Download the latest release from the GitHub repository
-2. Extract the files to your vault's `.obsidian/plugins/obsidian-ai-agent/` directory
+2. Extract the files to your vault's `.obsidian/plugins/obsidian-note-sage/` directory
 3. Reload Obsidian
-4. Go to **Settings** → **Community Plugins** and enable "Obsidian AI Agent"
+4. Go to **Settings** → **Community Plugins** and enable "Note Sage"
 
 ---
 
@@ -74,10 +79,11 @@
 ### Configuring the Plugin
 
 1. Open Obsidian Settings
-2. Go to **Obsidian AI Agent** in the left sidebar
+2. Go to **Note Sage** in the left sidebar
 3. Paste your Anthropic API Key in the **Anthropic API Key** field
 4. Select your preferred Claude model
-5. Close settings
+5. Choose your preferred interface language (11 languages available)
+6. Close settings
 
 ---
 
@@ -126,6 +132,24 @@ The plugin can include context from your currently active note in your messages.
 
 This is useful when asking questions about or requesting modifications to your current note.
 
+### Quick Actions
+
+Use the quick action buttons above the chat input for common tasks:
+
+| Action | Description |
+|--------|-------------|
+| **Summarize** | Concisely summarize the current document |
+| **Improve** | Improve writing style and fix errors |
+| **Analyze** | Analyze the document and provide insights |
+| **Translate** | Translate content between languages |
+
+#### Customizing Quick Actions
+
+1. Go to **Settings > Note Sage > Quick Actions**
+2. Enable/disable individual buttons
+3. Set custom prompts for each action
+4. Leave empty to use default prompts
+
 ### Session Management
 
 The plugin maintains conversation sessions for continuity:
@@ -138,13 +162,62 @@ The plugin maintains conversation sessions for continuity:
 
 ## Settings
 
-Access settings via **Obsidian Settings** → **Obsidian AI Agent** or click the ⚙️ button in the chat header.
+Access settings via **Obsidian Settings** → **Note Sage** or click the ⚙️ button in the chat header.
+
+### Basic Settings
+
+| Setting | Description |
+|---------|-------------|
+| **Model** | Select the Claude model to use |
+| **Language** | Interface language (Auto or choose from 11 languages) |
+
+### File Context
+
+| Setting | Description |
+|---------|-------------|
+| **Include file content** | Include current file content in context |
+| **Prefer selected text** | Include only selection instead of entire file |
+| **Max content length** | Maximum characters to include from file |
+
+### Quick Actions
+
+| Setting | Description |
+|---------|-------------|
+| **Enable/Disable buttons** | Toggle individual quick action buttons |
+| **Custom prompts** | Set custom prompts for each action |
+
+### Advanced Settings
 
 | Setting | Description |
 |---------|-------------|
 | **Anthropic API Key** | Your API key from console.anthropic.com |
-| **Model** | Select the Claude model to use |
+| **Claude CLI Path** | Path to claude executable (auto-detected) |
+| **Custom System Prompt** | Custom instructions for Claude |
 | **Debug mode** | Enable detailed logging in the browser console |
+
+---
+
+## MCP Servers
+
+MCP (Model Context Protocol) servers extend the AI agent's capabilities by connecting external tools and resources.
+
+### Adding an MCP Server
+
+1. Go to **Settings > Note Sage > MCP Servers**
+2. Click **Add Server**
+3. Choose server type:
+   - **stdio**: Command-line based servers
+   - **SSE**: Server-Sent Events based servers
+   - **HTTP**: HTTP-based servers
+4. Configure server settings (command, URL, etc.)
+5. Enable the server
+
+### MCP Tools Panel
+
+When MCP servers are connected:
+- View available tools from connected servers
+- See tool descriptions and parameters
+- Monitor server connection status
 
 ---
 
@@ -260,9 +333,9 @@ Yes, when using the agent with appropriate permissions, it can read and modify f
 
 ## Support
 
-- **Issues**: Report problems on [GitHub Issues](https://github.com/anpigon/obsidian-ai-agent/issues)
+- **Issues**: Report problems on [GitHub Issues](https://github.com/jeongsk/obsidian-note-sage/issues)
 - **Documentation**: Check the project's CLAUDE.md for developer information
 
 ---
 
-*Version 0.2.0 | Obsidian AI Agent*
+*Version 0.6.0 | Note Sage*

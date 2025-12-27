@@ -1,6 +1,6 @@
 # Note Sage
 
-[한국어](README.md) | [English](README_EN.md) | [简体中文](README_ZH.md) | [日本語](README_JA.md)
+[한국어](README.md) | [English](README_EN.md) | [简体中文](README_ZH.md) | [日本語](README_JA.md) | [Deutsch](README_DE.md) | [Français](README_FR.md) | [Español](README_ES.md) | [Português](README_PT.md) | [Русский](README_RU.md) | [हिन्दी](README_HI.md) | [العربية](README_AR.md)
 
 https://github.com/user-attachments/assets/3b251604-cf52-4f38-8c9d-fba67e280b64
 
@@ -19,7 +19,8 @@ This plugin keeps Claude context-aware of your Obsidian environment while lettin
 - **Context-aware**: Automatically includes relevant vault context in conversations
 - **Real-time collaboration**: See AI edits happen live in your Obsidian interface
 - **Quick Actions**: Execute common tasks quickly with predefined prompts (Summarize, Improve, Analyze, Translate)
-- **Multilingual UI**: Support for English and Korean interfaces
+- **MCP Server Integration**: Connect external tools and resources to the AI agent
+- **Multilingual UI**: Support for 11 languages (English, Korean, Japanese, Chinese, German, French, Spanish, Portuguese, Russian, Hindi, Arabic)
 - **Session management**: Maintain conversation continuity and save conversations
 
 ## Installation
@@ -74,7 +75,7 @@ You can customize each button's prompt in settings.
 | Setting | Description |
 |---------|-------------|
 | Model | Select Claude model (opus-4-5, sonnet-4-5, haiku-4-5) |
-| Language | Interface language (Auto/English/Korean) |
+| Language | Interface language (Auto or choose from 11 languages) |
 
 ### File Context
 
@@ -87,6 +88,16 @@ You can customize each button's prompt in settings.
 ### Quick Actions
 
 Customize the prompt for each quick action button in settings. Leave empty to use defaults.
+
+### MCP Servers
+
+Connect MCP (Model Context Protocol) servers to extend the AI agent's capabilities.
+
+| Setting | Description |
+|---------|-------------|
+| Add Server | Connect stdio, SSE, or HTTP type MCP servers |
+| Enable/Disable Server | Toggle individual servers |
+| Tools Panel | View available tools from connected MCP servers |
 
 ### Advanced Settings
 
@@ -126,12 +137,16 @@ echo "$(sed -n 's/^exec "\([^"]*\)".*/\1/p' $(which claude))"
 
 ## Roadmap
 
-### Core Features
+### Completed Features
+- [x] **MCP Server Integration** - Connect external tools and resources
+- [x] **Multi-language Support** - 11 languages with RTL support
+- [x] **Quick Actions Customization** - Per-button prompt settings
+- [x] **Obsidian Plugin Management Tools** - Manage plugins through AI
+
+### Upcoming Features
 - [ ] **Interaction modes** - Write mode, Plan mode, and custom workflows
 - [ ] **Permission controls** - Fine-grained file access and editing permissions
 - [ ] **Cross-platform support** - Enhanced Windows/WSL compatibility
-
-### Obsidian Integration
 - [ ] **Context menu integration** - "Add to AI context" from file explorer
 - [ ] **File linking** - Open the files that were read/edited by the model
 - [ ] **Enhanced copy/paste** - Smart context copy/paste

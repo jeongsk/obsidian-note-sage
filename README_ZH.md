@@ -1,6 +1,6 @@
 # Note Sage
 
-[한국어](README.md) | [English](README_EN.md) | [简体中文](README_ZH.md) | [日本語](README_JA.md)
+[한국어](README.md) | [English](README_EN.md) | [简体中文](README_ZH.md) | [日本語](README_JA.md) | [Deutsch](README_DE.md) | [Français](README_FR.md) | [Español](README_ES.md) | [Português](README_PT.md) | [Русский](README_RU.md) | [हिन्दी](README_HI.md) | [العربية](README_AR.md)
 
 https://github.com/user-attachments/assets/3b251604-cf52-4f38-8c9d-fba67e280b64
 
@@ -19,7 +19,8 @@ https://github.com/user-attachments/assets/3b251604-cf52-4f38-8c9d-fba67e280b64
 - **上下文感知**：自动将相关的库上下文包含在对话中
 - **实时协作**：实时查看 AI 在 Obsidian 界面中的编辑
 - **快捷操作**：使用预定义提示快速执行常用任务（摘要、改进、分析、翻译）
-- **多语言界面**：支持英语和韩语界面
+- **MCP 服务器集成**：将外部工具和资源连接到 AI 代理
+- **多语言界面**：支持 11 种语言（中文、英语、韩语、日语、德语、法语、西班牙语、葡萄牙语、俄语、印地语、阿拉伯语）
 - **会话管理**：保持对话连续性并保存对话
 
 ## 安装
@@ -74,7 +75,7 @@ https://github.com/user-attachments/assets/3b251604-cf52-4f38-8c9d-fba67e280b64
 | 设置 | 说明 |
 |------|------|
 | 模型 | 选择 Claude 模型（opus-4-5、sonnet-4-5、haiku-4-5）|
-| 语言 | 界面语言（自动/英语/韩语）|
+| 语言 | 界面语言（自动或从 11 种语言中选择）|
 
 ### 文件上下文
 
@@ -87,6 +88,16 @@ https://github.com/user-attachments/assets/3b251604-cf52-4f38-8c9d-fba67e280b64
 ### 快捷操作
 
 在设置中自定义每个快捷操作按钮的提示。留空则使用默认值。
+
+### MCP 服务器
+
+连接 MCP（Model Context Protocol）服务器以扩展 AI 代理的功能。
+
+| 设置 | 说明 |
+|------|------|
+| 添加服务器 | 连接 stdio、SSE 或 HTTP 类型的 MCP 服务器 |
+| 启用/禁用服务器 | 切换单个服务器 |
+| 工具面板 | 查看已连接 MCP 服务器的可用工具 |
 
 ### 高级设置
 
@@ -126,12 +137,16 @@ echo "$(sed -n 's/^exec "\([^"]*\)".*/\1/p' $(which claude))"
 
 ## 路线图
 
-### 核心功能
+### 已完成的功能
+- [x] **MCP 服务器集成** - 连接外部工具和资源
+- [x] **多语言支持** - 11 种语言及 RTL 支持
+- [x] **快捷操作自定义** - 按钮级别的提示设置
+- [x] **Obsidian 插件管理工具** - 通过 AI 管理插件
+
+### 计划中的功能
 - [ ] **交互模式** - 写作模式、计划模式和自定义工作流
 - [ ] **权限控制** - 精细的文件访问和编辑权限
 - [ ] **跨平台支持** - 增强的 Windows/WSL 兼容性
-
-### Obsidian 集成
 - [ ] **上下文菜单集成** - 在文件浏览器中"添加到 AI 上下文"
 - [ ] **文件链接** - 打开模型读取/编辑过的文件
 - [ ] **增强的复制/粘贴** - 智能上下文复制/粘贴
