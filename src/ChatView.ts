@@ -327,7 +327,7 @@ export class NoteSageView extends ItemView {
 
 		const iconEl = this.mcpStatusContainer.createSpan({
 			cls: `sage-mcp-header-icon ${statusClass}`,
-			attr: { 'aria-label': tooltip, title: tooltip }
+			attr: { 'aria-label': tooltip }
 		});
 		setIcon(iconEl, iconName);
 
