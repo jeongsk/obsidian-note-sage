@@ -262,22 +262,22 @@ export class NoteSageView extends ItemView {
 	private createMcpStatusIcon(headerEl: HTMLElement): void {
 		this.mcpStatusContainer = headerEl.createEl('div', { cls: 'sage-mcp-header-status' });
 
-		// MCP 서버가 설정되어 있으면 표시
-		this.renderMcpStatusIcon();
-
-		// 상태 변경 구독
+		// 상태 변경 구독 및 McpToolsPanel 생성 (renderMcpStatusIcon보다 먼저)
 		if (this.plugin.mcpServerManager) {
-			this.unsubscribeMcpStatus = this.plugin.mcpServerManager.onStatusChange(() => {
-				this.renderMcpStatusIcon();
-			});
-
-			// McpToolsPanel 인스턴스 생성
+			// McpToolsPanel 인스턴스 생성 (클릭 이벤트에서 사용되므로 먼저 생성)
 			this.mcpToolsPanel = new McpToolsPanel(
 				this.mcpStatusContainer,
 				this.plugin,
 				this.plugin.mcpServerManager
 			);
+
+			this.unsubscribeMcpStatus = this.plugin.mcpServerManager.onStatusChange(() => {
+				this.renderMcpStatusIcon();
+			});
 		}
+
+		// MCP 서버가 설정되어 있으면 표시
+		this.renderMcpStatusIcon();
 	}
 
 	/**
