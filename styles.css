@@ -698,8 +698,8 @@
 .sage-mcp-toggle {
 	position: relative;
 	display: inline-block;
-	width: 42px;
-	height: 24px;
+	width: 32px;
+	height: 18px;
 	flex-shrink: 0;
 }
 
@@ -718,21 +718,21 @@
 	right: 0;
 	bottom: 0;
 	background-color: var(--background-modifier-border);
-	transition: 0.3s;
-	border-radius: 24px;
+	transition: 0.2s;
+	border-radius: 18px;
 }
 
 .sage-mcp-toggle-slider::before {
 	position: absolute;
 	content: "";
-	height: 18px;
-	width: 18px;
-	left: 3px;
-	bottom: 3px;
+	height: 14px;
+	width: 14px;
+	left: 2px;
+	bottom: 2px;
 	background-color: white;
-	transition: 0.3s;
+	transition: 0.2s;
 	border-radius: 50%;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .sage-mcp-toggle-checkbox:checked + .sage-mcp-toggle-slider {
@@ -740,7 +740,7 @@
 }
 
 .sage-mcp-toggle-checkbox:checked + .sage-mcp-toggle-slider::before {
-	transform: translateX(18px);
+	transform: translateX(14px);
 }
 
 .sage-mcp-btn {
