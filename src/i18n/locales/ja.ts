@@ -59,6 +59,7 @@ export const ja: TranslationKeys = {
 	// Code block
 	copy: 'コピー',
 	copied: 'コピーしました！',
+	copyFailed: '失敗',
 
 	// Markdown export
 	user: 'ユーザー',
@@ -178,6 +179,7 @@ export const ja: TranslationKeys = {
 			save: '保存',
 			cancel: 'キャンセル',
 			duplicateName: 'この名前のサーバーは既に存在します',
+			invalidJson: 'JSON形式が無効です',
 			statusConnected: '接続済み',
 			statusFailed: '接続失敗',
 			statusPending: '接続中...',
@@ -194,6 +196,8 @@ export const ja: TranslationKeys = {
 			panelToolsNotConnected: '接続して利用可能なツールを表示',
 			panelToolsCount: '{count}個のツール',
 			panelToggleError: 'サーバーステータスの変更に失敗しました',
+			deleteError: 'サーバーの削除に失敗しました',
+			saveError: 'サーバーの保存に失敗しました',
 		},
 
 		// About

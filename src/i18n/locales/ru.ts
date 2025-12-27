@@ -59,6 +59,7 @@ export const ru: TranslationKeys = {
 	// Code block
 	copy: 'Копировать',
 	copied: 'Скопировано!',
+	copyFailed: 'Ошибка',
 
 	// Markdown export
 	user: 'Пользователь',
@@ -178,6 +179,7 @@ export const ru: TranslationKeys = {
 			save: 'Сохранить',
 			cancel: 'Отмена',
 			duplicateName: 'Сервер с таким именем уже существует',
+			invalidJson: 'Неверный формат JSON',
 			statusConnected: 'Подключено',
 			statusFailed: 'Ошибка подключения',
 			statusPending: 'Подключение...',
@@ -194,6 +196,8 @@ export const ru: TranslationKeys = {
 			panelToolsNotConnected: 'Подключитесь для просмотра доступных инструментов',
 			panelToolsCount: '{count} инструментов',
 			panelToggleError: 'Не удалось изменить статус сервера',
+			deleteError: 'Не удалось удалить сервер',
+			saveError: 'Не удалось сохранить сервер',
 		},
 
 		// About

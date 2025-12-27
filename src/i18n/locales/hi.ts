@@ -59,6 +59,7 @@ export const hi: TranslationKeys = {
 	// Code block
 	copy: 'कॉपी करें',
 	copied: 'कॉपी हो गया!',
+	copyFailed: 'विफल',
 
 	// Markdown export
 	user: 'उपयोगकर्ता',
@@ -178,6 +179,7 @@ export const hi: TranslationKeys = {
 			save: 'सहेजें',
 			cancel: 'रद्द करें',
 			duplicateName: 'इस नाम का सर्वर पहले से मौजूद है',
+			invalidJson: 'अमान्य JSON प्रारूप',
 			statusConnected: 'कनेक्टेड',
 			statusFailed: 'कनेक्शन विफल',
 			statusPending: 'कनेक्ट हो रहा है...',
@@ -194,6 +196,8 @@ export const hi: TranslationKeys = {
 			panelToolsNotConnected: 'उपलब्ध टूल देखने के लिए कनेक्ट करें',
 			panelToolsCount: '{count} टूल',
 			panelToggleError: 'सर्वर स्थिति बदलने में विफल',
+			deleteError: 'सर्वर हटाने में विफल',
+			saveError: 'सर्वर सहेजने में विफल',
 		},
 
 		// About

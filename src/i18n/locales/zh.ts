@@ -59,6 +59,7 @@ export const zh: TranslationKeys = {
 	// Code block
 	copy: '复制',
 	copied: '已复制！',
+	copyFailed: '失败',
 
 	// Markdown export
 	user: '用户',
@@ -178,6 +179,7 @@ export const zh: TranslationKeys = {
 			save: '保存',
 			cancel: '取消',
 			duplicateName: '已存在同名服务器',
+			invalidJson: 'JSON格式无效',
 			statusConnected: '已连接',
 			statusFailed: '连接失败',
 			statusPending: '连接中...',
@@ -194,6 +196,8 @@ export const zh: TranslationKeys = {
 			panelToolsNotConnected: '连接后查看可用工具',
 			panelToolsCount: '{count}个工具',
 			panelToggleError: '更改服务器状态失败',
+			deleteError: '删除服务器失败',
+			saveError: '保存服务器失败',
 		},
 
 		// About

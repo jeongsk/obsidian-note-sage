@@ -60,6 +60,7 @@ interface McpSettingsTranslations {
 	save: string;
 	cancel: string;
 	duplicateName: string;
+	invalidJson: string;
 	statusConnected: string;
 	statusFailed: string;
 	statusPending: string;
@@ -76,6 +77,8 @@ interface McpSettingsTranslations {
 	panelToolsNotConnected: string;
 	panelToolsCount: string;
 	panelToggleError: string;
+	deleteError: string;
+	saveError: string;
 }
 
 interface SettingsTranslations {
@@ -156,6 +159,7 @@ export interface TranslationKeys {
 	tasks: string;
 	copy: string;
 	copied: string;
+	copyFailed: string;
 	user: string;
 	assistant: string;
 	result: string;
@@ -224,6 +228,7 @@ export const en: TranslationKeys = {
 	// Code block
 	copy: 'Copy',
 	copied: 'Copied!',
+	copyFailed: 'Failed',
 
 	// Markdown export
 	user: 'User',
@@ -343,6 +348,7 @@ export const en: TranslationKeys = {
 			save: 'Save',
 			cancel: 'Cancel',
 			duplicateName: 'A server with this name already exists',
+			invalidJson: 'Invalid JSON format',
 			statusConnected: 'Connected',
 			statusFailed: 'Connection failed',
 			statusPending: 'Connecting...',
@@ -359,6 +365,8 @@ export const en: TranslationKeys = {
 			panelToolsNotConnected: 'Connect to view available tools',
 			panelToolsCount: '{count} tools',
 			panelToggleError: 'Failed to change server status',
+			deleteError: 'Failed to delete server',
+			saveError: 'Failed to save server',
 		},
 
 		// About

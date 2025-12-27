@@ -59,6 +59,7 @@ export const ko: TranslationKeys = {
 	// Code block
 	copy: '복사',
 	copied: '복사됨!',
+	copyFailed: '실패',
 
 	// Markdown export
 	user: '사용자',
@@ -178,6 +179,7 @@ export const ko: TranslationKeys = {
 			save: '저장',
 			cancel: '취소',
 			duplicateName: '같은 이름의 서버가 이미 존재합니다',
+			invalidJson: '잘못된 JSON 형식입니다',
 			statusConnected: '연결됨',
 			statusFailed: '연결 실패',
 			statusPending: '연결 중...',
@@ -194,6 +196,8 @@ export const ko: TranslationKeys = {
 			panelToolsNotConnected: '연결 후 도구 목록을 확인할 수 있습니다',
 			panelToolsCount: '{count}개 도구',
 			panelToggleError: '서버 상태 변경에 실패했습니다',
+			deleteError: '서버 삭제에 실패했습니다',
+			saveError: '서버 저장에 실패했습니다',
 		},
 
 		// About

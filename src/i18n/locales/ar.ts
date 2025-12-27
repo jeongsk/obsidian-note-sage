@@ -59,6 +59,7 @@ export const ar: TranslationKeys = {
 	// Code block
 	copy: 'نسخ',
 	copied: 'تم النسخ!',
+	copyFailed: 'فشل',
 
 	// Markdown export
 	user: 'المستخدم',
@@ -178,6 +179,7 @@ export const ar: TranslationKeys = {
 			save: 'حفظ',
 			cancel: 'إلغاء',
 			duplicateName: 'خادم بهذا الاسم موجود بالفعل',
+			invalidJson: 'صيغة JSON غير صالحة',
 			statusConnected: 'متصل',
 			statusFailed: 'فشل الاتصال',
 			statusPending: 'جاري الاتصال...',
@@ -194,6 +196,8 @@ export const ar: TranslationKeys = {
 			panelToolsNotConnected: 'اتصل لعرض الأدوات المتاحة',
 			panelToolsCount: '{count} أدوات',
 			panelToggleError: 'فشل في تغيير حالة الخادم',
+			deleteError: 'فشل في حذف الخادم',
+			saveError: 'فشل في حفظ الخادم',
 		},
 
 		// About

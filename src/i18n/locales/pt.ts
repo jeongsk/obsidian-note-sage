@@ -59,6 +59,7 @@ export const pt: TranslationKeys = {
 	// Code block
 	copy: 'Copiar',
 	copied: 'Copiado!',
+	copyFailed: 'Falhou',
 
 	// Markdown export
 	user: 'Usuário',
@@ -178,6 +179,7 @@ export const pt: TranslationKeys = {
 			save: 'Salvar',
 			cancel: 'Cancelar',
 			duplicateName: 'Já existe um servidor com este nome',
+			invalidJson: 'Formato JSON inválido',
 			statusConnected: 'Conectado',
 			statusFailed: 'Conexão falhou',
 			statusPending: 'Conectando...',
@@ -194,6 +196,8 @@ export const pt: TranslationKeys = {
 			panelToolsNotConnected: 'Conecte para ver ferramentas disponíveis',
 			panelToolsCount: '{count} ferramentas',
 			panelToggleError: 'Falha ao alterar status do servidor',
+			deleteError: 'Falha ao excluir servidor',
+			saveError: 'Falha ao salvar servidor',
 		},
 
 		// About
