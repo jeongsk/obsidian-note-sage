@@ -77,9 +77,9 @@ export class ChatRenderer {
 			chatMessage.timestamp &&
 			((chatMessage.type === 'user' && chatMessage.isUserInput) || chatMessage.type === 'result');
 
-		if (showTimestamp) {
+		if (showTimestamp && chatMessage.timestamp) {
 			const timestampEl = messageEl.createEl('div', { cls: 'sage-message-timestamp' });
-			timestampEl.setText(chatMessage.timestamp!.toLocaleTimeString());
+			timestampEl.setText(chatMessage.timestamp.toLocaleTimeString());
 		}
 	}
 
@@ -164,13 +164,13 @@ export class ChatRenderer {
 				const code = target.getAttribute('data-code');
 
 				if (code) {
+					const originalText = target.textContent;
 					try {
 						// HTML 엔티티 디코딩
 						const decodedCode = this.decodeHtmlEntities(code);
 						await navigator.clipboard.writeText(decodedCode);
 
-						// 버튼 텍스트 변경
-						const originalText = target.textContent;
+						// 성공 피드백
 						target.textContent = t('copied');
 						target.classList.add('copied');
 
@@ -180,6 +180,14 @@ export class ChatRenderer {
 						}, 2000);
 					} catch (error) {
 						console.error('Failed to copy:', error);
+						// 실패 피드백
+						target.textContent = t('copyFailed');
+						target.classList.add('copy-failed');
+
+						window.setTimeout(() => {
+							target.textContent = originalText;
+							target.classList.remove('copy-failed');
+						}, 2000);
 					}
 				}
 			});
