@@ -7,6 +7,7 @@ import { MessageFactory } from './MessageFactory';
 import { createExampleMessages } from './exampleMessages';
 import { createObsidianPluginToolsServer } from './tools/ObsidianPluginTools';
 import { McpServerManager } from './mcp/McpServerManager';
+import { McpToolsPanel } from './mcp/McpToolsPanel';
 import { t, setLanguage } from './i18n';
 import type NoteSagePlugin from './main';
 
@@ -48,6 +49,9 @@ export class NoteSageView extends ItemView {
 
 	// MCP 상태 구독 해제 함수
 	private unsubscribeMcpStatus?: () => void;
+
+	// MCP 도구 패널
+	private mcpToolsPanel?: McpToolsPanel;
 
 	constructor(leaf: WorkspaceLeaf, plugin: NoteSagePlugin) {
 		super(leaf);
@@ -127,6 +131,12 @@ export class NoteSageView extends ItemView {
 		if (this.unsubscribeMcpStatus) {
 			this.unsubscribeMcpStatus();
 			this.unsubscribeMcpStatus = undefined;
+		}
+
+		// MCP 도구 패널 정리
+		if (this.mcpToolsPanel) {
+			this.mcpToolsPanel.destroy();
+			this.mcpToolsPanel = undefined;
 		}
 	}
 
@@ -239,6 +249,13 @@ export class NoteSageView extends ItemView {
 			this.unsubscribeMcpStatus = this.plugin.mcpServerManager.onStatusChange(() => {
 				this.renderMcpStatusIcon();
 			});
+
+			// McpToolsPanel 인스턴스 생성
+			this.mcpToolsPanel = new McpToolsPanel(
+				this.mcpStatusContainer,
+				this.plugin,
+				this.plugin.mcpServerManager
+			);
 		}
 	}
 
@@ -314,14 +331,11 @@ export class NoteSageView extends ItemView {
 		});
 		setIcon(iconEl, iconName);
 
-		// 서버 상세 정보 툴팁
-		const detailTooltip = enabledServers.map(server => {
-			const status = statusMap.get(server.name);
-			const statusText = status?.status || 'pending';
-			return `${server.name}: ${statusText}`;
-		}).join('\n');
-
-		iconEl.setAttribute('title', detailTooltip);
+		// 클릭 시 패널 토글
+		iconEl.addEventListener('click', (e) => {
+			e.stopPropagation();
+			this.mcpToolsPanel?.toggle();
+		});
 	}
 
 	private createChatBody(container: HTMLElement): void {
