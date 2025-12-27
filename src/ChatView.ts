@@ -7,6 +7,7 @@ import { MessageFactory } from './MessageFactory';
 import { createExampleMessages } from './exampleMessages';
 import { createObsidianPluginToolsServer } from './tools/ObsidianPluginTools';
 import { McpServerManager } from './mcp/McpServerManager';
+import { McpToolsPanel } from './mcp/McpToolsPanel';
 import { t, setLanguage } from './i18n';
 import type NoteSagePlugin from './main';
 
@@ -48,6 +49,9 @@ export class NoteSageView extends ItemView {
 
 	// MCP 상태 구독 해제 함수
 	private unsubscribeMcpStatus?: () => void;
+
+	// MCP 도구 패널
+	private mcpToolsPanel?: McpToolsPanel;
 
 	constructor(leaf: WorkspaceLeaf, plugin: NoteSagePlugin) {
 		super(leaf);
@@ -116,6 +120,27 @@ export class NoteSageView extends ItemView {
 
 		this.createChatInterface(container);
 		this.renderer = new ChatRenderer(this.messagesContainer, this);
+
+		// MCP 서버 로컬 검증 (백그라운드)
+		this.triggerMcpValidation();
+	}
+
+	/**
+	 * 활성화된 MCP 서버들을 로컬에서 검증
+	 * ChatView 열릴 때 호출되어 즉각적인 피드백 제공
+	 */
+	private triggerMcpValidation(): void {
+		const servers = this.settings.mcpServers?.filter(s => s.enabled) || [];
+		if (servers.length === 0) return;
+
+		// 비동기로 실행 - UI 블로킹 없음
+		try {
+			this.plugin.mcpServerManager?.validateAllEnabled(this.settings.mcpServers || []);
+		} catch (err) {
+			if (this.settings.debugContext) {
+				console.warn('[NoteSageView] MCP validation error:', err);
+			}
+		}
 	}
 
 	async onClose(): Promise<void> {
@@ -127,6 +152,12 @@ export class NoteSageView extends ItemView {
 		if (this.unsubscribeMcpStatus) {
 			this.unsubscribeMcpStatus();
 			this.unsubscribeMcpStatus = undefined;
+		}
+
+		// MCP 도구 패널 정리
+		if (this.mcpToolsPanel) {
+			this.mcpToolsPanel.destroy();
+			this.mcpToolsPanel = undefined;
 		}
 	}
 
@@ -231,15 +262,22 @@ export class NoteSageView extends ItemView {
 	private createMcpStatusIcon(headerEl: HTMLElement): void {
 		this.mcpStatusContainer = headerEl.createEl('div', { cls: 'sage-mcp-header-status' });
 
-		// MCP 서버가 설정되어 있으면 표시
-		this.renderMcpStatusIcon();
-
-		// 상태 변경 구독
+		// 상태 변경 구독 및 McpToolsPanel 생성 (renderMcpStatusIcon보다 먼저)
 		if (this.plugin.mcpServerManager) {
+			// McpToolsPanel 인스턴스 생성 (클릭 이벤트에서 사용되므로 먼저 생성)
+			this.mcpToolsPanel = new McpToolsPanel(
+				this.mcpStatusContainer,
+				this.plugin,
+				this.plugin.mcpServerManager
+			);
+
 			this.unsubscribeMcpStatus = this.plugin.mcpServerManager.onStatusChange(() => {
 				this.renderMcpStatusIcon();
 			});
 		}
+
+		// MCP 서버가 설정되어 있으면 표시
+		this.renderMcpStatusIcon();
 	}
 
 	/**
@@ -310,18 +348,15 @@ export class NoteSageView extends ItemView {
 
 		const iconEl = this.mcpStatusContainer.createSpan({
 			cls: `sage-mcp-header-icon ${statusClass}`,
-			attr: { 'aria-label': tooltip, title: tooltip }
+			attr: { 'aria-label': tooltip }
 		});
 		setIcon(iconEl, iconName);
 
-		// 서버 상세 정보 툴팁
-		const detailTooltip = enabledServers.map(server => {
-			const status = statusMap.get(server.name);
-			const statusText = status?.status || 'pending';
-			return `${server.name}: ${statusText}`;
-		}).join('\n');
-
-		iconEl.setAttribute('title', detailTooltip);
+		// 클릭 시 패널 토글
+		iconEl.addEventListener('click', (e) => {
+			e.stopPropagation();
+			this.mcpToolsPanel?.toggle();
+		});
 	}
 
 	private createChatBody(container: HTMLElement): void {

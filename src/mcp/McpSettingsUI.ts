@@ -108,7 +108,7 @@ export class McpSettingsUI {
 		// 상태 아이콘
 		const status = this.mcpServerManager?.getStatus(server.name);
 		const statusEl = itemEl.createSpan({ cls: 'sage-mcp-status-icon' });
-		this.renderStatusIcon(statusEl, status);
+		this.renderStatusIcon(statusEl, status, server.enabled);
 
 		// 서버 정보
 		const infoEl = itemEl.createDiv({ cls: 'sage-mcp-server-info' });
@@ -122,15 +122,28 @@ export class McpSettingsUI {
 		const controlsEl = itemEl.createDiv({ cls: 'sage-mcp-server-controls' });
 
 		// 활성화/비활성화 토글
-		const toggleEl = controlsEl.createDiv({ cls: 'sage-mcp-toggle' });
-		const toggleInput = toggleEl.createEl('input', {
+		const toggleLabel = controlsEl.createEl('label', { cls: 'sage-mcp-toggle' });
+		const toggleInput = toggleLabel.createEl('input', {
 			type: 'checkbox',
-			cls: 'sage-mcp-toggle-input'
+			cls: 'sage-mcp-toggle-checkbox'
 		});
 		toggleInput.checked = server.enabled;
+		toggleLabel.createSpan({ cls: 'sage-mcp-toggle-slider' });
 		toggleInput.addEventListener('change', async () => {
 			server.enabled = toggleInput.checked;
 			await this.onSave(this.servers);
+
+			// 활성화 시 로컬 검증 수행
+			if (toggleInput.checked && this.mcpServerManager) {
+				const result = this.mcpServerManager.validateEntry(server);
+				this.mcpServerManager.updateStatus({
+					name: server.name,
+					status: result.valid ? 'pending' : 'failed',
+					errorMessage: result.errorMessage
+				});
+			}
+
+			this.render();
 		});
 
 		// 편집 버튼
@@ -165,41 +178,47 @@ export class McpSettingsUI {
 	/**
 	 * 상태 아이콘 렌더링
 	 */
-	private renderStatusIcon(container: HTMLElement, status?: McpServerStatus): void {
+	private renderStatusIcon(container: HTMLElement, status?: McpServerStatus, enabled: boolean = true): void {
 		container.empty();
 
 		let iconName: string;
 		let statusClass: string;
 		let tooltip: string;
 
-		switch (status?.status) {
-			case 'connected':
-				iconName = 'check-circle';
-				statusClass = 'sage-mcp-status-connected';
-				tooltip = t('settings.mcp.statusConnected');
-				break;
-			case 'failed':
-				iconName = 'x-circle';
-				statusClass = 'sage-mcp-status-failed';
-				tooltip = t('settings.mcp.statusFailed');
-				break;
-			case 'needs-auth':
-				iconName = 'key';
-				statusClass = 'sage-mcp-status-needs-auth';
-				tooltip = t('settings.mcp.statusNeedsAuth');
-				break;
-			case 'pending':
-			default:
-				iconName = 'loader';
-				statusClass = 'sage-mcp-status-pending';
-				tooltip = t('settings.mcp.statusPending');
-				break;
+		// 비활성화된 서버는 비활성화 상태로 표시
+		if (!enabled) {
+			iconName = 'circle';
+			statusClass = 'sage-mcp-status-disabled';
+			tooltip = t('settings.mcp.enabled');
+		} else {
+			switch (status?.status) {
+				case 'connected':
+					iconName = 'check-circle';
+					statusClass = 'sage-mcp-status-connected';
+					tooltip = t('settings.mcp.statusConnected');
+					break;
+				case 'failed':
+					iconName = 'x-circle';
+					statusClass = 'sage-mcp-status-failed';
+					tooltip = t('settings.mcp.statusFailed');
+					break;
+				case 'needs-auth':
+					iconName = 'key';
+					statusClass = 'sage-mcp-status-needs-auth';
+					tooltip = t('settings.mcp.statusNeedsAuth');
+					break;
+				case 'pending':
+				default:
+					iconName = 'loader';
+					statusClass = 'sage-mcp-status-pending';
+					tooltip = t('settings.mcp.statusPending');
+					break;
+			}
 		}
 
 		container.addClass(statusClass);
 		setIcon(container, iconName);
 		container.setAttribute('aria-label', tooltip);
-		container.setAttribute('title', tooltip);
 	}
 
 	/**
