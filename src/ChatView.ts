@@ -9,6 +9,7 @@ import { createObsidianPluginToolsServer } from './tools/ObsidianPluginTools';
 import { McpServerManager } from './mcp/McpServerManager';
 import { McpToolsPanel } from './mcp/McpToolsPanel';
 import { t, setLanguage, getTextDirection } from './i18n';
+import { UI_CONSTANTS, CONTENT_LIMITS, UNICODE_CONSTANTS } from './constants';
 import type NoteSagePlugin from './main';
 
 export const VIEW_TYPE_NOTE_SAGE = 'note-sage-view';
@@ -50,6 +51,9 @@ export class NoteSageView extends ItemView {
 	// MCP 상태 구독 해제 함수
 	private unsubscribeMcpStatus?: () => void;
 
+	// MCP 상태 렌더링 디바운스 타이머
+	private mcpStatusRenderTimeout?: number;
+
 	// MCP 도구 패널
 	private mcpToolsPanel?: McpToolsPanel;
 
@@ -71,7 +75,7 @@ export class NoteSageView extends ItemView {
 	/**
 	 * 설정에 따라 MCP 서버를 업데이트합니다.
 	 */
-	private updateMcpServers(): void {
+	updateMcpServers(): void {
 		const servers: Record<string, import('@anthropic-ai/claude-agent-sdk').McpServerConfig> = {};
 
 		// 플러그인 도구 서버 추가
@@ -161,6 +165,12 @@ export class NoteSageView extends ItemView {
 			this.agentService.cancel();
 		}
 
+		// MCP 상태 렌더링 타이머 정리
+		if (this.mcpStatusRenderTimeout) {
+			window.clearTimeout(this.mcpStatusRenderTimeout);
+			this.mcpStatusRenderTimeout = undefined;
+		}
+
 		// MCP 상태 구독 해제
 		if (this.unsubscribeMcpStatus) {
 			this.unsubscribeMcpStatus();
@@ -248,6 +258,14 @@ export class NoteSageView extends ItemView {
 	}
 
 	private async handleModelChange(newModel: string): Promise<void> {
+		// 모델 유효성 검사
+		const isValidModel = AVAILABLE_MODELS.some(m => m.value === newModel);
+		if (!isValidModel) {
+			console.warn(`[NoteSageView] Invalid model selection: ${newModel}, falling back to default`);
+			newModel = AVAILABLE_MODELS[0].value;
+			this.modelSelector.value = newModel;
+		}
+
 		this.settings.model = newModel;
 
 		// 플러그인 설정에 저장
@@ -258,7 +276,11 @@ export class NoteSageView extends ItemView {
 		const plugin = app.plugins.plugins['obsidian-note-sage'];
 		if (plugin) {
 			plugin.settings.model = newModel;
-			await plugin.saveSettings();
+			try {
+				await plugin.saveSettings();
+			} catch (error) {
+				console.error('[NoteSageView] Failed to save model settings:', error);
+			}
 		}
 
 		// AgentService 설정 업데이트
@@ -612,10 +634,17 @@ export class NoteSageView extends ItemView {
 	private async getFileContent(file: TFile): Promise<string | null> {
 		try {
 			const content = await this.app.vault.read(file);
-			const maxLength = this.settings.maxContentLength || 10000;
+			const maxLength = this.settings.maxContentLength || CONTENT_LIMITS.DEFAULT_MAX_CONTENT_LENGTH;
 
 			if (content.length > maxLength) {
-				return content.substring(0, maxLength) + `\n\n... (${t('truncated')}, ${content.length - maxLength} ${t('charactersOmitted')})`;
+				// surrogate pair 분리 방지를 위한 안전한 절단점 찾기
+				let cutPoint = maxLength;
+				const charCode = content.charCodeAt(cutPoint - 1);
+				// High surrogate 범위이면 쌍의 첫 번째 부분
+				if (charCode >= UNICODE_CONSTANTS.HIGH_SURROGATE_START && charCode <= UNICODE_CONSTANTS.HIGH_SURROGATE_END) {
+					cutPoint--;
+				}
+				return content.substring(0, cutPoint) + `\n\n... (${t('truncated')}, ${content.length - cutPoint} ${t('charactersOmitted')})`;
 			}
 
 			return content;
@@ -688,8 +717,14 @@ export class NoteSageView extends ItemView {
 					if (this.plugin.mcpServerManager) {
 						this.plugin.mcpServerManager.updateStatuses(statuses);
 					}
-					// 상태 아이콘 다시 렌더링
-					this.renderMcpStatusIcon();
+					// 상태 아이콘 다시 렌더링 (디바운스로 race condition 방지)
+					if (this.mcpStatusRenderTimeout) {
+						window.clearTimeout(this.mcpStatusRenderTimeout);
+					}
+					this.mcpStatusRenderTimeout = window.setTimeout(() => {
+						this.renderMcpStatusIcon();
+						this.mcpStatusRenderTimeout = undefined;
+					}, UI_CONSTANTS.MCP_STATUS_DEBOUNCE_MS);
 				}
 			});
 

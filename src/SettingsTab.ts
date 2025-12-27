@@ -3,6 +3,7 @@ import type NoteSagePlugin from './main';
 import { AVAILABLE_MODELS, QUICK_ACTION_DEFINITIONS, DEFAULT_QUICK_ACTIONS, QuickActionConfig } from './types';
 import { t, setLanguage, AVAILABLE_LANGUAGES, SupportedLanguage } from './i18n';
 import { McpSettingsUI } from './mcp/McpSettingsUI';
+import { CONTENT_LIMITS } from './constants';
 
 export class NoteSageSettingTab extends PluginSettingTab {
 	plugin: NoteSagePlugin;
@@ -66,11 +67,15 @@ export class NoteSageSettingTab extends PluginSettingTab {
 			.setName(t('settings.maxContentLength'))
 			.setDesc(t('settings.maxContentLengthDesc'))
 			.addText(text => text
-				.setPlaceholder('10000')
-				.setValue(String(this.plugin.settings.maxContentLength || 10000))
+				.setPlaceholder(String(CONTENT_LIMITS.DEFAULT_MAX_CONTENT_LENGTH))
+				.setValue(String(this.plugin.settings.maxContentLength || CONTENT_LIMITS.DEFAULT_MAX_CONTENT_LENGTH))
 				.onChange(async (value) => {
-					const numValue = parseInt(value) || 10000;
-					this.plugin.settings.maxContentLength = Math.max(1000, Math.min(100000, numValue));
+					const parsed = parseInt(value, 10);
+					const numValue = Number.isNaN(parsed) ? CONTENT_LIMITS.DEFAULT_MAX_CONTENT_LENGTH : parsed;
+					this.plugin.settings.maxContentLength = Math.max(
+						CONTENT_LIMITS.MIN_CONTENT_LENGTH,
+						Math.min(CONTENT_LIMITS.MAX_CONTENT_LENGTH, numValue)
+					);
 					await this.plugin.saveSettings();
 					this.updateViews();
 				}));
