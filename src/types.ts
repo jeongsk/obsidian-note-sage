@@ -1,6 +1,19 @@
 // ==================== 설정 ====================
 
+import type { App } from 'obsidian';
 import type { SupportedLanguage } from './i18n';
+
+// ==================== Obsidian 확장 타입 ====================
+
+/**
+ * Obsidian App의 내부 API 확장 (설정 창 접근용)
+ */
+export interface ObsidianAppExtended extends App {
+	setting?: {
+		open: () => void;
+		openTabById?: (id: string) => void;
+	};
+}
 
 // ==================== MCP Server Types ====================
 
