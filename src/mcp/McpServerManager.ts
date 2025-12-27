@@ -247,4 +247,59 @@ export class McpServerManager {
 		this.listeners.clear();
 		this.statusCache.clear();
 	}
+
+	// ==================== 로컬 검증 ====================
+
+	/**
+	 * 검증 결과 타입
+	 */
+	static ValidationResult: { valid: boolean; errorMessage?: string };
+
+	/**
+	 * 단일 MCP 서버 설정을 로컬에서 검증
+	 * - stdio: 명령어 존재 여부 확인
+	 * - sse/http: URL 형식 유효성 검사
+	 * @param entry - 검증할 서버 설정
+	 * @returns 검증 결과
+	 */
+	validateEntry(entry: McpServerConfigEntry): { valid: boolean; errorMessage?: string } {
+		if (entry.type === 'stdio') {
+			if (!entry.command) {
+				return { valid: false, errorMessage: 'Command is required' };
+			}
+			const result = McpServerManager.validateCommand(entry.command);
+			return {
+				valid: result.found,
+				errorMessage: result.found ? undefined : `Command "${entry.command}" not found`
+			};
+		} else {
+			// sse 또는 http
+			if (!entry.url) {
+				return { valid: false, errorMessage: 'URL is required' };
+			}
+			try {
+				new URL(entry.url);
+				return { valid: true };
+			} catch {
+				return { valid: false, errorMessage: `Invalid URL: ${entry.url}` };
+			}
+		}
+	}
+
+	/**
+	 * 모든 활성화된 MCP 서버를 로컬에서 검증하고 상태 업데이트
+	 * @param entries - 검증할 서버 설정 목록
+	 */
+	validateAllEnabled(entries: McpServerConfigEntry[]): void {
+		const enabled = entries.filter(e => e.enabled);
+
+		for (const entry of enabled) {
+			const result = this.validateEntry(entry);
+			this.updateStatus({
+				name: entry.name,
+				status: result.valid ? 'pending' : 'failed',
+				errorMessage: result.errorMessage
+			});
+		}
+	}
 }

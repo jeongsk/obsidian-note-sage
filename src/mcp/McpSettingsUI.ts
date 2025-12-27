@@ -132,6 +132,17 @@ export class McpSettingsUI {
 		toggleInput.addEventListener('change', async () => {
 			server.enabled = toggleInput.checked;
 			await this.onSave(this.servers);
+
+			// 활성화 시 로컬 검증 수행
+			if (toggleInput.checked && this.mcpServerManager) {
+				const result = this.mcpServerManager.validateEntry(server);
+				this.mcpServerManager.updateStatus({
+					name: server.name,
+					status: result.valid ? 'pending' : 'failed',
+					errorMessage: result.errorMessage
+				});
+			}
+
 			this.render();
 		});
 

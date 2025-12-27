@@ -319,6 +319,17 @@ export class McpToolsPanel {
 
 		try {
 			await this.plugin.saveSettings();
+
+			// 활성화 시 로컬 검증 수행
+			if (newState) {
+				const result = this.mcpServerManager.validateEntry(server);
+				this.mcpServerManager.updateStatus({
+					name: server.name,
+					status: result.valid ? 'pending' : 'failed',
+					errorMessage: result.errorMessage
+				});
+			}
+
 			// MCP 서버 설정 업데이트 (ChatView의 updateMcpServers 호출)
 			if ((this.plugin as any).chatView?.updateMcpServers) {
 				(this.plugin as any).chatView.updateMcpServers();
@@ -350,6 +361,15 @@ export class McpToolsPanel {
 	 */
 	private renderToolsList(container: HTMLElement, server: McpServerConfigEntry, status?: McpServerStatus): void {
 		const toolsEl = container.createDiv({ cls: 'sage-mcp-panel-tools' });
+
+		// 검증 실패 시 에러 메시지 표시
+		if (status?.status === 'failed' && status?.errorMessage) {
+			toolsEl.createDiv({
+				cls: 'sage-mcp-panel-tools-error',
+				text: status.errorMessage
+			});
+			return;
+		}
 
 		// 연결되지 않은 경우 메시지 표시
 		if (!server.enabled || status?.status !== 'connected') {

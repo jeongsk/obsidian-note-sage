@@ -619,6 +619,7 @@
 .sage-mcp-server-item {
 	display: flex;
 	align-items: center;
+	flex-wrap: wrap;
 	gap: 0.5rem;
 	padding: 0.5rem;
 	background: var(--background-secondary);
@@ -667,6 +668,16 @@
 
 .sage-mcp-status-disabled {
 	color: var(--text-faint);
+}
+
+.sage-mcp-error-message {
+	width: 100%;
+	font-size: var(--font-smaller);
+	color: var(--text-error);
+	padding: 0.25rem 0.5rem;
+	margin-top: 0.25rem;
+	background: var(--background-modifier-error);
+	border-radius: var(--radius);
 }
 
 .sage-mcp-server-info {
@@ -1060,6 +1071,14 @@
 	font-size: var(--font-smaller);
 	color: var(--text-muted);
 	font-style: italic;
+}
+
+.sage-mcp-panel-tools-error {
+	font-size: var(--font-smaller);
+	color: var(--text-error);
+	padding: 0.25rem 0.5rem;
+	background: var(--background-modifier-error);
+	border-radius: var(--radius);
 }
 
 .sage-mcp-panel-tools-count {

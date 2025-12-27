@@ -120,6 +120,27 @@ export class NoteSageView extends ItemView {
 
 		this.createChatInterface(container);
 		this.renderer = new ChatRenderer(this.messagesContainer, this);
+
+		// MCP 서버 로컬 검증 (백그라운드)
+		this.triggerMcpValidation();
+	}
+
+	/**
+	 * 활성화된 MCP 서버들을 로컬에서 검증
+	 * ChatView 열릴 때 호출되어 즉각적인 피드백 제공
+	 */
+	private triggerMcpValidation(): void {
+		const servers = this.settings.mcpServers?.filter(s => s.enabled) || [];
+		if (servers.length === 0) return;
+
+		// 비동기로 실행 - UI 블로킹 없음
+		try {
+			this.plugin.mcpServerManager?.validateAllEnabled(this.settings.mcpServers || []);
+		} catch (err) {
+			if (this.settings.debugContext) {
+				console.warn('[NoteSageView] MCP validation error:', err);
+			}
+		}
 	}
 
 	async onClose(): Promise<void> {
