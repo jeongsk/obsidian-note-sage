@@ -186,6 +186,14 @@ export const ko: TranslationKeys = {
 			commandNotFound: '명령어를 찾을 수 없음',
 			commandNotFoundDesc: '"{command}" 명령어를 찾을 수 없습니다. 전체 경로를 입력해 주세요 (예: /Users/username/.bun/bin/bunx)',
 			commandValidating: '명령어 확인 중...',
+			// Panel translations
+			panelTitle: 'MCP 서버',
+			panelNoServers: '등록된 서버가 없습니다',
+			panelNoServersDesc: '설정에서 MCP 서버를 추가하세요',
+			panelOpenSettings: '설정 열기',
+			panelToolsNotConnected: '연결 후 도구 목록을 확인할 수 있습니다',
+			panelToolsCount: '{count}개 도구',
+			panelToggleError: '서버 상태 변경에 실패했습니다',
 		},
 
 		// About

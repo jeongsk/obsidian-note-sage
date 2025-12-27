@@ -50,6 +50,19 @@ export interface McpServerStatus {
 
 	/** 오류 메시지 (연결 실패 시) */
 	errorMessage?: string;
+
+	/** 서버가 제공하는 도구 목록 */
+	tools?: McpTool[];
+}
+
+/**
+ * MCP 서버가 제공하는 개별 도구 정보
+ */
+export interface McpTool {
+	/** 도구 이름 */
+	name: string;
+	/** 도구 설명 */
+	description?: string;
 }
 
 // ==================== Quick Actions ====================

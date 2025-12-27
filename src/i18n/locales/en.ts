@@ -68,6 +68,14 @@ interface McpSettingsTranslations {
 	commandNotFound: string;
 	commandNotFoundDesc: string;
 	commandValidating: string;
+	// Panel translations
+	panelTitle: string;
+	panelNoServers: string;
+	panelNoServersDesc: string;
+	panelOpenSettings: string;
+	panelToolsNotConnected: string;
+	panelToolsCount: string;
+	panelToggleError: string;
 }
 
 interface SettingsTranslations {
@@ -343,6 +351,14 @@ export const en: TranslationKeys = {
 			commandNotFound: 'Command not found',
 			commandNotFoundDesc: 'The command "{command}" could not be found. Please enter the full path (e.g., /Users/username/.bun/bin/bunx)',
 			commandValidating: 'Validating command...',
+			// Panel translations
+			panelTitle: 'MCP Servers',
+			panelNoServers: 'No servers registered',
+			panelNoServersDesc: 'Add MCP servers in settings',
+			panelOpenSettings: 'Open Settings',
+			panelToolsNotConnected: 'Connect to view available tools',
+			panelToolsCount: '{count} tools',
+			panelToggleError: 'Failed to change server status',
 		},
 
 		// About
