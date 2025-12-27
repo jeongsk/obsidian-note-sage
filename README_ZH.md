@@ -28,7 +28,6 @@ https://github.com/user-attachments/assets/3b251604-cf52-4f38-8c9d-fba67e280b64
 ### 前置要求
 
 - **Anthropic 账户** - Claude API 访问所需（[console.anthropic.com](https://console.anthropic.com)）
-- **Node.js** - 插件运行所需
 - **Claude Code CLI** - 从 [Anthropic's Claude Code](https://www.anthropic.com/claude-code) 获取
 
 ### 安装步骤
@@ -112,16 +111,13 @@ https://github.com/user-attachments/assets/3b251604-cf52-4f38-8c9d-fba67e280b64
 
 ### CLI 问题
 
-**找不到 Node.js 或 Claude CLI？**
+**找不到 Claude CLI？**
 
-1. **验证安装**：在终端中运行 `node --version` 和 `claude --version`
+1. **验证安装**：在终端中运行 `claude --version`
 2. **手动配置**：如果自动检测失败，在**设置 > 社区插件 > Note Sage**中手动设置路径
 
 **查找可执行文件路径：**
 ```bash
-# Node.js 位置
-which node
-
 # Claude CLI 位置
 echo "$(sed -n 's/^exec "\([^"]*\)".*/\1/p' $(which claude))"
 ```

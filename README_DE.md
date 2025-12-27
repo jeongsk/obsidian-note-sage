@@ -28,7 +28,6 @@ Dieses Plugin hält Claude über Ihre Obsidian-Umgebung informiert und ermöglic
 ### Voraussetzungen
 
 - **Anthropic-Konto** - Erforderlich für den Claude-API-Zugang ([console.anthropic.com](https://console.anthropic.com))
-- **Node.js** - Erforderlich für die Plugin-Ausführung
 - **Claude Code CLI** - Holen Sie es von [Anthropic's Claude Code](https://www.anthropic.com/claude-code)
 
 ### Einrichtung
@@ -112,16 +111,13 @@ Verbinden Sie MCP-Server (Model Context Protocol), um die Fähigkeiten des KI-Ag
 
 ### CLI-Probleme
 
-**Node.js oder Claude CLI nicht gefunden?**
+**Claude CLI nicht gefunden?**
 
-1. **Installationen überprüfen**: Führen Sie `node --version` und `claude --version` in Ihrem Terminal aus
-2. **Manuelle Konfiguration**: Bei fehlgeschlagener Auto-Erkennung Pfade manuell in **Einstellungen > Community Plugins > Note Sage** setzen
+1. **Installation überprüfen**: Führen Sie `claude --version` in Ihrem Terminal aus
+2. **Manuelle Konfiguration**: Bei fehlgeschlagener Auto-Erkennung Pfad manuell in **Einstellungen > Community Plugins > Note Sage** setzen
 
-**Ausführungspfade finden:**
+**Ausführungspfad finden:**
 ```bash
-# Node.js-Speicherort
-which node
-
 # Claude CLI-Speicherort
 echo "$(sed -n 's/^exec "\([^"]*\)".*/\1/p' $(which claude))"
 ```

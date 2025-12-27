@@ -28,7 +28,6 @@ Este plugin mantém o Claude ciente do seu ambiente Obsidian enquanto permite qu
 ### Pré-requisitos
 
 - **Conta Anthropic** - Necessária para acesso à API Claude ([console.anthropic.com](https://console.anthropic.com))
-- **Node.js** - Necessário para execução do plugin
 - **Claude Code CLI** - Obtenha em [Anthropic's Claude Code](https://www.anthropic.com/claude-code)
 
 ### Configuração
@@ -112,16 +111,13 @@ Conecte servidores MCP (Model Context Protocol) para estender as capacidades do 
 
 ### Problemas de CLI
 
-**Não consegue encontrar Node.js ou Claude CLI?**
+**Não consegue encontrar Claude CLI?**
 
-1. **Verificar instalações**: Execute `node --version` e `claude --version` no seu terminal
-2. **Configuração manual**: Se a auto-detecção falhar, defina os caminhos manualmente em **Configurações > Plugins da Comunidade > Note Sage**
+1. **Verificar instalação**: Execute `claude --version` no seu terminal
+2. **Configuração manual**: Se a auto-detecção falhar, defina o caminho manualmente em **Configurações > Plugins da Comunidade > Note Sage**
 
-**Encontrar caminhos dos executáveis:**
+**Encontrar caminho do executável:**
 ```bash
-# Localização do Node.js
-which node
-
 # Localização do Claude CLI
 echo "$(sed -n 's/^exec "\([^"]*\)".*/\1/p' $(which claude))"
 ```

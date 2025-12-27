@@ -28,7 +28,6 @@ AIを使用する際にワークフローが中断されたり、vaultのコン�
 ### 前提条件
 
 - **Anthropicアカウント** - Claude APIアクセスに必要（[console.anthropic.com](https://console.anthropic.com)）
-- **Node.js** - プラグイン実行に必要
 - **Claude Code CLI** - [Anthropic's Claude Code](https://www.anthropic.com/claude-code)から取得
 
 ### セットアップ
@@ -112,16 +111,13 @@ MCP（Model Context Protocol）サーバーを接続してAIエージェント�
 
 ### CLIの問題
 
-**Node.jsまたはClaude CLIが見つからない場合**
+**Claude CLIが見つからない場合**
 
-1. **インストールの確認**：ターミナルで`node --version`と`claude --version`を実行
+1. **インストールの確認**：ターミナルで`claude --version`を実行
 2. **手動設定**：自動検出に失敗した場合、**設定 > コミュニティプラグイン > Note Sage**でパスを手動設定
 
 **実行ファイルのパスを探す：**
 ```bash
-# Node.jsの場所
-which node
-
 # Claude CLIの場所
 echo "$(sed -n 's/^exec "\([^"]*\)".*/\1/p' $(which claude))"
 ```

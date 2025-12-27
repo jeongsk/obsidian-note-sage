@@ -28,7 +28,6 @@ AI 작업 중에 흐름이 끊기거나 vault 컨텍스트를 잃어버리는 �
 ### 사전 요구사항
 
 - **Anthropic 계정** - Claude API 접근용 ([console.anthropic.com](https://console.anthropic.com))
-- **Node.js** - 플러그인 실행에 필요
 - **Claude Code CLI** - [Anthropic's Claude Code](https://www.anthropic.com/claude-code)에서 설치
 
 ### 설치 방법
@@ -112,16 +111,13 @@ MCP (Model Context Protocol) 서버를 연결하여 AI 에이전트의 기능을
 
 ### CLI 문제
 
-**Node.js 또는 Claude CLI를 찾을 수 없나요?**
+**Claude CLI를 찾을 수 없나요?**
 
-1. **설치 확인**: 터미널에서 `node --version`과 `claude --version` 실행
+1. **설치 확인**: 터미널에서 `claude --version` 실행
 2. **수동 설정**: 자동 탐지 실패 시 **설정 > 커뮤니티 플러그인 > Note Sage**에서 경로 직접 설정
 
 **실행 파일 경로 찾기:**
 ```bash
-# Node.js 경로
-which node
-
 # Claude CLI 경로
 echo "$(sed -n 's/^exec "\([^"]*\)".*/\1/p' $(which claude))"
 ```

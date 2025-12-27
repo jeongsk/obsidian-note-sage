@@ -28,7 +28,6 @@ https://github.com/user-attachments/assets/3b251604-cf52-4f38-8c9d-fba67e280b64
 ### Предварительные требования
 
 - **Аккаунт Anthropic** — необходим для доступа к Claude API ([console.anthropic.com](https://console.anthropic.com))
-- **Node.js** — необходим для работы плагина
 - **Claude Code CLI** — получите на [Anthropic's Claude Code](https://www.anthropic.com/claude-code)
 
 ### Настройка
@@ -112,16 +111,13 @@ https://github.com/user-attachments/assets/3b251604-cf52-4f38-8c9d-fba67e280b64
 
 ### Проблемы с CLI
 
-**Не можете найти Node.js или Claude CLI?**
+**Не можете найти Claude CLI?**
 
-1. **Проверьте установки**: Запустите `node --version` и `claude --version` в терминале
-2. **Ручная настройка**: Если автоопределение не работает, установите пути вручную в **Настройки > Плагины сообщества > Note Sage**
+1. **Проверьте установку**: Запустите `claude --version` в терминале
+2. **Ручная настройка**: Если автоопределение не работает, установите путь вручную в **Настройки > Плагины сообщества > Note Sage**
 
-**Найти пути к исполняемым файлам:**
+**Найти путь к исполняемому файлу:**
 ```bash
-# Расположение Node.js
-which node
-
 # Расположение Claude CLI
 echo "$(sed -n 's/^exec "\([^"]*\)".*/\1/p' $(which claude))"
 ```

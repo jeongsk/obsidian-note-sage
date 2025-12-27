@@ -28,7 +28,6 @@ This plugin keeps Claude context-aware of your Obsidian environment while lettin
 ### Prerequisites
 
 - **Anthropic Account** - Required for Claude API access ([console.anthropic.com](https://console.anthropic.com))
-- **Node.js** - Required for plugin execution
 - **Claude Code CLI** - Get it from [Anthropic's Claude Code](https://www.anthropic.com/claude-code)
 
 ### Setup
@@ -112,16 +111,13 @@ Connect MCP (Model Context Protocol) servers to extend the AI agent's capabiliti
 
 ### CLI Issues
 
-**Can't find Node.js or Claude CLI?**
+**Can't find Claude CLI?**
 
-1. **Verify installations**: Run `node --version` and `claude --version` in your terminal
+1. **Verify installation**: Run `claude --version` in your terminal
 2. **Manual configuration**: If auto-detection fails, set paths manually in **Settings > Community Plugins > Note Sage**
 
-**Find executable paths:**
+**Find executable path:**
 ```bash
-# Node.js location
-which node
-
 # Claude CLI location
 echo "$(sed -n 's/^exec "\([^"]*\)".*/\1/p' $(which claude))"
 ```

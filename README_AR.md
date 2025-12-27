@@ -28,7 +28,6 @@ https://github.com/user-attachments/assets/3b251604-cf52-4f38-8c9d-fba67e280b64
 ### المتطلبات الأساسية
 
 - **حساب Anthropic** - مطلوب للوصول إلى Claude API ([console.anthropic.com](https://console.anthropic.com))
-- **Node.js** - مطلوب لتشغيل الإضافة
 - **Claude Code CLI** - احصل عليه من [Anthropic's Claude Code](https://www.anthropic.com/claude-code)
 
 ### الإعداد
@@ -112,16 +111,13 @@ https://github.com/user-attachments/assets/3b251604-cf52-4f38-8c9d-fba67e280b64
 
 ### مشاكل CLI
 
-**لا يمكن العثور على Node.js أو Claude CLI؟**
+**لا يمكن العثور على Claude CLI؟**
 
-1. **التحقق من التثبيتات**: قم بتشغيل `node --version` و `claude --version` في المحطة الطرفية
+1. **التحقق من التثبيت**: قم بتشغيل `claude --version` في المحطة الطرفية
 2. **التكوين اليدوي**: إذا فشل الاكتشاف التلقائي، قم بتعيين المسارات يدوياً في **الإعدادات > إضافات المجتمع > Note Sage**
 
-**البحث عن مسارات الملفات التنفيذية:**
+**البحث عن مسار الملف التنفيذي:**
 ```bash
-# موقع Node.js
-which node
-
 # موقع Claude CLI
 echo "$(sed -n 's/^exec "\([^"]*\)".*/\1/p' $(which claude))"
 ```
