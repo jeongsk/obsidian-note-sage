@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-note-sage",
-	"version": "0.5.0",
+	"version": "0.6.0",
 	"description": "An intelligent AI assistant plugin for Obsidian using Claude Agent SDK.",
 	"main": "main.js",
 	"scripts": {
