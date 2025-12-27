@@ -699,10 +699,6 @@
 	align-items: center;
 }
 
-.sage-mcp-toggle-input {
-	cursor: pointer;
-}
-
 .sage-mcp-btn {
 	display: flex;
 	align-items: center;
