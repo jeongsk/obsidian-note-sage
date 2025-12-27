@@ -1007,23 +1007,28 @@
 	height: 20px;
 	appearance: none;
 	-webkit-appearance: none;
+	-moz-appearance: none;
 	background: var(--background-modifier-border);
+	border: none;
 	border-radius: 10px;
 	cursor: pointer;
 	position: relative;
 	transition: background 0.2s ease;
+	outline: none;
 }
 
 .sage-mcp-toggle-input::before {
 	content: '';
+	display: block;
 	position: absolute;
 	top: 2px;
 	left: 2px;
 	width: 16px;
 	height: 16px;
-	background: var(--background-primary);
+	background: white;
 	border-radius: 50%;
 	transition: transform 0.2s ease;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .sage-mcp-toggle-input:checked {
