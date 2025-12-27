@@ -859,6 +859,7 @@
 
 /* ==================== MCP Header Status Icon ==================== */
 .sage-mcp-header-status {
+	position: relative;
 	display: flex;
 	align-items: center;
 	margin-right: 0.5rem;
