@@ -1115,3 +1115,146 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+/* ==================== RTL (Right-to-Left) Support ==================== */
+.sage-rtl {
+	direction: rtl;
+	text-align: right;
+}
+
+/* Header RTL adjustments */
+.sage-rtl .sage-chat-header {
+	flex-direction: row-reverse;
+}
+
+.sage-rtl .sage-chat-title {
+	margin-right: 0;
+	margin-left: auto;
+}
+
+.sage-rtl .sage-header-buttons {
+	flex-direction: row-reverse;
+}
+
+/* Model selector RTL */
+.sage-rtl .sage-model-selector-container {
+	margin-left: 0;
+	margin-right: auto;
+	margin-left: 8px;
+}
+
+.sage-rtl .sage-model-selector {
+	padding: 2px 6px 2px 20px;
+	background-position: left 4px center;
+}
+
+/* MCP header status RTL */
+.sage-rtl .sage-mcp-header-status {
+	margin-right: 0;
+	margin-left: 0.5rem;
+}
+
+/* File context header RTL */
+.sage-rtl .sage-file-context-header {
+	flex-direction: row-reverse;
+}
+
+.sage-rtl .sage-file-context-toggle {
+	flex-direction: row-reverse;
+}
+
+/* Quick actions RTL */
+.sage-rtl .sage-quick-actions {
+	flex-direction: row-reverse;
+}
+
+.sage-rtl .sage-quick-action-button {
+	flex-direction: row-reverse;
+}
+
+/* Chat input RTL */
+.sage-rtl .sage-chat-input {
+	text-align: right;
+}
+
+/* Button container RTL */
+.sage-rtl .sage-chat-button-container {
+	flex-direction: row-reverse;
+}
+
+/* Loading indicator RTL */
+.sage-rtl .sage-loading-indicator {
+	margin-left: 0;
+	margin-right: 6px;
+}
+
+/* Messages RTL */
+.sage-rtl .sage-chat-message-user {
+	text-align: right;
+}
+
+.sage-rtl .sage-chat-message-assistant {
+	text-align: right;
+}
+
+/* Todo card RTL */
+.sage-rtl .sage-todo-item {
+	flex-direction: row-reverse;
+}
+
+.sage-rtl .sage-todo-content {
+	text-align: right;
+}
+
+/* Thinking/Tool content RTL */
+.sage-rtl .sage-thinking-content,
+.sage-rtl .sage-tool-content {
+	border-left: none;
+	border-right: 1px solid var(--background-modifier-border);
+	margin-left: 0;
+	margin-right: 4px;
+	padding-left: 0;
+	padding-right: 6px;
+}
+
+/* MCP panel RTL */
+.sage-rtl .sage-mcp-panel {
+	right: auto;
+	left: 0;
+}
+
+.sage-rtl .sage-mcp-panel-header {
+	flex-direction: row-reverse;
+}
+
+.sage-rtl .sage-mcp-panel-item-header {
+	flex-direction: row-reverse;
+}
+
+.sage-rtl .sage-mcp-panel-item-info {
+	text-align: right;
+}
+
+/* MCP server item RTL */
+.sage-rtl .sage-mcp-server-item {
+	flex-direction: row-reverse;
+}
+
+.sage-rtl .sage-mcp-server-info {
+	text-align: right;
+}
+
+.sage-rtl .sage-mcp-server-controls {
+	flex-direction: row-reverse;
+}
+
+/* Code block RTL - keep LTR for code */
+.sage-rtl .sage-code-block {
+	direction: ltr;
+	text-align: left;
+}
+
+.sage-rtl .sage-code-header {
+	direction: rtl;
+	flex-direction: row-reverse;
+}

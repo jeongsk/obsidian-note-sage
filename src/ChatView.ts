@@ -8,7 +8,7 @@ import { createExampleMessages } from './exampleMessages';
 import { createObsidianPluginToolsServer } from './tools/ObsidianPluginTools';
 import { McpServerManager } from './mcp/McpServerManager';
 import { McpToolsPanel } from './mcp/McpToolsPanel';
-import { t, setLanguage } from './i18n';
+import { t, setLanguage, getTextDirection } from './i18n';
 import type NoteSagePlugin from './main';
 
 export const VIEW_TYPE_NOTE_SAGE = 'note-sage-view';
@@ -118,11 +118,24 @@ export class NoteSageView extends ItemView {
 		container.empty();
 		container.addClass('sage-chat-container');
 
+		// Set text direction for RTL language support
+		this.updateTextDirection(container);
+
 		this.createChatInterface(container);
 		this.renderer = new ChatRenderer(this.messagesContainer, this);
 
 		// MCP 서버 로컬 검증 (백그라운드)
 		this.triggerMcpValidation();
+	}
+
+	/**
+	 * Update text direction based on current language setting
+	 */
+	private updateTextDirection(container?: HTMLElement): void {
+		const dir = getTextDirection();
+		const targetContainer = container || this.containerEl.children[1] as HTMLElement;
+		targetContainer.setAttribute('dir', dir);
+		targetContainer.toggleClass('sage-rtl', dir === 'rtl');
 	}
 
 	/**
@@ -775,6 +788,8 @@ export class NoteSageView extends ItemView {
 		// Update language if changed
 		if (settings.language) {
 			setLanguage(settings.language);
+			// Update text direction for RTL support
+			this.updateTextDirection();
 		}
 
 		// 모델 선택기 동기화
