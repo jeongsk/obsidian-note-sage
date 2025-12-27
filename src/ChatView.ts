@@ -5,6 +5,7 @@ import { AgentService } from './AgentService';
 import { ChatRenderer } from './ChatRenderer';
 import { MessageFactory } from './MessageFactory';
 import { createExampleMessages } from './exampleMessages';
+import { createObsidianPluginToolsServer } from './tools/ObsidianPluginTools';
 import { t, setLanguage } from './i18n';
 import type NoteSagePlugin from './main';
 
@@ -52,6 +53,23 @@ export class NoteSageView extends ItemView {
 		// Initialize language from settings
 		if (this.settings.language) {
 			setLanguage(this.settings.language);
+		}
+
+		// Initialize MCP servers if plugin tools are enabled
+		this.updateMcpServers();
+	}
+
+	/**
+	 * 설정에 따라 MCP 서버를 업데이트합니다.
+	 */
+	private updateMcpServers(): void {
+		if (this.settings.enablePluginTools) {
+			const pluginToolsServer = createObsidianPluginToolsServer(this.app);
+			this.agentService.setMcpServers({
+				'obsidian-plugins': pluginToolsServer
+			});
+		} else {
+			this.agentService.clearMcpServers();
 		}
 	}
 
@@ -593,6 +611,9 @@ export class NoteSageView extends ItemView {
 		if (this.quickActionsContainer) {
 			this.renderQuickActions();
 		}
+
+		// MCP 서버 설정 업데이트
+		this.updateMcpServers();
 	}
 
 	// Phase 1-D: 외부에서 메시지 전송

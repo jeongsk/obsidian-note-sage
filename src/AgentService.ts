@@ -1,4 +1,5 @@
 import { query } from '@anthropic-ai/claude-agent-sdk';
+import type { McpServerConfig } from '@anthropic-ai/claude-agent-sdk';
 import type { NoteSageSettings, SDKMessage, ChatMessage } from './types';
 import { MessageFactory } from './MessageFactory';
 import * as fs from 'fs';
@@ -32,6 +33,7 @@ export interface AgentExecutionOptions {
 export class AgentService {
 	private settings: NoteSageSettings;
 	private currentAbortController: AbortController | null = null;
+	private mcpServers: Record<string, McpServerConfig> = {};
 
 	constructor(settings: NoteSageSettings) {
 		this.settings = settings;
@@ -39,6 +41,21 @@ export class AgentService {
 
 	updateSettings(settings: NoteSageSettings): void {
 		this.settings = settings;
+	}
+
+	/**
+	 * MCP 서버 설정을 지정합니다.
+	 * @param servers - MCP 서버 설정 객체
+	 */
+	setMcpServers(servers: Record<string, McpServerConfig>): void {
+		this.mcpServers = servers;
+	}
+
+	/**
+	 * MCP 서버 설정을 초기화합니다.
+	 */
+	clearMcpServers(): void {
+		this.mcpServers = {};
 	}
 
 	async execute(options: AgentExecutionOptions): Promise<string | null> {
@@ -193,6 +210,11 @@ export class AgentService {
 		// Phase 1-E: 시스템 프롬프트 적용
 		if (this.settings.systemPrompt && this.settings.systemPrompt.trim()) {
 			options.systemPrompt = this.settings.systemPrompt.trim();
+		}
+
+		// MCP 서버 설정 적용
+		if (Object.keys(this.mcpServers).length > 0) {
+			options.mcpServers = this.mcpServers;
 		}
 
 		return options;

@@ -199,6 +199,18 @@ export class NoteSageSettingTab extends PluginSettingTab {
 					this.updateViews();
 				}));
 
+		// Plugin management tools
+		new Setting(containerEl)
+			.setName(t('settings.pluginTools'))
+			.setDesc(t('settings.pluginToolsDesc'))
+			.addToggle(toggle => toggle
+				.setValue(this.plugin.settings.enablePluginTools ?? false)
+				.onChange(async (value) => {
+					this.plugin.settings.enablePluginTools = value;
+					await this.plugin.saveSettings();
+					this.updateViews();
+				}));
+
 		// Info section
 		new Setting(containerEl)
 			.setName(t('settings.about'))

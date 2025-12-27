@@ -146,6 +146,10 @@ export const ko: TranslationKeys = {
 		customPromptPlaceholder: '사용자 지정 프롬프트 입력 (기본값 사용 시 비워두세요)',
 		resetToDefault: '기본값으로 리셋',
 
+		// Plugin Tools
+		pluginTools: '플러그인 관리 도구',
+		pluginToolsDesc: '에이전트가 Obsidian 플러그인을 조회하고 활성화/비활성화할 수 있습니다',
+
 		// About
 		about: '정보',
 		aboutText1: '이 플러그인은 Claude Agent SDK를 사용하여 Obsidian 내에서 AI 지원 기능을 제공합니다.',

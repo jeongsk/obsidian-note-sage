@@ -65,6 +65,8 @@ export interface NoteSageSettings {
 	language?: SupportedLanguage;
 	// Quick Actions 설정
 	quickActions?: QuickActionConfig[];
+	// 플러그인 관리 도구 설정
+	enablePluginTools?: boolean;
 }
 
 export const DEFAULT_SETTINGS: NoteSageSettings = {
@@ -85,7 +87,9 @@ export const DEFAULT_SETTINGS: NoteSageSettings = {
 	// 다국어 지원 기본값
 	language: 'auto',
 	// Quick Actions 기본값
-	quickActions: DEFAULT_QUICK_ACTIONS
+	quickActions: DEFAULT_QUICK_ACTIONS,
+	// 플러그인 관리 도구 기본값
+	enablePluginTools: false
 };
 
 // 사용 가능한 모델 목록 (4.5 시리즈만)
