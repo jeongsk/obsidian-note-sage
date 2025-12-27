@@ -1,11 +1,12 @@
 import { ItemView, WorkspaceLeaf, setIcon, MarkdownView, TFile } from 'obsidian';
-import type { NoteSageSettings, ChatMessage, QuickActionConfig } from './types';
+import type { NoteSageSettings, ChatMessage, QuickActionConfig, McpServerStatus } from './types';
 import { AVAILABLE_MODELS, QUICK_ACTION_DEFINITIONS, DEFAULT_QUICK_ACTIONS } from './types';
 import { AgentService } from './AgentService';
 import { ChatRenderer } from './ChatRenderer';
 import { MessageFactory } from './MessageFactory';
 import { createExampleMessages } from './exampleMessages';
 import { createObsidianPluginToolsServer } from './tools/ObsidianPluginTools';
+import { McpServerManager } from './mcp/McpServerManager';
 import { t, setLanguage } from './i18n';
 import type NoteSagePlugin from './main';
 
@@ -43,6 +44,10 @@ export class NoteSageView extends ItemView {
 	private fileContextHeader: HTMLElement;
 	private modelSelector: HTMLSelectElement;
 	private quickActionsContainer: HTMLElement;
+	private mcpStatusContainer: HTMLElement;
+
+	// MCP 상태 구독 해제 함수
+	private unsubscribeMcpStatus?: () => void;
 
 	constructor(leaf: WorkspaceLeaf, plugin: NoteSagePlugin) {
 		super(leaf);
@@ -63,11 +68,23 @@ export class NoteSageView extends ItemView {
 	 * 설정에 따라 MCP 서버를 업데이트합니다.
 	 */
 	private updateMcpServers(): void {
+		const servers: Record<string, import('@anthropic-ai/claude-agent-sdk').McpServerConfig> = {};
+
+		// 플러그인 도구 서버 추가
 		if (this.settings.enablePluginTools) {
 			const pluginToolsServer = createObsidianPluginToolsServer(this.app);
-			this.agentService.setMcpServers({
-				'obsidian-plugins': pluginToolsServer
-			});
+			servers['obsidian-plugins'] = pluginToolsServer;
+		}
+
+		// 사용자 설정 MCP 서버 추가
+		if (this.settings.mcpServers && this.settings.mcpServers.length > 0) {
+			const userServers = McpServerManager.toSdkMcpServers(this.settings.mcpServers);
+			Object.assign(servers, userServers);
+		}
+
+		// AgentService에 설정
+		if (Object.keys(servers).length > 0) {
+			this.agentService.setMcpServers(servers);
 		} else {
 			this.agentService.clearMcpServers();
 		}
@@ -98,6 +115,12 @@ export class NoteSageView extends ItemView {
 		if (this.isProcessing) {
 			this.agentService.cancel();
 		}
+
+		// MCP 상태 구독 해제
+		if (this.unsubscribeMcpStatus) {
+			this.unsubscribeMcpStatus();
+			this.unsubscribeMcpStatus = undefined;
+		}
 	}
 
 	// ==================== UI 생성 ====================
@@ -118,6 +141,9 @@ export class NoteSageView extends ItemView {
 
 		// 모델 선택기
 		this.createModelSelector(headerEl);
+
+		// MCP 상태 아이콘
+		this.createMcpStatusIcon(headerEl);
 
 		const buttonGroupEl = headerEl.createEl('div', { cls: 'sage-header-buttons' });
 
@@ -190,6 +216,105 @@ export class NoteSageView extends ItemView {
 		if (this.settings.debugContext) {
 			console.log('[NoteSageView] Model changed to:', newModel);
 		}
+	}
+
+	/**
+	 * MCP 상태 아이콘 컨테이너 생성
+	 */
+	private createMcpStatusIcon(headerEl: HTMLElement): void {
+		this.mcpStatusContainer = headerEl.createEl('div', { cls: 'sage-mcp-header-status' });
+
+		// MCP 서버가 설정되어 있으면 표시
+		this.renderMcpStatusIcon();
+
+		// 상태 변경 구독
+		if (this.plugin.mcpServerManager) {
+			this.unsubscribeMcpStatus = this.plugin.mcpServerManager.onStatusChange(() => {
+				this.renderMcpStatusIcon();
+			});
+		}
+	}
+
+	/**
+	 * MCP 상태 아이콘 렌더링
+	 */
+	private renderMcpStatusIcon(): void {
+		if (!this.mcpStatusContainer) return;
+
+		this.mcpStatusContainer.empty();
+
+		// 활성화된 MCP 서버가 있는지 확인
+		const enabledServers = this.settings.mcpServers?.filter(s => s.enabled) || [];
+		if (enabledServers.length === 0) {
+			this.mcpStatusContainer.style.display = 'none';
+			return;
+		}
+
+		this.mcpStatusContainer.style.display = 'flex';
+
+		// 상태 집계
+		const statuses = this.plugin.mcpServerManager?.getAllStatuses() || [];
+		const statusMap = new Map<string, McpServerStatus>();
+		for (const status of statuses) {
+			statusMap.set(status.name, status);
+		}
+
+		let connectedCount = 0;
+		let failedCount = 0;
+		let pendingCount = 0;
+
+		for (const server of enabledServers) {
+			const status = statusMap.get(server.name);
+			switch (status?.status) {
+				case 'connected':
+					connectedCount++;
+					break;
+				case 'failed':
+					failedCount++;
+					break;
+				default:
+					pendingCount++;
+					break;
+			}
+		}
+
+		// 아이콘 결정
+		let iconName: string;
+		let statusClass: string;
+		let tooltip: string;
+
+		if (failedCount > 0) {
+			iconName = 'plug-zap';
+			statusClass = 'sage-mcp-header-failed';
+			tooltip = `MCP: ${failedCount} ${t('settings.mcp.statusFailed')}`;
+		} else if (pendingCount > 0) {
+			iconName = 'plug';
+			statusClass = 'sage-mcp-header-pending';
+			tooltip = `MCP: ${t('settings.mcp.statusPending')}`;
+		} else if (connectedCount > 0) {
+			iconName = 'plug';
+			statusClass = 'sage-mcp-header-connected';
+			tooltip = `MCP: ${connectedCount} ${t('settings.mcp.statusConnected')}`;
+		} else {
+			iconName = 'plug';
+			statusClass = 'sage-mcp-header-pending';
+			tooltip = `MCP: ${enabledServers.length} servers`;
+		}
+
+		const iconEl = this.mcpStatusContainer.createSpan({
+			cls: `sage-mcp-header-icon ${statusClass}`,
+			attr: { 'aria-label': tooltip, title: tooltip }
+		});
+		setIcon(iconEl, iconName);
+
+		// 서버 상세 정보 툴팁
+		const detailTooltip = enabledServers.map(server => {
+			const status = statusMap.get(server.name);
+			const statusText = status?.status || 'pending';
+			return `${server.name}: ${statusText}`;
+		}).join('\n');
+
+		iconEl.setAttribute('title', detailTooltip);
 	}
 
 	private createChatBody(container: HTMLElement): void {

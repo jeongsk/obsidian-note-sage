@@ -2,6 +2,56 @@
 
 import type { SupportedLanguage } from './i18n';
 
+// ==================== MCP Server Types ====================
+
+/**
+ * MCP 서버 설정 항목 (플러그인 설정에 저장)
+ */
+export interface McpServerConfigEntry {
+	/** 고유 서버 이름 (SDK의 mcpServers 객체 키로 사용) */
+	name: string;
+
+	/** 서버 타입: stdio, sse, http */
+	type: 'stdio' | 'sse' | 'http';
+
+	/** 서버 활성화 여부 */
+	enabled: boolean;
+
+	// stdio 타입 전용 필드
+	/** 실행할 명령어 (stdio 타입) */
+	command?: string;
+	/** 명령어 인자 (stdio 타입) */
+	args?: string[];
+	/** 환경 변수 (stdio 타입) */
+	env?: Record<string, string>;
+
+	// sse/http 타입 전용 필드
+	/** 서버 URL (sse/http 타입) */
+	url?: string;
+	/** HTTP 헤더 (sse/http 타입) */
+	headers?: Record<string, string>;
+}
+
+/**
+ * MCP 서버 연결 상태 (런타임, SDK에서 조회)
+ */
+export interface McpServerStatus {
+	/** 서버 이름 */
+	name: string;
+
+	/** 연결 상태 */
+	status: 'connected' | 'failed' | 'pending' | 'needs-auth';
+
+	/** 서버 정보 (연결 성공 시) */
+	serverInfo?: {
+		name: string;
+		version: string;
+	};
+
+	/** 오류 메시지 (연결 실패 시) */
+	errorMessage?: string;
+}
+
 // ==================== Quick Actions ====================
 
 /**
@@ -67,6 +117,8 @@ export interface NoteSageSettings {
 	quickActions?: QuickActionConfig[];
 	// 플러그인 관리 도구 설정
 	enablePluginTools?: boolean;
+	// MCP 서버 설정
+	mcpServers?: McpServerConfigEntry[];
 }
 
 export const DEFAULT_SETTINGS: NoteSageSettings = {
@@ -89,7 +141,9 @@ export const DEFAULT_SETTINGS: NoteSageSettings = {
 	// Quick Actions 기본값
 	quickActions: DEFAULT_QUICK_ACTIONS,
 	// 플러그인 관리 도구 기본값
-	enablePluginTools: false
+	enablePluginTools: false,
+	// MCP 서버 기본값
+	mcpServers: []
 };
 
 // 사용 가능한 모델 목록 (4.5 시리즈만)
