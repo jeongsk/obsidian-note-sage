@@ -131,6 +131,7 @@ export class McpSettingsUI {
 		toggleInput.addEventListener('change', async () => {
 			server.enabled = toggleInput.checked;
 			await this.onSave(this.servers);
+			this.render();
 		});
 
 		// 편집 버튼
