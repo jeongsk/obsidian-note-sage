@@ -15,6 +15,7 @@ export class McpServerManager {
 
 	/**
 	 * McpServerConfigEntry를 SDK의 McpServerConfig로 변환
+	 * stdio 타입의 경우 process.env를 병합하여 PATH 등 시스템 환경변수를 상속
 	 */
 	static toSdkConfig(entry: McpServerConfigEntry): McpServerConfig {
 		if (entry.type === 'stdio') {
@@ -22,7 +23,11 @@ export class McpServerManager {
 				type: 'stdio',
 				command: entry.command!,
 				args: entry.args,
-				env: entry.env
+				// Electron 환경에서 PATH 등 시스템 환경변수를 상속하기 위해 process.env 병합
+				env: {
+					...process.env as Record<string, string>,
+					...entry.env
+				}
 			};
 		} else if (entry.type === 'sse') {
 			return {
