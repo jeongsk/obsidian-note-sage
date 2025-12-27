@@ -108,7 +108,7 @@ export class McpSettingsUI {
 		// 상태 아이콘
 		const status = this.mcpServerManager?.getStatus(server.name);
 		const statusEl = itemEl.createSpan({ cls: 'sage-mcp-status-icon' });
-		this.renderStatusIcon(statusEl, status);
+		this.renderStatusIcon(statusEl, status, server.enabled);
 
 		// 서버 정보
 		const infoEl = itemEl.createDiv({ cls: 'sage-mcp-server-info' });
@@ -165,41 +165,47 @@ export class McpSettingsUI {
 	/**
 	 * 상태 아이콘 렌더링
 	 */
-	private renderStatusIcon(container: HTMLElement, status?: McpServerStatus): void {
+	private renderStatusIcon(container: HTMLElement, status?: McpServerStatus, enabled: boolean = true): void {
 		container.empty();
 
 		let iconName: string;
 		let statusClass: string;
 		let tooltip: string;
 
-		switch (status?.status) {
-			case 'connected':
-				iconName = 'check-circle';
-				statusClass = 'sage-mcp-status-connected';
-				tooltip = t('settings.mcp.statusConnected');
-				break;
-			case 'failed':
-				iconName = 'x-circle';
-				statusClass = 'sage-mcp-status-failed';
-				tooltip = t('settings.mcp.statusFailed');
-				break;
-			case 'needs-auth':
-				iconName = 'key';
-				statusClass = 'sage-mcp-status-needs-auth';
-				tooltip = t('settings.mcp.statusNeedsAuth');
-				break;
-			case 'pending':
-			default:
-				iconName = 'loader';
-				statusClass = 'sage-mcp-status-pending';
-				tooltip = t('settings.mcp.statusPending');
-				break;
+		// 비활성화된 서버는 비활성화 상태로 표시
+		if (!enabled) {
+			iconName = 'circle';
+			statusClass = 'sage-mcp-status-disabled';
+			tooltip = t('settings.mcp.enabled');
+		} else {
+			switch (status?.status) {
+				case 'connected':
+					iconName = 'check-circle';
+					statusClass = 'sage-mcp-status-connected';
+					tooltip = t('settings.mcp.statusConnected');
+					break;
+				case 'failed':
+					iconName = 'x-circle';
+					statusClass = 'sage-mcp-status-failed';
+					tooltip = t('settings.mcp.statusFailed');
+					break;
+				case 'needs-auth':
+					iconName = 'key';
+					statusClass = 'sage-mcp-status-needs-auth';
+					tooltip = t('settings.mcp.statusNeedsAuth');
+					break;
+				case 'pending':
+				default:
+					iconName = 'loader';
+					statusClass = 'sage-mcp-status-pending';
+					tooltip = t('settings.mcp.statusPending');
+					break;
+			}
 		}
 
 		container.addClass(statusClass);
 		setIcon(container, iconName);
 		container.setAttribute('aria-label', tooltip);
-		container.setAttribute('title', tooltip);
 	}
 
 	/**

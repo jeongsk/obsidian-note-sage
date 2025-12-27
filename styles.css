@@ -665,6 +665,10 @@
 	color: var(--color-orange);
 }
 
+.sage-mcp-status-disabled {
+	color: var(--text-faint);
+}
+
 .sage-mcp-server-info {
 	flex: 1;
 	min-width: 0;
