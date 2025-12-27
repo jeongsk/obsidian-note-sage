@@ -813,7 +813,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	cursor: help;
+	cursor: pointer;
 	padding: 2px;
 	border-radius: var(--radius);
 	transition: all 0.2s ease;
@@ -838,4 +838,248 @@
 
 .sage-mcp-header-pending {
 	color: var(--text-muted);
+}
+
+/* ==================== MCP Tools Panel ==================== */
+.sage-mcp-panel {
+	position: absolute;
+	top: 100%;
+	right: 0;
+	min-width: 280px;
+	max-width: 360px;
+	max-height: 400px;
+	background: var(--background-primary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+	z-index: 100;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.sage-mcp-panel-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.75rem 1rem;
+	border-bottom: 1px solid var(--background-modifier-border);
+	background: var(--background-secondary);
+}
+
+.sage-mcp-panel-title {
+	font-weight: 600;
+	font-size: var(--font-small);
+	color: var(--text-normal);
+}
+
+.sage-mcp-panel-settings {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 4px;
+	border: none;
+	background: transparent;
+	color: var(--text-muted);
+	cursor: pointer;
+	border-radius: var(--radius);
+	transition: all 0.15s ease;
+}
+
+.sage-mcp-panel-settings:hover {
+	background: var(--background-modifier-hover);
+	color: var(--text-normal);
+}
+
+.sage-mcp-panel-settings svg {
+	width: 16px;
+	height: 16px;
+}
+
+.sage-mcp-panel-list {
+	flex: 1;
+	overflow-y: auto;
+	padding: 0.5rem;
+}
+
+/* Empty state */
+.sage-mcp-panel-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 2rem 1rem;
+	text-align: center;
+	gap: 0.5rem;
+}
+
+.sage-mcp-panel-empty-title {
+	font-weight: 500;
+	color: var(--text-normal);
+	font-size: var(--font-small);
+}
+
+.sage-mcp-panel-empty-desc {
+	color: var(--text-muted);
+	font-size: var(--font-smaller);
+}
+
+.sage-mcp-panel-empty-button {
+	margin-top: 0.5rem;
+	padding: 0.5rem 1rem;
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+	border: none;
+	border-radius: var(--radius);
+	cursor: pointer;
+	font-size: var(--font-small);
+	transition: background 0.15s ease;
+}
+
+.sage-mcp-panel-empty-button:hover {
+	background: var(--interactive-accent-hover);
+}
+
+/* Server item */
+.sage-mcp-panel-item {
+	border-radius: var(--radius);
+	margin-bottom: 0.25rem;
+	background: var(--background-secondary);
+	overflow: hidden;
+}
+
+.sage-mcp-panel-item:last-child {
+	margin-bottom: 0;
+}
+
+.sage-mcp-panel-item-header {
+	display: flex;
+	align-items: center;
+	padding: 0.5rem 0.75rem;
+	cursor: pointer;
+	gap: 0.5rem;
+	transition: background 0.15s ease;
+}
+
+.sage-mcp-panel-item-header:hover {
+	background: var(--background-modifier-hover);
+}
+
+.sage-mcp-panel-item-status {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.sage-mcp-panel-item-status svg {
+	width: 14px;
+	height: 14px;
+}
+
+.sage-mcp-panel-item-info {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+}
+
+.sage-mcp-panel-item-name {
+	font-weight: 500;
+	font-size: var(--font-small);
+	color: var(--text-normal);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.sage-mcp-panel-item-type {
+	font-size: var(--font-smaller);
+	color: var(--text-muted);
+}
+
+/* Toggle switch */
+.sage-mcp-panel-item-toggle {
+	flex-shrink: 0;
+}
+
+.sage-mcp-toggle-input {
+	width: 34px;
+	height: 20px;
+	appearance: none;
+	-webkit-appearance: none;
+	background: var(--background-modifier-border);
+	border-radius: 10px;
+	cursor: pointer;
+	position: relative;
+	transition: background 0.2s ease;
+}
+
+.sage-mcp-toggle-input::before {
+	content: '';
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 16px;
+	height: 16px;
+	background: var(--background-primary);
+	border-radius: 50%;
+	transition: transform 0.2s ease;
+}
+
+.sage-mcp-toggle-input:checked {
+	background: var(--interactive-accent);
+}
+
+.sage-mcp-toggle-input:checked::before {
+	transform: translateX(14px);
+}
+
+/* Tools list (expanded state) */
+.sage-mcp-panel-item--expanded .sage-mcp-panel-item-header {
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.sage-mcp-panel-tools {
+	padding: 0.5rem 0.75rem;
+	background: var(--background-primary);
+}
+
+.sage-mcp-panel-tools-message {
+	font-size: var(--font-smaller);
+	color: var(--text-muted);
+	font-style: italic;
+}
+
+.sage-mcp-panel-tools-count {
+	font-size: var(--font-smaller);
+	color: var(--text-muted);
+	margin-bottom: 0.5rem;
+}
+
+.sage-mcp-panel-tools-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.sage-mcp-panel-tool-item {
+	display: flex;
+	flex-direction: column;
+	padding: 0.25rem 0.5rem;
+	background: var(--background-secondary);
+	border-radius: var(--radius);
+}
+
+.sage-mcp-panel-tool-name {
+	font-size: var(--font-smaller);
+	font-weight: 500;
+	color: var(--text-normal);
+}
+
+.sage-mcp-panel-tool-desc {
+	font-size: var(--font-smaller);
+	color: var(--text-muted);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
