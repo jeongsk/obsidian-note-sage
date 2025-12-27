@@ -183,6 +183,9 @@ export const ko: TranslationKeys = {
 			statusPending: '연결 중...',
 			statusNeedsAuth: '인증 필요',
 			noServers: 'MCP 서버가 설정되지 않았습니다. "서버 추가"를 클릭하여 시작하세요.',
+			commandNotFound: '명령어를 찾을 수 없음',
+			commandNotFoundDesc: '"{command}" 명령어를 찾을 수 없습니다. 전체 경로를 입력해 주세요 (예: /Users/username/.bun/bin/bunx)',
+			commandValidating: '명령어 확인 중...',
 		},
 
 		// About

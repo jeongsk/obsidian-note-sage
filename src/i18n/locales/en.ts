@@ -65,6 +65,9 @@ interface McpSettingsTranslations {
 	statusPending: string;
 	statusNeedsAuth: string;
 	noServers: string;
+	commandNotFound: string;
+	commandNotFoundDesc: string;
+	commandValidating: string;
 }
 
 interface SettingsTranslations {
@@ -337,6 +340,9 @@ export const en: TranslationKeys = {
 			statusPending: 'Connecting...',
 			statusNeedsAuth: 'Authentication required',
 			noServers: 'No MCP servers configured. Click "Add server" to get started.',
+			commandNotFound: 'Command not found',
+			commandNotFoundDesc: 'The command "{command}" could not be found. Please enter the full path (e.g., /Users/username/.bun/bin/bunx)',
+			commandValidating: 'Validating command...',
 		},
 
 		// About
