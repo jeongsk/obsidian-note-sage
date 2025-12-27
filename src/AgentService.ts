@@ -11,6 +11,13 @@ export interface AgentSession {
 	isActive: boolean;
 }
 
+export interface McpStatusInfo {
+	name: string;
+	status: 'connected' | 'failed' | 'pending' | 'needs-auth';
+	serverInfo?: { name: string; version: string };
+	errorMessage?: string;
+}
+
 export interface AgentExecutionOptions {
 	prompt: string;
 	workingDirectory: string;
@@ -18,6 +25,7 @@ export interface AgentExecutionOptions {
 	onMessage: (message: ChatMessage) => void;
 	onError: (error: Error) => void;
 	onComplete: () => void;
+	onMcpStatus?: (statuses: McpStatusInfo[]) => void;
 	signal?: AbortSignal;
 }
 
@@ -59,7 +67,7 @@ export class AgentService {
 	}
 
 	async execute(options: AgentExecutionOptions): Promise<string | null> {
-		const { prompt, workingDirectory, sessionId, onMessage, onError, onComplete, signal } = options;
+		const { prompt, workingDirectory, sessionId, onMessage, onError, onComplete, onMcpStatus, signal } = options;
 
 		// Validate workingDirectory
 		if (!workingDirectory || typeof workingDirectory !== 'string') {
@@ -107,9 +115,22 @@ export class AgentService {
 
 				const chatMessage = MessageFactory.convertSDKMessage(message as SDKMessage, activeSessionId);
 
-				// init 메시지에서 세션 ID 추출
+				// init 메시지에서 세션 ID 추출 및 MCP 상태 업데이트
 				if (message.type === 'system' && (message as SDKMessage).subtype === 'init') {
 					activeSessionId = (message as SDKMessage).session_id || activeSessionId;
+
+					// MCP 서버가 설정되어 있으면 연결 성공으로 상태 업데이트
+					if (onMcpStatus && Object.keys(this.mcpServers).length > 0) {
+						const statuses: McpStatusInfo[] = Object.keys(this.mcpServers).map(name => ({
+							name,
+							status: 'connected' as const
+						}));
+						onMcpStatus(statuses);
+
+						if (this.settings.debugContext) {
+							console.log('[AgentService] MCP servers connected:', statuses);
+						}
+					}
 				}
 
 				if (chatMessage) {
@@ -215,6 +236,10 @@ export class AgentService {
 		// MCP 서버 설정 적용
 		if (Object.keys(this.mcpServers).length > 0) {
 			options.mcpServers = this.mcpServers;
+
+			if (this.settings.debugContext) {
+				console.log('[AgentService] MCP servers being passed to SDK:', JSON.stringify(this.mcpServers, null, 2));
+			}
 		}
 
 		return options;

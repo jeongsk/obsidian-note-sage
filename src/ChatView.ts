@@ -80,11 +80,18 @@ export class NoteSageView extends ItemView {
 		if (this.settings.mcpServers && this.settings.mcpServers.length > 0) {
 			const userServers = McpServerManager.toSdkMcpServers(this.settings.mcpServers);
 			Object.assign(servers, userServers);
+
+			if (this.settings.debugContext) {
+				console.log('[NoteSageView] User MCP servers:', JSON.stringify(userServers, null, 2));
+			}
 		}
 
 		// AgentService에 설정
 		if (Object.keys(servers).length > 0) {
 			this.agentService.setMcpServers(servers);
+			if (this.settings.debugContext) {
+				console.log('[NoteSageView] Total MCP servers set:', Object.keys(servers));
+			}
 		} else {
 			this.agentService.clearMcpServers();
 		}
@@ -627,6 +634,14 @@ export class NoteSageView extends ItemView {
 				},
 				onComplete: () => {
 					// Processing complete
+				},
+				onMcpStatus: (statuses) => {
+					// MCP 서버 상태 업데이트
+					if (this.plugin.mcpServerManager) {
+						this.plugin.mcpServerManager.updateStatuses(statuses);
+					}
+					// 상태 아이콘 다시 렌더링
+					this.renderMcpStatusIcon();
 				}
 			});
 
