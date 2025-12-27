@@ -576,6 +576,12 @@
 	border-color: var(--interactive-success);
 }
 
+.sage-copy-button.copy-failed {
+	background: var(--background-modifier-error);
+	color: var(--color-red);
+	border-color: var(--color-red);
+}
+
 .sage-code-block pre {
 	margin: 0;
 	padding: 8px;
@@ -839,6 +845,20 @@
 	font-size: var(--font-smaller);
 	color: var(--text-muted);
 	word-break: break-all;
+}
+
+/* JSON validation error */
+.sage-mcp-json-error {
+	padding: 0.5rem;
+	font-size: var(--font-smaller);
+	color: var(--color-red);
+	background: var(--background-modifier-error);
+	border-radius: var(--radius);
+	margin-top: 0.25rem;
+}
+
+.sage-input-error {
+	border-color: var(--color-red) !important;
 }
 
 .sage-mcp-dynamic-fields {
