@@ -1,12 +1,42 @@
 // Internationalization (i18n) module for Note Sage
 import { en, TranslationKeys } from './locales/en';
 import { ko } from './locales/ko';
+import { es } from './locales/es';
+import { fr } from './locales/fr';
+import { de } from './locales/de';
+import { pt } from './locales/pt';
+import { ja } from './locales/ja';
+import { zh } from './locales/zh';
+import { ar } from './locales/ar';
+import { ru } from './locales/ru';
+import { hi } from './locales/hi';
 
-export type SupportedLanguage = 'en' | 'ko' | 'auto';
+export type SupportedLanguage =
+	| 'en'   // English
+	| 'es'   // Spanish
+	| 'fr'   // French
+	| 'de'   // German
+	| 'pt'   // Portuguese
+	| 'ja'   // Japanese
+	| 'ko'   // Korean
+	| 'zh'   // Chinese (Simplified)
+	| 'ar'   // Arabic
+	| 'ru'   // Russian
+	| 'hi'   // Hindi
+	| 'auto'; // System detection
 
 const translations: Record<string, TranslationKeys> = {
 	en,
+	es,
+	fr,
+	de,
+	pt,
+	ja,
 	ko,
+	zh,
+	ar,
+	ru,
+	hi,
 };
 
 let currentLanguage: SupportedLanguage = 'auto';
@@ -91,13 +121,47 @@ export function t(keyPath: string): string {
 }
 
 /**
- * List of available languages with their labels
+ * Language option with text direction
  */
-export const AVAILABLE_LANGUAGES: Array<{ value: SupportedLanguage; label: string }> = [
-	{ value: 'auto', label: 'Auto (System)' },
-	{ value: 'en', label: 'English' },
-	{ value: 'ko', label: '한국어' },
+interface LanguageOption {
+	value: SupportedLanguage;
+	label: string;
+	direction: 'ltr' | 'rtl';
+}
+
+/**
+ * List of available languages with their labels and text direction
+ */
+export const AVAILABLE_LANGUAGES: LanguageOption[] = [
+	{ value: 'auto', label: 'Auto (System)', direction: 'ltr' },
+	{ value: 'en', label: 'English', direction: 'ltr' },
+	{ value: 'es', label: 'Español', direction: 'ltr' },
+	{ value: 'fr', label: 'Français', direction: 'ltr' },
+	{ value: 'de', label: 'Deutsch', direction: 'ltr' },
+	{ value: 'pt', label: 'Português', direction: 'ltr' },
+	{ value: 'ja', label: '日本語', direction: 'ltr' },
+	{ value: 'ko', label: '한국어', direction: 'ltr' },
+	{ value: 'zh', label: '简体中文', direction: 'ltr' },
+	{ value: 'ar', label: 'العربية', direction: 'rtl' },
+	{ value: 'ru', label: 'Русский', direction: 'ltr' },
+	{ value: 'hi', label: 'हिन्दी', direction: 'ltr' },
 ];
+
+/**
+ * Get the text direction for the current language
+ */
+export function getTextDirection(): 'ltr' | 'rtl' {
+	const lang = getEffectiveLanguage();
+	const langOption = AVAILABLE_LANGUAGES.find(l => l.value === lang);
+	return langOption?.direction || 'ltr';
+}
+
+/**
+ * Check if the current language is RTL
+ */
+export function isRtlLanguage(): boolean {
+	return getTextDirection() === 'rtl';
+}
 
 // Re-export types
 export type { TranslationKeys };
