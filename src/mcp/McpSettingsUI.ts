@@ -316,6 +316,38 @@ export class McpSettingsUI {
 				return;
 			}
 
+			// stdio 타입일 경우 명령어 유효성 검사
+			if (formState.type === 'stdio' && formState.command) {
+				const commandField = dynamicFieldsContainer.querySelector('.sage-mcp-form-field');
+				const existingError = commandField?.querySelector('.sage-mcp-command-error');
+				if (existingError) {
+					existingError.remove();
+				}
+
+				const validation = McpServerManager.validateCommand(formState.command);
+				if (!validation.found) {
+					// 에러 메시지 표시
+					if (commandField) {
+						const errorEl = commandField.createDiv({ cls: 'sage-mcp-command-error' });
+						errorEl.createDiv({
+							cls: 'sage-mcp-command-error-title',
+							text: t('settings.mcp.commandNotFound')
+						});
+						errorEl.createDiv({
+							cls: 'sage-mcp-command-error-desc',
+							text: t('settings.mcp.commandNotFoundDesc').replace('{command}', formState.command)
+						});
+					}
+					return;
+				}
+
+				// 검증된 전체 경로가 있으면 사용
+				if (validation.resolvedPath && validation.resolvedPath !== formState.command) {
+					console.log(`[McpSettingsUI] Command "${formState.command}" resolved to "${validation.resolvedPath}"`);
+					formState.command = validation.resolvedPath;
+				}
+			}
+
 			const newServer: McpServerConfigEntry = {
 				name: formState.name!,
 				type: formState.type!,
@@ -377,7 +409,8 @@ export class McpSettingsUI {
 	 */
 	private renderStdioFields(container: HTMLElement, formState: Partial<McpServerConfigEntry>): void {
 		// 명령어
-		new Setting(container)
+		const commandContainer = container.createDiv({ cls: 'sage-mcp-form-field' });
+		new Setting(commandContainer)
 			.setName(t('settings.mcp.command'))
 			.addText(text => {
 				text
@@ -385,6 +418,11 @@ export class McpSettingsUI {
 					.setValue(formState.command || '')
 					.onChange(value => {
 						formState.command = value.trim();
+						// 입력 시 에러 메시지 숨기기
+						const errorEl = commandContainer.querySelector('.sage-mcp-command-error');
+						if (errorEl) {
+							errorEl.remove();
+						}
 					});
 				text.inputEl.required = true;
 			});
