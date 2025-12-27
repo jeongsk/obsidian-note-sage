@@ -292,7 +292,6 @@ export class McpToolsPanel {
 		container.addClass(statusClass);
 		setIcon(container, iconName);
 		container.setAttribute('aria-label', tooltip);
-		container.setAttribute('title', tooltip);
 	}
 
 	/**
