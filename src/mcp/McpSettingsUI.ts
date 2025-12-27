@@ -1,4 +1,4 @@
-import { Setting, setIcon } from 'obsidian';
+import { Setting, setIcon, Notice } from 'obsidian';
 import type { McpServerConfigEntry, McpServerStatus } from '../types';
 import { t } from '../i18n';
 import { McpServerManager } from './McpServerManager';
@@ -130,20 +130,25 @@ export class McpSettingsUI {
 		toggleInput.checked = server.enabled;
 		toggleLabel.createSpan({ cls: 'sage-mcp-toggle-slider' });
 		toggleInput.addEventListener('change', async () => {
-			server.enabled = toggleInput.checked;
-			await this.onSave(this.servers);
+			try {
+				server.enabled = toggleInput.checked;
+				await this.onSave(this.servers);
 
-			// 활성화 시 로컬 검증 수행
-			if (toggleInput.checked && this.mcpServerManager) {
-				const result = this.mcpServerManager.validateEntry(server);
-				this.mcpServerManager.updateStatus({
-					name: server.name,
-					status: result.valid ? 'pending' : 'failed',
-					errorMessage: result.errorMessage
-				});
+				// 활성화 시 로컬 검증 수행
+				if (toggleInput.checked && this.mcpServerManager) {
+					const result = this.mcpServerManager.validateEntry(server);
+					this.mcpServerManager.updateStatus({
+						name: server.name,
+						status: result.valid ? 'pending' : 'failed',
+						errorMessage: result.errorMessage
+					});
+				}
+
+				this.render();
+			} catch (error) {
+				console.error('[McpSettingsUI] Toggle error:', error);
+				new Notice(t('settings.mcp.panelToggleError'), 5000);
 			}
-
-			this.render();
 		});
 
 		// 편집 버튼
@@ -162,9 +167,14 @@ export class McpSettingsUI {
 		deleteBtn.setAttribute('aria-label', t('settings.mcp.deleteServer'));
 		deleteBtn.addEventListener('click', async () => {
 			if (confirm(t('settings.mcp.deleteConfirm'))) {
-				this.servers = this.servers.filter(s => s.name !== server.name);
-				await this.onSave(this.servers);
-				this.render();
+				try {
+					this.servers = this.servers.filter(s => s.name !== server.name);
+					await this.onSave(this.servers);
+					this.render();
+				} catch (error) {
+					console.error('[McpSettingsUI] Delete error:', error);
+					new Notice(t('settings.mcp.deleteError'), 5000);
+				}
 			}
 		});
 
@@ -232,6 +242,11 @@ export class McpSettingsUI {
 				return t('settings.mcp.typeSse');
 			case 'http':
 				return t('settings.mcp.typeHttp');
+			default: {
+				// TypeScript exhaustiveness check
+				const _exhaustiveCheck: never = type;
+				return `Unknown: ${_exhaustiveCheck}`;
+			}
 		}
 	}
 
@@ -367,36 +382,41 @@ export class McpSettingsUI {
 				}
 			}
 
-			const newServer: McpServerConfigEntry = {
-				name: formState.name!,
-				type: formState.type!,
-				enabled: formState.enabled ?? true,
-				...(formState.type === 'stdio' && {
-					command: formState.command,
-					args: formState.args,
-					env: formState.env
-				}),
-				...((formState.type === 'sse' || formState.type === 'http') && {
-					url: formState.url,
-					headers: formState.headers
-				})
-			};
+			try {
+				const newServer: McpServerConfigEntry = {
+					name: formState.name!,
+					type: formState.type!,
+					enabled: formState.enabled ?? true,
+					...(formState.type === 'stdio' && {
+						command: formState.command,
+						args: formState.args,
+						env: formState.env
+					}),
+					...((formState.type === 'sse' || formState.type === 'http') && {
+						url: formState.url,
+						headers: formState.headers
+					})
+				};
 
-			if (isEditing) {
-				// 기존 서버 수정
-				const index = this.servers.findIndex(s => s.name === this.editingServer!.name);
-				if (index >= 0) {
-					this.servers[index] = newServer;
+				if (isEditing) {
+					// 기존 서버 수정
+					const index = this.servers.findIndex(s => s.name === this.editingServer!.name);
+					if (index >= 0) {
+						this.servers[index] = newServer;
+					}
+				} else {
+					// 새 서버 추가
+					this.servers.push(newServer);
 				}
-			} else {
-				// 새 서버 추가
-				this.servers.push(newServer);
-			}
 
-			await this.onSave(this.servers);
-			this.isFormVisible = false;
-			this.editingServer = null;
-			this.render();
+				await this.onSave(this.servers);
+				this.isFormVisible = false;
+				this.editingServer = null;
+				this.render();
+			} catch (error) {
+				console.error('[McpSettingsUI] Save error:', error);
+				new Notice(t('settings.mcp.saveError'), 5000);
+			}
 		});
 
 		// 취소 버튼
@@ -462,17 +482,27 @@ export class McpSettingsUI {
 			});
 
 		// 환경 변수
-		new Setting(container)
+		const envContainer = container.createDiv({ cls: 'sage-mcp-form-field' });
+		new Setting(envContainer)
 			.setName(t('settings.mcp.env'))
 			.addTextArea(text => {
 				text
 					.setPlaceholder(t('settings.mcp.envPlaceholder'))
 					.setValue(formState.env ? JSON.stringify(formState.env, null, 2) : '')
 					.onChange(value => {
+						const existingError = envContainer.querySelector('.sage-mcp-json-error');
 						try {
 							formState.env = value.trim() ? JSON.parse(value) : undefined;
+							if (existingError) existingError.remove();
+							text.inputEl.removeClass('sage-input-error');
 						} catch {
-							// 유효하지 않은 JSON은 무시
+							if (!existingError && value.trim()) {
+								envContainer.createDiv({
+									cls: 'sage-mcp-json-error',
+									text: t('settings.mcp.invalidJson')
+								});
+							}
+							text.inputEl.addClass('sage-input-error');
 						}
 					});
 				text.inputEl.rows = 3;
@@ -499,17 +529,27 @@ export class McpSettingsUI {
 			});
 
 		// 헤더
-		new Setting(container)
+		const headersContainer = container.createDiv({ cls: 'sage-mcp-form-field' });
+		new Setting(headersContainer)
 			.setName(t('settings.mcp.headers'))
 			.addTextArea(text => {
 				text
 					.setPlaceholder(t('settings.mcp.headersPlaceholder'))
 					.setValue(formState.headers ? JSON.stringify(formState.headers, null, 2) : '')
 					.onChange(value => {
+						const existingError = headersContainer.querySelector('.sage-mcp-json-error');
 						try {
 							formState.headers = value.trim() ? JSON.parse(value) : undefined;
+							if (existingError) existingError.remove();
+							text.inputEl.removeClass('sage-input-error');
 						} catch {
-							// 유효하지 않은 JSON은 무시
+							if (!existingError && value.trim()) {
+								headersContainer.createDiv({
+									cls: 'sage-mcp-json-error',
+									text: t('settings.mcp.invalidJson')
+								});
+							}
+							text.inputEl.addClass('sage-input-error');
 						}
 					});
 				text.inputEl.rows = 3;

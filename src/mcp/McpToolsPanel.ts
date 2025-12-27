@@ -1,8 +1,9 @@
 import { Notice, setIcon } from 'obsidian';
-import type { McpServerConfigEntry, McpServerStatus, McpTool } from '../types';
+import type { McpServerConfigEntry, McpServerStatus, ObsidianAppExtended } from '../types';
 import { t } from '../i18n';
 import { McpServerManager } from './McpServerManager';
 import type NoteSagePlugin from '../main';
+import type { NoteSageView } from '../ChatView';
 
 /**
  * MCP 도구 패널 - 헤더 아이콘 클릭 시 표시되는 드롭다운 패널
@@ -307,6 +308,11 @@ export class McpToolsPanel {
 				return t('settings.mcp.typeSse');
 			case 'http':
 				return t('settings.mcp.typeHttp');
+			default: {
+				// TypeScript exhaustiveness check
+				const _exhaustiveCheck: never = type;
+				return `Unknown: ${_exhaustiveCheck}`;
+			}
 		}
 	}
 
@@ -331,8 +337,9 @@ export class McpToolsPanel {
 			}
 
 			// MCP 서버 설정 업데이트 (ChatView의 updateMcpServers 호출)
-			if ((this.plugin as any).chatView?.updateMcpServers) {
-				(this.plugin as any).chatView.updateMcpServers();
+			const chatView = this.getChatView();
+			if (chatView?.updateMcpServers) {
+				chatView.updateMcpServers();
 			}
 			this.render();
 		} catch (error) {
@@ -412,9 +419,21 @@ export class McpToolsPanel {
 	 * 설정 페이지 열기
 	 */
 	private openSettings(): void {
+		const app = this.plugin.app as ObsidianAppExtended;
 		// Obsidian 설정 페이지 열기
-		(this.plugin.app as any).setting?.open();
+		app.setting?.open();
 		// 플러그인 설정 탭으로 이동
-		(this.plugin.app as any).setting?.openTabById?.('note-sage');
+		app.setting?.openTabById?.('note-sage');
+	}
+
+	/**
+	 * ChatView 인스턴스 가져오기
+	 */
+	private getChatView(): NoteSageView | undefined {
+		const leaves = this.plugin.app.workspace.getLeavesOfType('note-sage-view');
+		if (leaves.length > 0) {
+			return leaves[0].view as NoteSageView;
+		}
+		return undefined;
 	}
 }
