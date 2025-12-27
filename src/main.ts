@@ -1,4 +1,4 @@
-import { Plugin, WorkspaceLeaf } from 'obsidian';
+import { Plugin, WorkspaceLeaf, MarkdownView } from 'obsidian';
 import { NoteSageView, VIEW_TYPE_NOTE_SAGE } from './ChatView';
 import { NoteSageSettingTab } from './SettingsTab';
 import { NoteSageSettings, DEFAULT_SETTINGS, DEFAULT_QUICK_ACTIONS } from './types';
@@ -32,6 +32,17 @@ export default class NoteSagePlugin extends Plugin {
 		if (this.settings.language) {
 			setLanguage(this.settings.language);
 		}
+
+		// 파일 변경 감지: Agent SDK가 fs로 직접 수정한 파일을 에디터에 반영
+		this.registerEvent(
+			this.app.vault.on('modify', (file) => {
+				const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
+				if (activeView && activeView.file?.path === file.path) {
+					// rebuildView()는 내부 API이므로 타입 단언 사용
+					(activeView.leaf as unknown as { rebuildView: () => void }).rebuildView();
+				}
+			})
+		);
 
 		// Register the custom view
 		this.registerView(
