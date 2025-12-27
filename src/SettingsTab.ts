@@ -2,9 +2,11 @@ import { App, PluginSettingTab, Setting } from 'obsidian';
 import type NoteSagePlugin from './main';
 import { AVAILABLE_MODELS, QUICK_ACTION_DEFINITIONS, DEFAULT_QUICK_ACTIONS, QuickActionConfig } from './types';
 import { t, setLanguage, AVAILABLE_LANGUAGES, SupportedLanguage } from './i18n';
+import { McpSettingsUI } from './mcp/McpSettingsUI';
 
 export class NoteSageSettingTab extends PluginSettingTab {
 	plugin: NoteSagePlugin;
+	private mcpSettingsUI?: McpSettingsUI;
 
 	constructor(app: App, plugin: NoteSagePlugin) {
 		super(app, plugin);
@@ -129,6 +131,10 @@ export class NoteSageSettingTab extends PluginSettingTab {
 			.setHeading();
 
 		this.renderQuickActionsSettings(containerEl);
+
+		// ==================== MCP 서버 설정 ====================
+		const mcpContainer = containerEl.createDiv({ cls: 'sage-mcp-settings' });
+		this.renderMcpSettings(mcpContainer);
 
 		// ==================== Claude CLI 고급 설정 ====================
 		new Setting(containerEl)
@@ -266,6 +272,27 @@ export class NoteSageSettingTab extends PluginSettingTab {
 
 		await this.plugin.saveSettings();
 		this.updateViews();
+	}
+
+	// MCP 설정 UI 렌더링
+	private renderMcpSettings(containerEl: HTMLElement): void {
+		// 기존 UI 정리
+		if (this.mcpSettingsUI) {
+			this.mcpSettingsUI.destroy();
+		}
+
+		this.mcpSettingsUI = new McpSettingsUI(
+			containerEl,
+			this.plugin.settings.mcpServers || [],
+			async (servers) => {
+				this.plugin.settings.mcpServers = servers;
+				await this.plugin.saveSettings();
+				this.updateViews();
+			},
+			this.plugin.mcpServerManager
+		);
+
+		this.mcpSettingsUI.render();
 	}
 
 	// Quick Actions 설정 UI 렌더링

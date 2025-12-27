@@ -3,6 +3,7 @@ import { NoteSageView, VIEW_TYPE_NOTE_SAGE } from './ChatView';
 import { NoteSageSettingTab } from './SettingsTab';
 import { NoteSageSettings, DEFAULT_SETTINGS, DEFAULT_QUICK_ACTIONS } from './types';
 import { t, setLanguage } from './i18n';
+import { McpServerManager } from './mcp/McpServerManager';
 
 // 빠른 프롬프트 타입
 interface QuickPrompt {
@@ -15,6 +16,7 @@ interface QuickPrompt {
 export default class NoteSagePlugin extends Plugin {
 	settings: NoteSageSettings;
 	isAgentExecuting: boolean = false;
+	mcpServerManager: McpServerManager;
 
 	setAgentExecuting(value: boolean): void {
 		this.isAgentExecuting = value;
@@ -37,6 +39,9 @@ export default class NoteSagePlugin extends Plugin {
 		if (this.settings.language) {
 			setLanguage(this.settings.language);
 		}
+
+		// Initialize MCP Server Manager
+		this.mcpServerManager = new McpServerManager();
 
 		// 파일 변경 감지: Agent SDK가 fs로 직접 수정한 파일을 에디터에 반영
 		// 에이전트 실행 중일 때만 rebuildView() 호출 (사용자 직접 수정 시에는 무시)
@@ -141,6 +146,11 @@ export default class NoteSagePlugin extends Plugin {
 	}
 
 	onunload() {
+		// Cleanup MCP Server Manager
+		if (this.mcpServerManager) {
+			this.mcpServerManager.destroy();
+		}
+
 		// Detach leaves with our view type when unloading
 		this.app.workspace.detachLeavesOfType(VIEW_TYPE_NOTE_SAGE);
 	}

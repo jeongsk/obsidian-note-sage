@@ -33,6 +33,43 @@ interface PromptsTranslations {
 	codeReview: string;
 }
 
+interface McpSettingsTranslations {
+	title: string;
+	description: string;
+	addServer: string;
+	editServer: string;
+	deleteServer: string;
+	deleteConfirm: string;
+	serverName: string;
+	serverNamePlaceholder: string;
+	serverType: string;
+	typeStdio: string;
+	typeSse: string;
+	typeHttp: string;
+	command: string;
+	commandPlaceholder: string;
+	args: string;
+	argsPlaceholder: string;
+	env: string;
+	envPlaceholder: string;
+	url: string;
+	urlPlaceholder: string;
+	headers: string;
+	headersPlaceholder: string;
+	enabled: string;
+	save: string;
+	cancel: string;
+	duplicateName: string;
+	statusConnected: string;
+	statusFailed: string;
+	statusPending: string;
+	statusNeedsAuth: string;
+	noServers: string;
+	commandNotFound: string;
+	commandNotFoundDesc: string;
+	commandValidating: string;
+}
+
 interface SettingsTranslations {
 	apiKey: string;
 	apiKeyDesc: string;
@@ -74,6 +111,8 @@ interface SettingsTranslations {
 	// Plugin Tools
 	pluginTools: string;
 	pluginToolsDesc: string;
+	// MCP Servers
+	mcp: McpSettingsTranslations;
 	about: string;
 	aboutText1: string;
 	aboutText2: string;
@@ -267,6 +306,44 @@ export const en: TranslationKeys = {
 		// Plugin Tools
 		pluginTools: 'Plugin management tools',
 		pluginToolsDesc: 'Allow agent to list, enable, and disable Obsidian plugins',
+
+		// MCP Servers
+		mcp: {
+			title: 'MCP Servers',
+			description: 'Configure external MCP servers for custom tools and resources',
+			addServer: 'Add server',
+			editServer: 'Edit server',
+			deleteServer: 'Delete server',
+			deleteConfirm: 'Are you sure you want to delete this server?',
+			serverName: 'Server name',
+			serverNamePlaceholder: 'e.g., filesystem, weather-api',
+			serverType: 'Server type',
+			typeStdio: 'stdio (local command)',
+			typeSse: 'SSE (Server-Sent Events)',
+			typeHttp: 'HTTP',
+			command: 'Command',
+			commandPlaceholder: 'e.g., npx, python',
+			args: 'Arguments',
+			argsPlaceholder: 'e.g., -y, @anthropic/mcp-server-filesystem, /path',
+			env: 'Environment variables (JSON)',
+			envPlaceholder: '{"KEY": "value"}',
+			url: 'URL',
+			urlPlaceholder: 'e.g., http://localhost:8080/mcp',
+			headers: 'Headers (JSON)',
+			headersPlaceholder: '{"Authorization": "Bearer ..."}',
+			enabled: 'Enabled',
+			save: 'Save',
+			cancel: 'Cancel',
+			duplicateName: 'A server with this name already exists',
+			statusConnected: 'Connected',
+			statusFailed: 'Connection failed',
+			statusPending: 'Connecting...',
+			statusNeedsAuth: 'Authentication required',
+			noServers: 'No MCP servers configured. Click "Add server" to get started.',
+			commandNotFound: 'Command not found',
+			commandNotFoundDesc: 'The command "{command}" could not be found. Please enter the full path (e.g., /Users/username/.bun/bin/bunx)',
+			commandValidating: 'Validating command...',
+		},
 
 		// About
 		about: 'About',

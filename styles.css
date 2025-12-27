@@ -596,3 +596,246 @@
 	font-family: var(--font-monospace);
 	font-size: 0.9em;
 }
+
+/* ==================== MCP Server Settings ==================== */
+.sage-mcp-settings {
+	margin-top: 1rem;
+}
+
+.sage-mcp-server-list {
+	margin-top: 0.5rem;
+}
+
+.sage-mcp-no-servers {
+	padding: 1rem;
+	text-align: center;
+	color: var(--text-muted);
+	font-style: italic;
+	background: var(--background-secondary);
+	border-radius: var(--radius);
+	margin-bottom: 0.5rem;
+}
+
+.sage-mcp-server-item {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem;
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius);
+	margin-bottom: 0.5rem;
+}
+
+.sage-mcp-server-item:hover {
+	border-color: var(--background-modifier-border-hover);
+}
+
+.sage-mcp-status-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	flex-shrink: 0;
+}
+
+.sage-mcp-status-icon svg {
+	width: 16px;
+	height: 16px;
+}
+
+.sage-mcp-status-connected {
+	color: var(--color-green);
+}
+
+.sage-mcp-status-failed {
+	color: var(--color-red);
+}
+
+.sage-mcp-status-pending {
+	color: var(--text-muted);
+}
+
+.sage-mcp-status-pending svg {
+	animation: spinner 1s linear infinite;
+}
+
+.sage-mcp-status-needs-auth {
+	color: var(--color-orange);
+}
+
+.sage-mcp-server-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.sage-mcp-server-name {
+	font-weight: 500;
+	color: var(--text-normal);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.sage-mcp-server-type {
+	font-size: var(--font-smaller);
+	color: var(--text-muted);
+}
+
+.sage-mcp-server-controls {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+	flex-shrink: 0;
+}
+
+.sage-mcp-toggle {
+	display: flex;
+	align-items: center;
+}
+
+.sage-mcp-toggle-input {
+	cursor: pointer;
+}
+
+.sage-mcp-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	background: transparent;
+	border: none;
+	border-radius: var(--radius);
+	color: var(--text-muted);
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.sage-mcp-btn:hover {
+	background: var(--background-modifier-hover);
+	color: var(--text-normal);
+}
+
+.sage-mcp-btn svg {
+	width: 14px;
+	height: 14px;
+}
+
+.sage-mcp-btn-delete:hover {
+	color: var(--color-red);
+}
+
+.sage-mcp-error-message {
+	width: 100%;
+	margin-top: 0.25rem;
+	padding: 0.25rem 0.5rem;
+	font-size: var(--font-smaller);
+	color: var(--color-red);
+	background: var(--background-modifier-error);
+	border-radius: var(--radius);
+}
+
+/* MCP Form Styles */
+.sage-mcp-form {
+	margin-top: 1rem;
+	padding: 1rem;
+	background: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius);
+}
+
+.sage-mcp-form h4 {
+	margin: 0 0 1rem 0;
+	font-size: var(--font-small);
+	font-weight: 600;
+}
+
+.sage-mcp-form-field {
+	margin-bottom: 0.5rem;
+}
+
+.sage-mcp-warning {
+	padding: 0.5rem;
+	font-size: var(--font-smaller);
+	color: var(--color-orange);
+	background: var(--background-modifier-error);
+	border-radius: var(--radius);
+	margin-top: 0.25rem;
+}
+
+.sage-mcp-command-error {
+	padding: 0.75rem;
+	margin-top: 0.5rem;
+	background: var(--background-modifier-error);
+	border: 1px solid var(--color-red);
+	border-radius: var(--radius);
+}
+
+.sage-mcp-command-error-title {
+	font-weight: 600;
+	color: var(--color-red);
+	margin-bottom: 0.25rem;
+}
+
+.sage-mcp-command-error-desc {
+	font-size: var(--font-smaller);
+	color: var(--text-muted);
+	word-break: break-all;
+}
+
+.sage-mcp-dynamic-fields {
+	margin-top: 0.5rem;
+}
+
+.sage-mcp-form-buttons {
+	display: flex;
+	gap: 0.5rem;
+	margin-top: 1rem;
+	padding-top: 1rem;
+	border-top: 1px solid var(--background-modifier-border);
+}
+
+.sage-mcp-form-buttons button {
+	padding: 0.5rem 1rem;
+}
+
+/* ==================== MCP Header Status Icon ==================== */
+.sage-mcp-header-status {
+	display: flex;
+	align-items: center;
+	margin-right: 0.5rem;
+}
+
+.sage-mcp-header-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: help;
+	padding: 2px;
+	border-radius: var(--radius);
+	transition: all 0.2s ease;
+}
+
+.sage-mcp-header-icon svg {
+	width: 14px;
+	height: 14px;
+}
+
+.sage-mcp-header-icon:hover {
+	background: var(--background-modifier-hover);
+}
+
+.sage-mcp-header-connected {
+	color: var(--color-green);
+}
+
+.sage-mcp-header-failed {
+	color: var(--color-red);
+}
+
+.sage-mcp-header-pending {
+	color: var(--text-muted);
+}
