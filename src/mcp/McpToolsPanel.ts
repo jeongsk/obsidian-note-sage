@@ -233,9 +233,11 @@ export class McpToolsPanel {
 
 		// 토글 스위치
 		const toggleEl = headerEl.createDiv({ cls: 'sage-mcp-panel-item-toggle' });
-		const toggleInput = toggleEl.createEl('input', { type: 'checkbox', cls: 'sage-mcp-toggle-input' });
+		const toggleLabel = toggleEl.createEl('label', { cls: 'sage-mcp-toggle' });
+		const toggleInput = toggleLabel.createEl('input', { type: 'checkbox', cls: 'sage-mcp-toggle-checkbox' });
 		toggleInput.checked = server.enabled;
-		toggleInput.addEventListener('click', (e) => {
+		toggleLabel.createSpan({ cls: 'sage-mcp-toggle-slider' });
+		toggleLabel.addEventListener('click', (e) => {
 			e.stopPropagation();
 		});
 		toggleInput.addEventListener('change', async () => {
