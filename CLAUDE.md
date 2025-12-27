@@ -229,6 +229,8 @@ This plugin is desktop-only (`isDesktopOnly: true` in manifest) as it relies on 
 ## Active Technologies
 - TypeScript 5.7+ + Obsidian API, @anthropic-ai/claude-agent-sdk (001-quick-action-buttons)
 - Obsidian Plugin Settings (JSON file in `.obsidian/plugins/` folder) (001-quick-action-buttons)
+- TypeScript 5.7+ (기존 프로젝트와 동일) + @anthropic-ai/claude-agent-sdk ^0.1.5, Obsidian API, Zod ^4.2.1 (001-mcp-server)
+- Obsidian 플러그인 설정 (JSON, data.json) (001-mcp-server)
 
 ## Recent Changes
 - 001-quick-action-buttons: Added TypeScript 5.7+ + Obsidian API, @anthropic-ai/claude-agent-sdk
