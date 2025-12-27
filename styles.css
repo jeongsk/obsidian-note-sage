@@ -1005,30 +1005,39 @@
 .sage-mcp-toggle-input {
 	width: 34px;
 	height: 20px;
-	appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
+	appearance: none !important;
+	-webkit-appearance: none !important;
+	-moz-appearance: none !important;
 	background: var(--background-modifier-border);
-	border: none;
+	border: none !important;
 	border-radius: 10px;
 	cursor: pointer;
 	position: relative;
 	transition: background 0.2s ease;
-	outline: none;
+	outline: none !important;
+	margin: 0;
+	padding: 0;
+	flex-shrink: 0;
+}
+
+/* Hide Obsidian's default checkbox styling */
+.sage-mcp-toggle-input::after {
+	display: none !important;
 }
 
 .sage-mcp-toggle-input::before {
-	content: '';
-	display: block;
+	content: '' !important;
+	display: block !important;
 	position: absolute;
 	top: 2px;
 	left: 2px;
 	width: 16px;
 	height: 16px;
-	background: white;
-	border-radius: 50%;
+	background: white !important;
+	border-radius: 50% !important;
 	transition: transform 0.2s ease;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	border: none !important;
 }
 
 .sage-mcp-toggle-input:checked {
@@ -1037,6 +1046,7 @@
 
 .sage-mcp-toggle-input:checked::before {
 	transform: translateX(14px);
+	background: white !important;
 }
 
 /* Tools list (expanded state) */
