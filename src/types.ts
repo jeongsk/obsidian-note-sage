@@ -78,6 +78,28 @@ export interface McpTool {
 	description?: string;
 }
 
+// ==================== Built-in Tools Toggle ====================
+
+/**
+ * 사용자가 토글할 수 있는 내장 도구 정의
+ * Phase 1: WebSearch, WebFetch만 지원
+ * 향후: Bash, Write, Edit, Task, NotebookEdit 추가 가능
+ */
+export const TOGGLEABLE_BUILTIN_TOOLS = [
+	{
+		name: 'WebSearch',
+		labelKey: 'settings.builtinTools.webSearch',
+		descriptionKey: 'settings.builtinTools.webSearchDesc'
+	},
+	{
+		name: 'WebFetch',
+		labelKey: 'settings.builtinTools.webFetch',
+		descriptionKey: 'settings.builtinTools.webFetchDesc'
+	}
+] as const;
+
+export type ToggleableBuiltinTool = typeof TOGGLEABLE_BUILTIN_TOOLS[number]['name'];
+
 // ==================== Quick Actions ====================
 
 /**
@@ -145,6 +167,8 @@ export interface NoteSageSettings {
 	enablePluginTools?: boolean;
 	// MCP 서버 설정
 	mcpServers?: McpServerConfigEntry[];
+	// 비활성화된 내장 도구 목록
+	disabledBuiltinTools?: string[];
 }
 
 export const DEFAULT_SETTINGS: NoteSageSettings = {
@@ -169,7 +193,9 @@ export const DEFAULT_SETTINGS: NoteSageSettings = {
 	// 플러그인 관리 도구 기본값
 	enablePluginTools: false,
 	// MCP 서버 기본값
-	mcpServers: []
+	mcpServers: [],
+	// 비활성화된 내장 도구 기본값 (빈 배열 = 모두 활성화)
+	disabledBuiltinTools: []
 };
 
 // 사용 가능한 모델 목록 (4.5 시리즈만)
