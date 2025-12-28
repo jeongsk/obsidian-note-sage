@@ -5,8 +5,10 @@ import type {
 	TextBlock,
 	ToolUseBlock,
 	ToolResultBlock,
+	ThinkingBlock,
 	UserChatMessage,
-	AssistantChatMessage
+	AssistantChatMessage,
+	ResultChatMessage
 } from './types';
 import { t } from './i18n';
 
@@ -134,6 +136,10 @@ export class ChatRenderer {
 				case 'tool_result':
 					this.renderToolResultBlock(container, content);
 					break;
+				case 'thinking':
+					// T018: Extended Thinking 블록 렌더링
+					this.renderThinkingBlock(container, content);
+					break;
 			}
 		});
 	}
@@ -225,6 +231,25 @@ export class ChatRenderer {
 		pre.createEl('code', {
 			text: typeof resultText === 'string' ? resultText : JSON.stringify(resultText, null, 2)
 		});
+	}
+
+	/**
+	 * T018: Extended Thinking 블록 렌더링
+	 * 접을 수 있는 형태로 Claude의 사고 과정을 표시
+	 */
+	private renderThinkingBlock(container: HTMLElement, content: ThinkingBlock): void {
+		const thinkingEl = container.createEl('div', { cls: 'sage-thinking-block' });
+
+		const headerEl = thinkingEl.createEl('div', { cls: 'sage-thinking-block-header clickable' });
+		const iconEl = headerEl.createEl('span', { cls: 'sage-thinking-block-icon' });
+		setIcon(iconEl, 'brain');
+		headerEl.createEl('span', { text: t('extendedThinking'), cls: 'sage-thinking-block-label' });
+
+		const contentEl = thinkingEl.createEl('div', { cls: 'sage-thinking-block-content collapsed' });
+		const sanitizedDom = sanitizeHTMLToDom(this.formatText(content.thinking));
+		contentEl.appendChild(sanitizedDom);
+
+		this.addCollapseToggle(headerEl, contentEl);
 	}
 
 	/**
@@ -343,6 +368,39 @@ export class ChatRenderer {
 	renderFinalResponse(messageEl: HTMLElement, chatMessage: ChatMessage): void {
 		const contentEl = messageEl.createEl('div', { cls: 'sage-message-content sage-final-response' });
 		this.renderMessageContent(contentEl, chatMessage);
+
+		// T011: 세션 비용 표시 (ResultChatMessage이고 total_cost_usd가 있을 때)
+		if (chatMessage.type === 'result') {
+			const resultMessage = chatMessage as ResultChatMessage;
+			this.renderSessionStats(messageEl, resultMessage);
+		}
+	}
+
+	/**
+	 * 세션 통계 렌더링 (비용, 턴 수)
+	 * T011: 결과 메시지에 세션 비용 표시
+	 */
+	private renderSessionStats(messageEl: HTMLElement, resultMessage: ResultChatMessage): void {
+		const { total_cost_usd, num_turns } = resultMessage;
+
+		// 비용이나 턴 수가 있을 때만 표시
+		if (total_cost_usd === undefined && num_turns === undefined) {
+			return;
+		}
+
+		const statsEl = messageEl.createEl('div', { cls: 'sage-session-stats' });
+
+		// 비용 표시
+		if (total_cost_usd !== undefined && total_cost_usd > 0) {
+			const costText = t('settings.agentOptions.costDisplay').replace('${cost}', `$${total_cost_usd.toFixed(4)}`);
+			statsEl.createEl('span', { text: costText, cls: 'sage-session-cost' });
+		}
+
+		// 턴 수 표시
+		if (num_turns !== undefined && num_turns > 0) {
+			const turnsText = `${num_turns} ${num_turns === 1 ? 'turn' : 'turns'}`;
+			statsEl.createEl('span', { text: turnsText, cls: 'sage-session-turns' });
+		}
 	}
 
 	/**

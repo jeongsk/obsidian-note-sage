@@ -1,5 +1,5 @@
-import { ItemView, WorkspaceLeaf, setIcon, MarkdownView, TFile } from 'obsidian';
-import type { NoteSageSettings, ChatMessage, QuickActionConfig, McpServerStatus, UserChatMessage, TextBlock } from './types';
+import { ItemView, WorkspaceLeaf, setIcon, MarkdownView, TFile, Notice } from 'obsidian';
+import type { NoteSageSettings, ChatMessage, QuickActionConfig, McpServerStatus, UserChatMessage, TextBlock, ResultChatMessage } from './types';
 import { AVAILABLE_MODELS, QUICK_ACTION_DEFINITIONS, DEFAULT_QUICK_ACTIONS } from './types';
 import { AgentService } from './AgentService';
 import { ChatRenderer } from './ChatRenderer';
@@ -736,6 +736,11 @@ export class NoteSageView extends ItemView {
 						}
 					}
 
+					// T012/T015: 한도 도달 알림 확인
+					if (message.type === 'result') {
+						this.checkLimitReached(message as ResultChatMessage);
+					}
+
 					this.addMessage(message);
 				},
 				onError: (error: Error) => {
@@ -790,6 +795,33 @@ export class NoteSageView extends ItemView {
 
 		const cancelMessage = MessageFactory.createCancelMessage(this.currentSessionId);
 		this.addMessage(cancelMessage);
+	}
+
+	/**
+	 * T012/T015: 비용 또는 턴 수 한도 도달 여부 확인 및 알림 표시
+	 */
+	private checkLimitReached(resultMessage: ResultChatMessage): void {
+		const { total_cost_usd, num_turns } = resultMessage;
+
+		// T012: 비용 한도 도달 확인
+		if (this.settings.apiKey && this.settings.maxBudgetUsd && this.settings.maxBudgetUsd > 0) {
+			if (total_cost_usd !== undefined && total_cost_usd >= this.settings.maxBudgetUsd) {
+				new Notice(t('settings.agentOptions.costLimitReached'), 5000);
+				if (this.settings.debugContext) {
+					console.log('[NoteSageView] Cost limit reached:', total_cost_usd, '>=', this.settings.maxBudgetUsd);
+				}
+			}
+		}
+
+		// T015: 턴 수 한도 도달 확인
+		if (this.settings.maxTurns && this.settings.maxTurns > 0) {
+			if (num_turns !== undefined && num_turns >= this.settings.maxTurns) {
+				new Notice(t('settings.agentOptions.turnLimitReached'), 5000);
+				if (this.settings.debugContext) {
+					console.log('[NoteSageView] Turn limit reached:', num_turns, '>=', this.settings.maxTurns);
+				}
+			}
+		}
 	}
 
 	// ==================== 유틸리티 ====================
