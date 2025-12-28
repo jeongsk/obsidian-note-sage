@@ -1,6 +1,10 @@
 import esbuild from "esbuild";
 import process from "process";
 import builtins from "builtin-modules";
+import postcss from "postcss";
+import tailwindcss from "tailwindcss";
+import autoprefixer from "autoprefixer";
+import { readFile, writeFile } from "fs/promises";
 
 const banner =
 `/*
@@ -47,6 +51,33 @@ if you want to view the source, please visit the github repository of this plugi
 
 const prod = (process.argv[2] === "production");
 
+// CSS 빌드 함수 (PostCSS + Tailwind)
+async function buildCSS() {
+	try {
+		const inputCSS = await readFile('./src/styles/main.css', 'utf8');
+		const result = await postcss([
+			tailwindcss,
+			autoprefixer,
+		]).process(inputCSS, {
+			from: './src/styles/main.css',
+			to: './styles.css',
+		});
+		await writeFile('./styles.css', result.css);
+		console.log('✓ CSS built successfully');
+	} catch (error) {
+		console.error('✗ CSS build failed:', error.message);
+		if (!prod) {
+			// 개발 모드에서는 에러를 출력하고 계속 진행
+			console.error(error);
+		} else {
+			throw error;
+		}
+	}
+}
+
+// 초기 CSS 빌드
+await buildCSS();
+
 const context = await esbuild.context({
 	banner: {
 		js: banner,
@@ -84,5 +115,28 @@ if (prod) {
 	await context.rebuild();
 	process.exit(0);
 } else {
+	// Watch 모드: CSS 파일 변경 감지
+	const chokidar = await import('chokidar');
+	const cssWatcher = chokidar.default.watch([
+		'./src/styles/**/*.css',
+		'./tailwind.config.js',
+	], {
+		ignoreInitial: true,
+	});
+
+	cssWatcher.on('change', async (path) => {
+		console.log(`\n[CSS] ${path} changed, rebuilding...`);
+		await buildCSS();
+	});
+
+	// TypeScript 파일 변경 시에도 CSS 재빌드 (Tailwind 클래스 스캔)
+	const tsWatcher = chokidar.default.watch('./src/**/*.ts', {
+		ignoreInitial: true,
+	});
+
+	tsWatcher.on('change', async () => {
+		await buildCSS();
+	});
+
 	await context.watch();
 }
