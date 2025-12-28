@@ -195,6 +195,7 @@ export interface TranslationKeys {
 	errorRenderingMessage: string;
 	cooking: string;
 	thinking: string;
+	extendedThinking: string;
 	toolResult: string;
 	usingTool: string;
 	noContent: string;
@@ -260,6 +261,7 @@ export const en: TranslationKeys = {
 	// Chat messages
 	cooking: 'Cooking...',
 	thinking: 'Thinking...',
+	extendedThinking: 'Extended Thinking',
 	toolResult: 'Tool result',
 	usingTool: 'Using tool',
 	noContent: 'No content',

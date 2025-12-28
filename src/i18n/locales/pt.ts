@@ -48,6 +48,7 @@ export const pt: TranslationKeys = {
 	// Chat messages
 	cooking: 'Processando...',
 	thinking: 'Pensando...',
+	extendedThinking: 'Pensamento estendido',
 	toolResult: 'Resultado da ferramenta',
 	usingTool: 'Usando ferramenta',
 	noContent: 'Sem conteúdo',

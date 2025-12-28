@@ -48,6 +48,7 @@ export const de: TranslationKeys = {
 	// Chat messages
 	cooking: 'Verarbeitung...',
 	thinking: 'Nachdenken...',
+	extendedThinking: 'Erweitertes Denken',
 	toolResult: 'Werkzeugergebnis',
 	usingTool: 'Werkzeug wird verwendet',
 	noContent: 'Kein Inhalt',

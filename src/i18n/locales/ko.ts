@@ -48,6 +48,7 @@ export const ko: TranslationKeys = {
 	// Chat messages
 	cooking: '처리 중...',
 	thinking: '생각 중...',
+	extendedThinking: '확장 사고',
 	toolResult: '도구 결과',
 	usingTool: '도구 사용 중',
 	noContent: '내용 없음',

@@ -48,6 +48,7 @@ export const zh: TranslationKeys = {
 	// Chat messages
 	cooking: '处理中...',
 	thinking: '思考中...',
+	extendedThinking: '扩展思考',
 	toolResult: '工具结果',
 	usingTool: '正在使用工具',
 	noContent: '无内容',

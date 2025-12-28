@@ -48,6 +48,7 @@ export const hi: TranslationKeys = {
 	// Chat messages
 	cooking: 'प्रोसेसिंग...',
 	thinking: 'सोच रहा हूँ...',
+	extendedThinking: 'विस्तृत सोच',
 	toolResult: 'टूल परिणाम',
 	usingTool: 'टूल का उपयोग कर रहा हूँ',
 	noContent: 'कोई सामग्री नहीं',

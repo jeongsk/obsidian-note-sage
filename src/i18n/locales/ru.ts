@@ -48,6 +48,7 @@ export const ru: TranslationKeys = {
 	// Chat messages
 	cooking: 'Обработка...',
 	thinking: 'Думаю...',
+	extendedThinking: 'Расширенное мышление',
 	toolResult: 'Результат инструмента',
 	usingTool: 'Использую инструмент',
 	noContent: 'Нет содержимого',

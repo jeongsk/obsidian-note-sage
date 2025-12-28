@@ -48,6 +48,7 @@ export const ar: TranslationKeys = {
 	// Chat messages
 	cooking: 'جاري المعالجة...',
 	thinking: 'جاري التفكير...',
+	extendedThinking: 'التفكير الموسع',
 	toolResult: 'نتيجة الأداة',
 	usingTool: 'استخدام الأداة',
 	noContent: 'لا يوجد محتوى',

@@ -48,6 +48,7 @@ export const ja: TranslationKeys = {
 	// Chat messages
 	cooking: '処理中...',
 	thinking: '考え中...',
+	extendedThinking: '拡張思考',
 	toolResult: 'ツールの結果',
 	usingTool: 'ツールを使用中',
 	noContent: 'コンテンツなし',
