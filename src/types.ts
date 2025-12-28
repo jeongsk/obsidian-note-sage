@@ -100,6 +100,44 @@ export const TOGGLEABLE_BUILTIN_TOOLS = [
 
 export type ToggleableBuiltinTool = typeof TOGGLEABLE_BUILTIN_TOOLS[number]['name'];
 
+// ==================== Agent Options ====================
+
+/**
+ * 권한 모드 타입
+ * Claude의 파일/시스템 접근 권한 수준을 결정
+ */
+export type PermissionMode = 'default' | 'acceptEdits' | 'bypassPermissions' | 'plan';
+
+/**
+ * Agent Options 기본값
+ */
+export const AGENT_OPTIONS_DEFAULTS = {
+	maxTurns: 0,                    // 0 = 무제한
+	maxBudgetUsd: 0,                // 0 = 무제한
+	enableExtendedThinking: false,
+	maxThinkingTokens: 10000,
+	permissionMode: 'bypassPermissions' as PermissionMode,
+} as const;
+
+/**
+ * Agent Options 범위 제한
+ */
+export const AGENT_OPTIONS_LIMITS = {
+	maxTurns: { min: 0, max: 100 },
+	maxBudgetUsd: { min: 0, max: 100 },
+	maxThinkingTokens: { min: 1000, max: 100000 },
+} as const;
+
+/**
+ * 권한 모드 옵션 목록 (UI 드롭다운용)
+ */
+export const PERMISSION_MODE_OPTIONS = [
+	{ value: 'bypassPermissions' as PermissionMode, labelKey: 'settings.agentOptions.permissionMode.bypassPermissions' },
+	{ value: 'acceptEdits' as PermissionMode, labelKey: 'settings.agentOptions.permissionMode.acceptEdits' },
+	{ value: 'default' as PermissionMode, labelKey: 'settings.agentOptions.permissionMode.default' },
+	{ value: 'plan' as PermissionMode, labelKey: 'settings.agentOptions.permissionMode.plan' },
+] as const;
+
 // ==================== Quick Actions ====================
 
 /**
@@ -169,6 +207,12 @@ export interface NoteSageSettings {
 	mcpServers?: McpServerConfigEntry[];
 	// 비활성화된 내장 도구 목록
 	disabledBuiltinTools?: string[];
+	// Agent Options 설정
+	maxTurns?: number;
+	maxBudgetUsd?: number;
+	enableExtendedThinking?: boolean;
+	maxThinkingTokens?: number;
+	permissionMode?: PermissionMode;
 }
 
 export const DEFAULT_SETTINGS: NoteSageSettings = {
@@ -195,7 +239,13 @@ export const DEFAULT_SETTINGS: NoteSageSettings = {
 	// MCP 서버 기본값
 	mcpServers: [],
 	// 비활성화된 내장 도구 기본값 (빈 배열 = 모두 활성화)
-	disabledBuiltinTools: []
+	disabledBuiltinTools: [],
+	// Agent Options 기본값
+	maxTurns: AGENT_OPTIONS_DEFAULTS.maxTurns,
+	maxBudgetUsd: AGENT_OPTIONS_DEFAULTS.maxBudgetUsd,
+	enableExtendedThinking: AGENT_OPTIONS_DEFAULTS.enableExtendedThinking,
+	maxThinkingTokens: AGENT_OPTIONS_DEFAULTS.maxThinkingTokens,
+	permissionMode: AGENT_OPTIONS_DEFAULTS.permissionMode,
 };
 
 // 사용 가능한 모델 목록 (4.5 시리즈만)

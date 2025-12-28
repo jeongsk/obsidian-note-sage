@@ -161,6 +161,37 @@ export const ja: TranslationKeys = {
 			webFetchDesc: 'Webページのコンテンツを取得して分析',
 		},
 
+		// Agent Options
+		agentOptions: {
+			title: 'エージェントオプション',
+			description: 'Claude Agent SDKの詳細オプションを設定',
+			maxTurns: '最大ターン数',
+			maxTurnsDesc: '最大会話ターン数。0で無制限。',
+			maxTurnsPlaceholder: '0（無制限）',
+			maxBudgetUsd: '最大予算（USD）',
+			maxBudgetUsdDesc: 'セッションあたりの最大コスト（USD）。0で無制限。',
+			maxBudgetUsdPlaceholder: '0.00（無制限）',
+			enableExtendedThinking: 'Extended Thinking',
+			enableExtendedThinkingDesc: 'Claudeが複雑な問題についてより深く考えるようにします',
+			maxThinkingTokens: '最大思考トークン',
+			maxThinkingTokensDesc: 'Extended Thinkingの最大トークン数（1,000 - 100,000）',
+			permissionMode: {
+				title: '権限モード',
+				description: 'Claudeのファイルおよびシステムアクセス権限を制御',
+				bypassPermissions: '権限をバイパス',
+				bypassPermissionsDesc: '確認なしですべての操作を許可（最大の利便性）',
+				acceptEdits: '編集を自動承認',
+				acceptEditsDesc: 'ファイル編集のみ自動承認',
+				default: 'デフォルト',
+				defaultDesc: 'すべての操作に確認が必要',
+				plan: 'プランモード',
+				planDesc: '計画のみ、実行なし',
+			},
+			costDisplay: 'セッションコスト: ${cost}',
+			costLimitReached: 'コスト上限に達しました。セッションが終了しました。',
+			turnLimitReached: 'ターン上限に達しました。セッションが終了しました。',
+		},
+
 		// MCP Servers
 		mcp: {
 			title: 'MCPサーバー',

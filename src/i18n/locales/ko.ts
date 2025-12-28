@@ -161,6 +161,37 @@ export const ko: TranslationKeys = {
 			webFetchDesc: '웹 페이지 콘텐츠를 가져와 분석합니다',
 		},
 
+		// Agent Options
+		agentOptions: {
+			title: 'Agent 옵션',
+			description: 'Claude Agent SDK 고급 옵션을 설정합니다',
+			maxTurns: '최대 턴 수',
+			maxTurnsDesc: '최대 대화 턴 수입니다. 0으로 설정하면 무제한입니다.',
+			maxTurnsPlaceholder: '0 (무제한)',
+			maxBudgetUsd: '최대 비용 (USD)',
+			maxBudgetUsdDesc: '세션당 최대 비용입니다 (USD). 0으로 설정하면 무제한입니다.',
+			maxBudgetUsdPlaceholder: '0.00 (무제한)',
+			enableExtendedThinking: 'Extended Thinking',
+			enableExtendedThinkingDesc: 'Claude가 복잡한 문제에 대해 더 깊이 생각하도록 합니다',
+			maxThinkingTokens: '최대 사고 토큰',
+			maxThinkingTokensDesc: 'Extended Thinking의 최대 토큰 수 (1,000 - 100,000)',
+			permissionMode: {
+				title: '권한 모드',
+				description: 'Claude의 파일 및 시스템 접근 권한을 제어합니다',
+				bypassPermissions: '권한 우회',
+				bypassPermissionsDesc: '확인 없이 모든 작업을 허용합니다 (최대 편의성)',
+				acceptEdits: '편집 자동 승인',
+				acceptEditsDesc: '파일 편집만 자동으로 승인합니다',
+				default: '기본',
+				defaultDesc: '모든 작업에 확인이 필요합니다',
+				plan: '계획 모드',
+				planDesc: '계획만 수립하고 실행하지 않습니다',
+			},
+			costDisplay: '세션 비용: ${cost}',
+			costLimitReached: '비용 한도에 도달했습니다. 세션이 종료되었습니다.',
+			turnLimitReached: '턴 한도에 도달했습니다. 세션이 종료되었습니다.',
+		},
+
 		// MCP Servers
 		mcp: {
 			title: 'MCP 서버',
