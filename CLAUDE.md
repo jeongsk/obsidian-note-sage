@@ -233,6 +233,8 @@ This plugin is desktop-only (`isDesktopOnly: true` in manifest) as it relies on 
 - Obsidian 플러그인 설정 (JSON, data.json) (001-mcp-server)
 - TypeScript 5.7+ + Obsidian API, @anthropic-ai/claude-agent-sdk ^0.1.5 (002-mcp-tools-panel)
 - Obsidian Plugin Settings (data.json) (002-mcp-tools-panel)
+- TypeScript 5.9+ + @anthropic-ai/claude-agent-sdk ^0.1.76, Obsidian API (001-builtin-tools-toggle)
+- Obsidian plugin data.json (via `this.plugin.saveSettings()`) (001-builtin-tools-toggle)
 
 ## Recent Changes
 - 001-quick-action-buttons: Added TypeScript 5.7+ + Obsidian API, @anthropic-ai/claude-agent-sdk

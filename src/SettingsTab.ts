@@ -1,6 +1,6 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
 import type NoteSagePlugin from './main';
-import { AVAILABLE_MODELS, QUICK_ACTION_DEFINITIONS, DEFAULT_QUICK_ACTIONS, QuickActionConfig } from './types';
+import { AVAILABLE_MODELS, QUICK_ACTION_DEFINITIONS, DEFAULT_QUICK_ACTIONS, QuickActionConfig, TOGGLEABLE_BUILTIN_TOOLS } from './types';
 import { t, setLanguage, AVAILABLE_LANGUAGES, SupportedLanguage } from './i18n';
 import { McpSettingsUI } from './mcp/McpSettingsUI';
 import { CONTENT_LIMITS } from './constants';
@@ -136,6 +136,14 @@ export class NoteSageSettingTab extends PluginSettingTab {
 			.setHeading();
 
 		this.renderQuickActionsSettings(containerEl);
+
+		// ==================== 내장 도구 설정 ====================
+		new Setting(containerEl)
+			.setName(t('settings.builtinTools.title'))
+			.setDesc(t('settings.builtinTools.description'))
+			.setHeading();
+
+		this.renderBuiltinToolsSettings(containerEl);
 
 		// ==================== MCP 서버 설정 ====================
 		const mcpContainer = containerEl.createDiv({ cls: 'sage-mcp-settings' });
@@ -298,6 +306,47 @@ export class NoteSageSettingTab extends PluginSettingTab {
 		);
 
 		this.mcpSettingsUI.render();
+	}
+
+	// 내장 도구 설정 UI 렌더링
+	private renderBuiltinToolsSettings(containerEl: HTMLElement): void {
+		const disabledTools = this.plugin.settings.disabledBuiltinTools || [];
+
+		for (const tool of TOGGLEABLE_BUILTIN_TOOLS) {
+			const isEnabled = !disabledTools.includes(tool.name);
+
+			new Setting(containerEl)
+				.setName(t(tool.labelKey))
+				.setDesc(t(tool.descriptionKey))
+				.addToggle(toggle => {
+					toggle
+						.setValue(isEnabled)
+						.onChange(async (value) => {
+							await this.updateBuiltinToolConfig(tool.name, value);
+						});
+				});
+		}
+	}
+
+	// 내장 도구 설정 업데이트
+	private async updateBuiltinToolConfig(toolName: string, enabled: boolean): Promise<void> {
+		// disabledBuiltinTools 배열이 없으면 초기화
+		if (!this.plugin.settings.disabledBuiltinTools) {
+			this.plugin.settings.disabledBuiltinTools = [];
+		}
+
+		const index = this.plugin.settings.disabledBuiltinTools.indexOf(toolName);
+
+		if (enabled && index >= 0) {
+			// 도구 활성화: 배열에서 제거
+			this.plugin.settings.disabledBuiltinTools.splice(index, 1);
+		} else if (!enabled && index < 0) {
+			// 도구 비활성화: 배열에 추가
+			this.plugin.settings.disabledBuiltinTools.push(toolName);
+		}
+
+		await this.plugin.saveSettings();
+		this.updateViews();
 	}
 
 	// Quick Actions 설정 UI 렌더링

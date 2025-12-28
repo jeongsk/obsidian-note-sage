@@ -151,6 +151,16 @@ export const hi: TranslationKeys = {
 		pluginTools: 'प्लगइन प्रबंधन टूल',
 		pluginToolsDesc: 'एजेंट को Obsidian प्लगइन सूचीबद्ध करने, सक्षम और अक्षम करने की अनुमति दें',
 
+		// Built-in Tools
+		builtinTools: {
+			title: 'बिल्ट-इन टूल्स',
+			description: 'बिल्ट-इन Claude टूल्स को सक्षम या अक्षम करें। MCP विकल्पों का उपयोग करना पसंद करें तो अक्षम करें।',
+			webSearch: 'वेब खोज',
+			webSearchDesc: 'वेब पर वर्तमान जानकारी खोजें',
+			webFetch: 'वेब फ़ेच',
+			webFetchDesc: 'वेब पेज कंटेंट प्राप्त करें और विश्लेषण करें',
+		},
+
 		// MCP Servers
 		mcp: {
 			title: 'MCP सर्वर',

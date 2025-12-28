@@ -151,6 +151,16 @@ export const pt: TranslationKeys = {
 		pluginTools: 'Ferramentas de gerenciamento de plugins',
 		pluginToolsDesc: 'Permitir que o agente liste, ative e desative plugins do Obsidian',
 
+		// Built-in Tools
+		builtinTools: {
+			title: 'Ferramentas integradas',
+			description: 'Ativar ou desativar ferramentas Claude integradas. Desative se preferir usar alternativas MCP.',
+			webSearch: 'Pesquisa web',
+			webSearchDesc: 'Pesquisar informações atuais na web',
+			webFetch: 'Buscar web',
+			webFetchDesc: 'Buscar e analisar conteúdo de páginas web',
+		},
+
 		// MCP Servers
 		mcp: {
 			title: 'Servidores MCP',

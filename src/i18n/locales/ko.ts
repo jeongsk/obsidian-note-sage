@@ -151,6 +151,16 @@ export const ko: TranslationKeys = {
 		pluginTools: '플러그인 관리 도구',
 		pluginToolsDesc: '에이전트가 Obsidian 플러그인을 조회하고 활성화/비활성화할 수 있습니다',
 
+		// Built-in Tools
+		builtinTools: {
+			title: '내장 도구',
+			description: '내장 Claude 도구를 활성화하거나 비활성화합니다. MCP 대안을 사용하려면 비활성화하세요.',
+			webSearch: '웹 검색',
+			webSearchDesc: '최신 정보를 웹에서 검색합니다',
+			webFetch: '웹 가져오기',
+			webFetchDesc: '웹 페이지 콘텐츠를 가져와 분석합니다',
+		},
+
 		// MCP Servers
 		mcp: {
 			title: 'MCP 서버',

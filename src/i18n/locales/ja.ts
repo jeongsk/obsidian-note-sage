@@ -151,6 +151,16 @@ export const ja: TranslationKeys = {
 		pluginTools: 'プラグイン管理ツール',
 		pluginToolsDesc: 'エージェントがObsidianプラグインの一覧表示、有効化、無効化を行うことを許可',
 
+		// Built-in Tools
+		builtinTools: {
+			title: '組み込みツール',
+			description: '組み込みClaudeツールを有効または無効にします。MCP代替を使用したい場合は無効にしてください。',
+			webSearch: 'Web検索',
+			webSearchDesc: 'Web上の最新情報を検索',
+			webFetch: 'Webフェッチ',
+			webFetchDesc: 'Webページのコンテンツを取得して分析',
+		},
+
 		// MCP Servers
 		mcp: {
 			title: 'MCPサーバー',

@@ -151,6 +151,16 @@ export const ru: TranslationKeys = {
 		pluginTools: 'Инструменты управления плагинами',
 		pluginToolsDesc: 'Разрешить агенту перечислять, включать и отключать плагины Obsidian',
 
+		// Built-in Tools
+		builtinTools: {
+			title: 'Встроенные инструменты',
+			description: 'Включить или отключить встроенные инструменты Claude. Отключите, если предпочитаете альтернативы MCP.',
+			webSearch: 'Веб-поиск',
+			webSearchDesc: 'Поиск актуальной информации в интернете',
+			webFetch: 'Веб-загрузка',
+			webFetchDesc: 'Загрузка и анализ содержимого веб-страниц',
+		},
+
 		// MCP Servers
 		mcp: {
 			title: 'MCP Серверы',

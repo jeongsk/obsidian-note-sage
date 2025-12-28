@@ -242,6 +242,15 @@ export class AgentService {
 			}
 		}
 
+		// 비활성화된 내장 도구 적용
+		if (this.settings.disabledBuiltinTools && this.settings.disabledBuiltinTools.length > 0) {
+			options.disallowedTools = this.settings.disabledBuiltinTools;
+
+			if (this.settings.debugContext) {
+				console.log('[AgentService] Disabled built-in tools:', this.settings.disabledBuiltinTools);
+			}
+		}
+
 		return options;
 	}
 

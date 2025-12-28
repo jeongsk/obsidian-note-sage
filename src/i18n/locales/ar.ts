@@ -151,6 +151,16 @@ export const ar: TranslationKeys = {
 		pluginTools: 'أدوات إدارة الإضافات',
 		pluginToolsDesc: 'السماح للوكيل بسرد إضافات Obsidian وتمكينها وتعطيلها',
 
+		// Built-in Tools
+		builtinTools: {
+			title: 'الأدوات المدمجة',
+			description: 'تمكين أو تعطيل أدوات Claude المدمجة. قم بالتعطيل إذا كنت تفضل استخدام بدائل MCP.',
+			webSearch: 'البحث على الويب',
+			webSearchDesc: 'البحث عن معلومات حالية على الويب',
+			webFetch: 'جلب الويب',
+			webFetchDesc: 'جلب وتحليل محتوى صفحات الويب',
+		},
+
 		// MCP Servers
 		mcp: {
 			title: 'خوادم MCP',
