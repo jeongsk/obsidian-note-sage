@@ -190,26 +190,31 @@
 		border-radius: var(--radius-s);
 		border-width: 1px;
 		border-color: var(--background-modifier-border);
-		padding-left: 0.25rem;
-		padding-right: 0.25rem;
-		padding-top: 0.125rem;
-		padding-bottom: 0.125rem;
+		background-color: var(--background-primary);
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
+		padding-top: 0.25rem;
+		padding-bottom: 0.25rem;
 		font-weight: 500;
-		color: var(--text-muted);
-		opacity: 0.4;
+		color: var(--text-faint);
 		transition-property: all;
 		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 		transition-duration: 200ms;
 		font-size: var(--font-smaller);
 }
 .sage-file-context-toggle:hover {
-		color: var(--text-normal);
-		opacity: 0.5;
+		border-color: var(--background-modifier-border-hover);
+		background-color: var(--background-modifier-hover);
+		color: var(--text-muted);
 }
 .sage-file-context-toggle.active {
-		color: var(--text-muted);
-		opacity: 1;
+		border-color: var(--interactive-accent);
+		color: var(--interactive-accent);
+		background: color-mix(in srgb, var(--interactive-accent) 15%, var(--background-primary));
 }
+.sage-file-context-toggle.active:hover {
+		background: color-mix(in srgb, var(--interactive-accent) 25%, var(--background-primary));
+	}
 .sage-file-context-toggle.active .sage-file-context-icon svg {
 		color: var(--interactive-accent);
 }

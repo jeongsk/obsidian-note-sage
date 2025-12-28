@@ -158,16 +158,21 @@
 	}
 
 	.sage-file-context-toggle {
-		@apply tw-inline-flex tw-items-center tw-gap-1 tw-px-1 tw-py-0.5 tw-rounded-obs tw-border tw-border-obs-border tw-text-obs-text-muted tw-cursor-pointer tw-transition-all tw-duration-200 tw-font-medium tw-opacity-40;
+		@apply tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-1 tw-rounded-obs tw-border tw-border-obs-border tw-bg-obs-bg tw-text-obs-text-faint tw-cursor-pointer tw-transition-all tw-duration-200 tw-font-medium;
 		font-size: var(--font-smaller);
 	}
 
 	.sage-file-context-toggle:hover {
-		@apply tw-opacity-50 tw-text-obs-text;
+		@apply tw-text-obs-text-muted tw-bg-obs-bg-hover tw-border-obs-border-hover;
 	}
 
 	.sage-file-context-toggle.active {
-		@apply tw-text-obs-text-muted tw-opacity-100;
+		@apply tw-text-obs-accent tw-border-obs-accent;
+		background: color-mix(in srgb, var(--interactive-accent) 15%, var(--background-primary));
+	}
+
+	.sage-file-context-toggle.active:hover {
+		background: color-mix(in srgb, var(--interactive-accent) 25%, var(--background-primary));
 	}
 
 	.sage-file-context-toggle.active .sage-file-context-icon svg {
