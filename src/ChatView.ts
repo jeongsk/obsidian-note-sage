@@ -1,5 +1,5 @@
 import { ItemView, WorkspaceLeaf, setIcon, MarkdownView, TFile } from 'obsidian';
-import type { NoteSageSettings, ChatMessage, QuickActionConfig, McpServerStatus } from './types';
+import type { NoteSageSettings, ChatMessage, QuickActionConfig, McpServerStatus, UserChatMessage, TextBlock } from './types';
 import { AVAILABLE_MODELS, QUICK_ACTION_DEFINITIONS, DEFAULT_QUICK_ACTIONS } from './types';
 import { AgentService } from './AgentService';
 import { ChatRenderer } from './ChatRenderer';
@@ -545,6 +545,24 @@ export class NoteSageView extends ItemView {
 		this.renderer.renderMessage(message);
 	}
 
+	/**
+	 * 두 사용자 메시지의 텍스트 내용이 동일한지 비교
+	 */
+	private isMessageContentEqual(msg1: UserChatMessage, msg2: UserChatMessage): boolean {
+		const content1 = msg1.message?.content;
+		const content2 = msg2.message?.content;
+
+		if (!content1 || !content2) return false;
+
+		const getText = (content: typeof content1): string =>
+			content
+				.filter((c): c is TextBlock => c.type === 'text')
+				.map(c => c.text)
+				.join('');
+
+		return getText(content1) === getText(content2);
+	}
+
 	private handleButtonClick(): void {
 		if (this.isProcessing) {
 			this.cancelExecution();
@@ -557,18 +575,22 @@ export class NoteSageView extends ItemView {
 		const messageText = this.inputField.value.trim();
 		if (!messageText || this.isProcessing) return;
 
-		const finalMessage = await this.buildFinalMessage(messageText);
-		this.logDebugContext(messageText, finalMessage);
-
-		const userMessage = MessageFactory.createUserInputMessage(messageText, this.currentSessionId);
-		this.addMessage(userMessage);
-
+		// Race condition 방지: 즉시 처리 상태로 전환
+		this.setProcessingState(true);
 		this.inputField.value = '';
 		this.autoResizeTextarea();
-		this.setProcessingState(true);
 
-		await this.executeCommand(finalMessage);
-		this.setProcessingState(false);
+		try {
+			const finalMessage = await this.buildFinalMessage(messageText);
+			this.logDebugContext(messageText, finalMessage);
+
+			const userMessage = MessageFactory.createUserInputMessage(messageText, this.currentSessionId);
+			this.addMessage(userMessage);
+
+			await this.executeCommand(finalMessage);
+		} finally {
+			this.setProcessingState(false);
+		}
 	}
 
 	private async buildFinalMessage(messageText: string): Promise<string> {
@@ -697,6 +719,21 @@ export class NoteSageView extends ItemView {
 					if (this.settings.debugContext) {
 						console.log('=== STREAMING MESSAGE DEBUG ===');
 						console.log('Received message:', message);
+					}
+
+					// SDK에서 반환한 user 메시지가 이미 추가된 사용자 입력과 중복인지 확인
+					if (message.type === 'user' && !(message as UserChatMessage).isUserInput) {
+						const lastUserInput = this.messages
+							.filter((m): m is UserChatMessage => m.type === 'user' && m.isUserInput === true)
+							.pop();
+
+						if (lastUserInput && this.isMessageContentEqual(lastUserInput, message as UserChatMessage)) {
+							// 중복 메시지이므로 건너뛰기
+							if (this.settings.debugContext) {
+								console.log('Skipping duplicate user message from SDK');
+							}
+							return;
+						}
 					}
 
 					this.addMessage(message);
