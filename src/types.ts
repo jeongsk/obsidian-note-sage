@@ -276,7 +276,16 @@ export interface ToolResultBlock {
 	is_error?: boolean;
 }
 
-export type ContentBlock = TextBlock | ToolUseBlock | ToolResultBlock;
+/**
+ * T018: Extended Thinking 블록 타입
+ * Claude가 Extended Thinking 모드에서 반환하는 사고 과정 블록
+ */
+export interface ThinkingBlock {
+	type: 'thinking';
+	thinking: string;
+}
+
+export type ContentBlock = TextBlock | ToolUseBlock | ToolResultBlock | ThinkingBlock;
 
 // ==================== 메시지 타입 ====================
 
