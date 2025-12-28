@@ -1,4 +1,1156 @@
-/* Global / scrollbar styles */
+/* Tailwind CSS 진입점 */
+/*
+ * 주의: @tailwind base는 전역 리셋 스타일을 포함하므로 제외
+ * Obsidian의 기존 스타일과 충돌을 방지하기 위해 components와 utilities만 사용
+ */
+/* 컨테이너 */
+.sage-chat-container {
+		display: flex;
+		height: 100%;
+		flex-direction: column;
+}
+.sage-chat-header {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		background-color: var(--background-secondary);
+		padding-bottom: 0.25rem;
+}
+.sage-chat-messages {
+		display: flex;
+		flex: 1 1 0%;
+		flex-direction: column;
+		gap: 0.75rem;
+		overflow-y: auto;
+		padding-top: 0.75rem;
+		padding-bottom: 0.75rem;
+		font-size: var(--font-small);
+		line-height: 1.5;
+		-moz-user-select: text;
+		     user-select: text;
+		-webkit-user-select: text;
+}
+.sage-chat-body {
+		display: flex;
+		flex: 1 1 0%;
+		flex-direction: column;
+		overflow: hidden;
+		padding: 0px;
+}
+.sage-chat-input-container {
+		display: flex;
+		flex-shrink: 0;
+		flex-direction: column;
+}
+/* 헤더 영역 */
+.sage-chat-title {
+		margin-right: auto;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.025em;
+		color: var(--text-muted);
+		opacity: 0.8;
+		font-size: var(--font-smallest);
+}
+.sage-header-buttons {
+		display: flex;
+		gap: 0.125rem;
+}
+/* 모델 선택기 */
+.sage-model-selector-container {
+		margin-left: auto;
+		margin-right: 0.5rem;
+		display: flex;
+		align-items: center;
+}
+.sage-model-selector {
+		max-width: 10rem;
+		cursor: pointer;
+		-webkit-appearance: none;
+		   -moz-appearance: none;
+		        appearance: none;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		border-radius: var(--radius-s);
+		border-width: 1px;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-primary);
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 200ms;
+		padding: 2px 20px 2px 6px;
+		font-size: var(--font-smallest);
+		color: var(--text-muted);
+		background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23000%27 opacity=%270.9%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 %3E%3Cpath d=%27m7 15 5 5 5-5%27/%3E%3Cpath d=%27m7 9 5-5 5 5%27/%3E%3C/svg%3E");
+		background-repeat: no-repeat;
+		background-position: right 4px center;
+		background-size: 12px;
+}
+.sage-model-selector:hover {
+		border-color: var(--interactive-accent);
+		color: var(--text-normal);
+}
+.sage-model-selector:focus {
+		border-color: var(--interactive-accent);
+		outline: 2px solid transparent;
+		outline-offset: 2px;
+		box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+}
+.sage-model-selector option {
+		background-color: var(--background-primary);
+		padding: 0.25rem;
+		color: var(--text-normal);
+}
+/* 버튼 공통 스타일 */
+/* New chat 버튼 */
+.sage-new-chat-button {
+		display: flex;
+		cursor: pointer;
+		align-items: center;
+		justify-content: center;
+		padding: 0px;
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 200ms;
+		min-height: 1.4rem;
+		min-width: 1.4rem;
+		max-height: 1.4rem;
+		max-width: 1.4rem;
+		background-color: transparent;
+		box-shadow: none;
+}
+.sage-new-chat-button svg {
+		width: var(--font-small);
+		height: var(--font-small);
+	}
+.sage-new-chat-button:hover {
+		background-color: var(--background-modifier-hover);
+	}
+.sage-new-chat-button:active,.sage-new-chat-button:focus {
+		--tw-scale-x: .95;
+		--tw-scale-y: .95;
+		transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+/* Settings 버튼 */
+.sage-settings-button {
+		display: flex;
+		cursor: pointer;
+		align-items: center;
+		justify-content: center;
+		padding: 0px;
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 200ms;
+		min-height: 1.4rem;
+		min-width: 1.4rem;
+		max-height: 1.4rem;
+		max-width: 1.4rem;
+		background-color: transparent;
+		box-shadow: none;
+}
+.sage-settings-button svg {
+		width: var(--font-small);
+		height: var(--font-small);
+	}
+.sage-settings-button:hover {
+		background-color: var(--background-modifier-hover);
+	}
+.sage-settings-button:active,.sage-settings-button:focus {
+		--tw-scale-x: .95;
+		--tw-scale-y: .95;
+		transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+/* Examples 버튼 */
+.sage-examples-button {
+		margin-right: 0.5rem;
+		display: none;
+		cursor: pointer;
+		height: 1.4rem !important;
+		box-shadow: none !important;
+}
+/* 파일 컨텍스트 헤더 */
+.sage-file-context-header {
+		display: flex;
+		align-items: center;
+		border-top-left-radius: var(--radius-s);
+		border-top-right-radius: var(--radius-s);
+		border-top-width: 1px;
+		border-left-width: 1px;
+		border-right-width: 1px;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-primary);
+		padding: 0.375rem;
+}
+.sage-file-context-toggle {
+		display: inline-flex;
+		cursor: pointer;
+		align-items: center;
+		gap: 0.25rem;
+		border-radius: var(--radius-s);
+		border-width: 1px;
+		border-color: var(--background-modifier-border);
+		padding-left: 0.25rem;
+		padding-right: 0.25rem;
+		padding-top: 0.125rem;
+		padding-bottom: 0.125rem;
+		font-weight: 500;
+		color: var(--text-muted);
+		opacity: 0.4;
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 200ms;
+		font-size: var(--font-smaller);
+}
+.sage-file-context-toggle:hover {
+		color: var(--text-normal);
+		opacity: 0.5;
+}
+.sage-file-context-toggle.active {
+		color: var(--text-muted);
+		opacity: 1;
+}
+.sage-file-context-toggle.active .sage-file-context-icon svg {
+		color: var(--interactive-accent);
+}
+.sage-file-context-icon {
+		display: flex;
+}
+.sage-file-context-icon svg {
+		height: 0.875rem;
+		width: 0.875rem;
+}
+.sage-file-context-text {
+		font-size: var(--font-smaller);
+	}
+/* 채팅 입력 */
+.sage-chat-input {
+		width: 100%;
+		resize: none;
+		overflow-y: auto;
+		border-radius: 0px;
+		border-left-width: 1px;
+		border-right-width: 1px;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-primary);
+		min-height: 2.5rem;
+		max-height: 180px;
+		padding: 3px 6px;
+		border-top: 0;
+		border-bottom: 0;
+		line-height: 1.5;
+		font-family: inherit;
+}
+.sage-chat-input:focus {
+		box-shadow: none !important;
+		border-left: 1px solid var(--background-modifier-border);
+		border-right: 1px solid var(--background-modifier-border);
+	}
+/* 전송 버튼 컨테이너 */
+.sage-chat-button-container {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		border-bottom-right-radius: var(--radius-s);
+		border-bottom-left-radius: var(--radius-s);
+		border-left-width: 1px;
+		border-right-width: 1px;
+		border-bottom-width: 1px;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-primary);
+		padding: 0.375rem;
+		margin-top: -4px;
+}
+.sage-chat-send-button {
+		cursor: pointer;
+		border-radius: 9999px;
+		padding: 0px;
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 200ms;
+		font-size: var(--font-smaller);
+		min-height: 1.4rem;
+		min-width: 1.4rem;
+		max-height: 1.4rem;
+		max-width: 1.4rem;
+		background: var(--text-normal) !important;
+		box-shadow: none !important;
+}
+.sage-chat-send-button svg {
+		width: var(--font-small);
+		height: var(--font-small);
+		stroke-width: 3px !important;
+		color: var(--text-normal) !important;
+		filter: invert(1);
+	}
+.sage-chat-send-button:hover {
+		opacity: 0.9;
+}
+.sage-chat-send-button:active,
+	.sage-chat-send-button:focus {
+		--tw-scale-x: .95;
+		--tw-scale-y: .95;
+		transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+/* 로딩 인디케이터 */
+.sage-loading-indicator {
+		margin-left: 0.375rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+}
+.sage-loading-indicator.hidden {
+		opacity: 0;
+}
+.sage-loading-spinner {
+		height: 0.875rem;
+		width: 0.875rem;
+		border-radius: 9999px;
+		border-width: 2px;
+		border-color: var(--background-modifier-border);
+		border-top-color: var(--interactive-accent);
+		animation: spinner 0.8s linear infinite;
+}
+/* 메시지 스타일 */
+.sage-chat-message {
+		display: flex;
+		flex-direction: column;
+		animation: fadeIn 0.3s ease-in;
+}
+.sage-chat-message-user {
+		width: 100%;
+		align-self: flex-start;
+		border-radius: var(--radius-s);
+		border-width: 1px;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-primary);
+		padding: 0.375rem;
+}
+.sage-chat-message-assistant {
+		width: 100%;
+		align-self: flex-start;
+		color: var(--text-muted);
+		font-size: var(--font-smaller);
+}
+.sage-message-content {
+		overflow-wrap: break-word;
+}
+.sage-message-timestamp {
+		margin-top: 0.125rem;
+		color: var(--text-muted);
+		font-size: var(--font-smallest);
+}
+/* 시스템 초기화 */
+.sage-system-init {
+		color: var(--text-muted);
+		opacity: 0.8;
+}
+/* Self thought */
+.sage-self-thought {
+		color: var(--text-muted);
+}
+/* Todo 카드 */
+.sage-todo-card {
+		border-radius: var(--radius-s);
+		border-width: 1px;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-primary);
+		padding: 0.375rem;
+}
+.sage-todo-header {
+		margin-bottom: 0.25rem;
+}
+.sage-todo-title {
+		font-weight: 500;
+}
+.sage-todos-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.125rem;
+}
+.sage-todo-item {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.25rem;
+}
+.sage-todo-status {
+		width: 0.875rem;
+		text-align: center;
+		padding-top: 1.5px;
+}
+.sage-todo-status svg {
+		height: 0.75rem;
+		width: 0.75rem;
+		color: var(--interactive-accent);
+}
+.sage-todo-content {
+		flex: 1 1 0%;
+}
+/* 접기 상태 */
+.collapsed {
+		display: none !important;
+	}
+/* Thinking 메시지 */
+.sage-thinking-header {
+		display: flex;
+		align-items: center;
+		background-color: var(--background-secondary);
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 200ms;
+}
+.sage-thinking-label,
+	.sage-tool-name {
+		cursor: pointer;
+		color: var(--text-muted);
+		opacity: 0.8;
+}
+.sage-thinking-label:hover {
+		opacity: 1;
+}
+.sage-thinking-content,
+	.sage-tool-content {
+		margin-left: 0.25rem;
+		margin-top: 0.125rem;
+		border-left-width: 1px;
+		border-color: var(--background-modifier-border);
+		padding-left: 0.375rem;
+}
+.sage-tool-result {
+		margin-top: 0.125rem;
+}
+.sage-tool-result pre,
+	.sage-tool-content pre {
+		margin: 0px;
+		white-space: pre-wrap;
+		overflow-wrap: break-word;
+		font-size: var(--font-smaller);
+}
+/* 최종 응답 */
+.sage-chat-message-final-response {
+		width: 100%;
+		align-self: flex-start;
+}
+/* ==================== Quick Actions ==================== */
+.sage-quick-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem;
+		padding: 0.375rem;
+}
+.sage-quick-action-button {
+		display: inline-flex;
+		cursor: pointer;
+		align-items: center;
+		gap: 0.25rem;
+		border-radius: var(--radius-s);
+		border-width: 1px;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-primary);
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
+		padding-top: 0.25rem;
+		padding-bottom: 0.25rem;
+		color: var(--text-muted);
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 200ms;
+		font-size: var(--font-smaller);
+		box-shadow: none !important;
+}
+.sage-quick-action-button:hover {
+		border-color: var(--interactive-accent);
+		background-color: var(--background-modifier-hover);
+		color: var(--text-normal);
+}
+.sage-quick-action-button:active {
+		transform: scale(0.98);
+	}
+.sage-quick-action-icon {
+		display: flex;
+		align-items: center;
+}
+.sage-quick-action-icon svg {
+		height: 0.75rem;
+		width: 0.75rem;
+}
+.sage-quick-action-label {
+		font-weight: 500;
+}
+/* ==================== Code Block ==================== */
+.sage-code-block {
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
+		overflow: hidden;
+		border-radius: var(--radius-s);
+		border-width: 1px;
+		border-color: var(--background-modifier-border);
+}
+.sage-code-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		border-bottom-width: 1px;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-secondary);
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
+		padding-top: 0.25rem;
+		padding-bottom: 0.25rem;
+}
+.sage-code-language {
+		font-weight: 500;
+		text-transform: uppercase;
+		color: var(--text-muted);
+		font-size: var(--font-smallest);
+}
+.sage-copy-button {
+		cursor: pointer;
+		border-radius: var(--radius-s);
+		border-width: 1px;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-primary);
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
+		padding-top: 0.125rem;
+		padding-bottom: 0.125rem;
+		color: var(--text-muted);
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 200ms;
+		font-size: var(--font-smallest);
+}
+.sage-copy-button:hover {
+		background-color: var(--background-modifier-hover);
+		color: var(--text-normal);
+}
+.sage-copy-button.copied {
+		border-color: var(--interactive-success);
+		color: var(--text-on-accent);
+		background: var(--interactive-success);
+}
+.sage-copy-button.copy-failed {
+		border-color: var(--color-red);
+		color: var(--color-red);
+		background: var(--background-modifier-error);
+}
+.sage-code-block pre {
+		margin: 0px;
+		overflow-x: auto;
+		background-color: var(--background-primary);
+		padding: 0.5rem;
+}
+.sage-code-block code {
+		font-family: var(--font-monospace);
+		font-size: var(--font-smaller);
+		line-height: 1.4;
+	}
+.sage-inline-code {
+		border-radius: 0.125rem;
+		background-color: var(--background-secondary);
+		padding-left: 0.25rem;
+		padding-right: 0.25rem;
+		padding-top: 1px;
+		padding-bottom: 1px;
+		font-family: var(--font-monospace);
+		font-size: 0.9em;
+}
+/* ==================== MCP Server Settings ==================== */
+.sage-mcp-settings {
+		margin-top: 1rem;
+}
+.sage-mcp-server-list {
+		margin-top: 0.5rem;
+}
+.sage-mcp-no-servers {
+		margin-bottom: 0.5rem;
+		border-radius: var(--radius-s);
+		background-color: var(--background-secondary);
+		padding: 1rem;
+		text-align: center;
+		font-style: italic;
+		color: var(--text-muted);
+}
+.sage-mcp-server-item {
+		margin-bottom: 0.5rem;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		border-radius: var(--radius-s);
+		border-width: 1px;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-secondary);
+		padding: 0.5rem;
+}
+.sage-mcp-server-item:hover {
+		border-color: var(--background-modifier-border-hover);
+}
+.sage-mcp-status-icon {
+		display: flex;
+		height: 1.25rem;
+		width: 1.25rem;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+}
+.sage-mcp-status-icon svg {
+		height: 1rem;
+		width: 1rem;
+}
+.sage-mcp-status-connected {
+		color: var(--color-green);
+}
+.sage-mcp-status-failed {
+		color: var(--color-red);
+}
+.sage-mcp-status-pending {
+		color: var(--text-muted);
+}
+.sage-mcp-status-pending svg {
+		animation: spinner 1s linear infinite;
+	}
+.sage-mcp-status-needs-auth {
+		color: var(--color-orange);
+}
+.sage-mcp-status-disabled {
+		color: var(--text-faint);
+}
+.sage-mcp-error-message {
+		margin-top: 0.25rem;
+		width: 100%;
+		border-radius: var(--radius-s);
+		padding: 0.25rem;
+		font-size: var(--font-smaller);
+		color: var(--text-error);
+		background: var(--background-modifier-error);
+}
+.sage-mcp-server-info {
+		min-width: 0px;
+		flex: 1 1 0%;
+}
+.sage-mcp-server-name {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		font-weight: 500;
+		color: var(--text-normal);
+}
+.sage-mcp-server-type {
+		color: var(--text-muted);
+		font-size: var(--font-smaller);
+}
+.sage-mcp-server-controls {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		gap: 0.25rem;
+}
+/* 토글 스위치 */
+.sage-mcp-toggle {
+		position: relative;
+		display: inline-block;
+		flex-shrink: 0;
+		width: 32px;
+		height: 18px;
+}
+.sage-mcp-toggle-checkbox {
+		position: absolute;
+		height: 0px;
+		width: 0px;
+		opacity: 0;
+}
+.sage-mcp-toggle-slider {
+		position: absolute;
+		inset: 0px;
+		cursor: pointer;
+		border-radius: 9999px;
+		background-color: var(--background-modifier-border);
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 200ms;
+}
+.sage-mcp-toggle-slider::before {
+		position: absolute;
+		border-radius: 9999px;
+		--tw-bg-opacity: 1;
+		background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 200ms;
+		content: "";
+		height: 14px;
+		width: 14px;
+		left: 2px;
+		bottom: 2px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.sage-mcp-toggle-checkbox:checked + .sage-mcp-toggle-slider {
+		background-color: var(--interactive-accent);
+}
+.sage-mcp-toggle-checkbox:checked + .sage-mcp-toggle-slider::before {
+		transform: translateX(14px);
+	}
+.sage-mcp-btn {
+		display: flex;
+		height: 1.5rem;
+		width: 1.5rem;
+		cursor: pointer;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--radius-s);
+		border-style: none;
+		background-color: transparent;
+		padding: 0px;
+		color: var(--text-muted);
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms;
+}
+.sage-mcp-btn:hover {
+		background-color: var(--background-modifier-hover);
+		color: var(--text-normal);
+}
+.sage-mcp-btn svg {
+		height: 0.875rem;
+		width: 0.875rem;
+}
+.sage-mcp-btn-delete:hover {
+		color: var(--color-red);
+}
+/* MCP Form */
+.sage-mcp-form {
+		margin-top: 1rem;
+		border-radius: var(--radius-s);
+		border-width: 1px;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-secondary);
+		padding: 1rem;
+}
+.sage-mcp-form h4 {
+		margin: 0px;
+		margin-bottom: 1rem;
+		font-weight: 600;
+		font-size: var(--font-small);
+}
+.sage-mcp-form-field {
+		margin-bottom: 0.5rem;
+}
+.sage-mcp-warning {
+		margin-top: 0.25rem;
+		border-radius: var(--radius-s);
+		padding: 0.5rem;
+		color: var(--color-orange);
+		font-size: var(--font-smaller);
+		background: var(--background-modifier-error);
+}
+.sage-mcp-command-error {
+		margin-top: 0.5rem;
+		border-radius: var(--radius-s);
+		border-width: 1px;
+		border-color: var(--color-red);
+		padding: 0.75rem;
+		background: var(--background-modifier-error);
+}
+.sage-mcp-command-error-title {
+		margin-bottom: 0.25rem;
+		font-weight: 600;
+		color: var(--color-red);
+}
+.sage-mcp-command-error-desc {
+		word-break: break-all;
+		color: var(--text-muted);
+		font-size: var(--font-smaller);
+}
+.sage-mcp-json-error {
+		margin-top: 0.25rem;
+		border-radius: var(--radius-s);
+		padding: 0.5rem;
+		color: var(--color-red);
+		font-size: var(--font-smaller);
+		background: var(--background-modifier-error);
+}
+.sage-input-error {
+		border-color: var(--color-red) !important;
+	}
+.sage-mcp-dynamic-fields {
+		margin-top: 0.5rem;
+}
+.sage-mcp-form-buttons {
+		margin-top: 1rem;
+		display: flex;
+		gap: 0.5rem;
+		border-top-width: 1px;
+		border-color: var(--background-modifier-border);
+		padding-top: 1rem;
+}
+.sage-mcp-form-buttons button {
+		padding-left: 1rem;
+		padding-right: 1rem;
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
+}
+/* ==================== MCP Header Status ==================== */
+.sage-mcp-header-status {
+		position: relative;
+		margin-right: 0.5rem;
+		display: flex;
+		align-items: center;
+}
+.sage-mcp-header-icon {
+		display: flex;
+		cursor: pointer;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--radius-s);
+		padding: 0.125rem;
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 200ms;
+}
+.sage-mcp-header-icon svg {
+		height: 0.875rem;
+		width: 0.875rem;
+}
+.sage-mcp-header-icon:hover {
+		background-color: var(--background-modifier-hover);
+}
+.sage-mcp-header-connected {
+		color: var(--color-green);
+}
+.sage-mcp-header-failed {
+		color: var(--color-red);
+}
+.sage-mcp-header-pending {
+		color: var(--text-muted);
+}
+/* ==================== MCP Tools Panel ==================== */
+.sage-mcp-panel {
+		position: absolute;
+		top: 100%;
+		right: 0px;
+		z-index: 50;
+		display: flex;
+		max-height: 24rem;
+		min-width: 18rem;
+		max-width: 24rem;
+		flex-direction: column;
+		overflow: hidden;
+		border-radius: var(--radius-s);
+		border-width: 1px;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-primary);
+		--tw-shadow: var(--shadow);
+		--tw-shadow-colored: var(--shadow);
+		box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+.sage-mcp-panel-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		border-bottom-width: 1px;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-secondary);
+		padding-left: 1rem;
+		padding-right: 1rem;
+		padding-top: 0.75rem;
+		padding-bottom: 0.75rem;
+}
+.sage-mcp-panel-title {
+		font-weight: 600;
+		color: var(--text-normal);
+		font-size: var(--font-small);
+}
+.sage-mcp-panel-settings {
+		display: flex;
+		cursor: pointer;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--radius-s);
+		border-style: none;
+		background-color: transparent;
+		padding: 0.25rem;
+		color: var(--text-muted);
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms;
+}
+.sage-mcp-panel-settings:hover {
+		background-color: var(--background-modifier-hover);
+		color: var(--text-normal);
+}
+.sage-mcp-panel-settings svg {
+		height: 1rem;
+		width: 1rem;
+}
+.sage-mcp-panel-list {
+		flex: 1 1 0%;
+		overflow-y: auto;
+		padding: 0.5rem;
+}
+/* Empty state */
+.sage-mcp-panel-empty {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		padding-left: 1rem;
+		padding-right: 1rem;
+		padding-top: 2rem;
+		padding-bottom: 2rem;
+		text-align: center;
+}
+.sage-mcp-panel-empty-title {
+		font-weight: 500;
+		color: var(--text-normal);
+		font-size: var(--font-small);
+}
+.sage-mcp-panel-empty-desc {
+		color: var(--text-muted);
+		font-size: var(--font-smaller);
+}
+.sage-mcp-panel-empty-button {
+		margin-top: 0.5rem;
+		cursor: pointer;
+		border-radius: var(--radius-s);
+		border-style: none;
+		background-color: var(--interactive-accent);
+		padding-left: 1rem;
+		padding-right: 1rem;
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
+		color: var(--text-on-accent);
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms;
+		font-size: var(--font-small);
+}
+.sage-mcp-panel-empty-button:hover {
+		background-color: var(--interactive-accent-hover);
+}
+/* Server item */
+.sage-mcp-panel-item {
+		margin-bottom: 0.25rem;
+		overflow: hidden;
+		border-radius: var(--radius-s);
+		background-color: var(--background-secondary);
+}
+.sage-mcp-panel-item:last-child {
+		margin-bottom: 0px;
+}
+.sage-mcp-panel-item-header {
+		display: flex;
+		cursor: pointer;
+		align-items: center;
+		gap: 0.5rem;
+		padding-left: 0.75rem;
+		padding-right: 0.75rem;
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms;
+}
+.sage-mcp-panel-item-header:hover {
+		background-color: var(--background-modifier-hover);
+}
+.sage-mcp-panel-item-status {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+}
+.sage-mcp-panel-item-status svg {
+		height: 0.875rem;
+		width: 0.875rem;
+}
+.sage-mcp-panel-item-info {
+		min-width: 0px;
+		flex: 1 1 0%;
+		overflow: hidden;
+}
+.sage-mcp-panel-item-name {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		font-weight: 500;
+		color: var(--text-normal);
+		font-size: var(--font-small);
+}
+.sage-mcp-panel-item-type {
+		color: var(--text-muted);
+		font-size: var(--font-smaller);
+}
+.sage-mcp-panel-item-toggle {
+		flex-shrink: 0;
+}
+/* Expanded state */
+.sage-mcp-panel-item--expanded .sage-mcp-panel-item-header {
+		border-bottom-width: 1px;
+		border-color: var(--background-modifier-border);
+}
+.sage-mcp-panel-tools {
+		background-color: var(--background-primary);
+		padding-left: 0.75rem;
+		padding-right: 0.75rem;
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
+}
+.sage-mcp-panel-tools-message {
+		font-style: italic;
+		color: var(--text-muted);
+		font-size: var(--font-smaller);
+}
+.sage-mcp-panel-tools-error {
+		border-radius: var(--radius-s);
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
+		padding-top: 0.25rem;
+		padding-bottom: 0.25rem;
+		font-size: var(--font-smaller);
+		color: var(--text-error);
+		background: var(--background-modifier-error);
+}
+.sage-mcp-panel-tools-count {
+		margin-bottom: 0.5rem;
+		color: var(--text-muted);
+		font-size: var(--font-smaller);
+}
+.sage-mcp-panel-tools-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+}
+.sage-mcp-panel-tool-item {
+		display: flex;
+		flex-direction: column;
+		border-radius: var(--radius-s);
+		background-color: var(--background-secondary);
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
+		padding-top: 0.25rem;
+		padding-bottom: 0.25rem;
+}
+.sage-mcp-panel-tool-name {
+		font-weight: 500;
+		color: var(--text-normal);
+		font-size: var(--font-smaller);
+}
+.sage-mcp-panel-tool-desc {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		color: var(--text-muted);
+		font-size: var(--font-smaller);
+}
+/* ==================== RTL Support ==================== */
+.sage-rtl {
+		direction: rtl;
+		text-align: right;
+	}
+.sage-rtl .sage-chat-header {
+		flex-direction: row-reverse;
+}
+.sage-rtl .sage-chat-title {
+		margin-right: 0px;
+		margin-left: auto;
+}
+.sage-rtl .sage-header-buttons {
+		flex-direction: row-reverse;
+}
+.sage-rtl .sage-model-selector-container {
+		margin-left: 0px;
+		margin-right: auto;
+		margin-left: 0.5rem;
+}
+.sage-rtl .sage-model-selector {
+		padding: 2px 6px 2px 20px;
+		background-position: left 4px center;
+	}
+.sage-rtl .sage-mcp-header-status {
+		margin-right: 0px;
+		margin-left: 0.5rem;
+}
+.sage-rtl .sage-file-context-header {
+		flex-direction: row-reverse;
+}
+.sage-rtl .sage-file-context-toggle {
+		flex-direction: row-reverse;
+}
+.sage-rtl .sage-quick-actions {
+		flex-direction: row-reverse;
+}
+.sage-rtl .sage-quick-action-button {
+		flex-direction: row-reverse;
+}
+.sage-rtl .sage-chat-input {
+		text-align: right;
+}
+.sage-rtl .sage-chat-button-container {
+		flex-direction: row-reverse;
+}
+.sage-rtl .sage-loading-indicator {
+		margin-left: 0px;
+		margin-right: 0.375rem;
+}
+.sage-rtl .sage-chat-message-user {
+		text-align: right;
+}
+.sage-rtl .sage-chat-message-assistant {
+		text-align: right;
+}
+.sage-rtl .sage-todo-item {
+		flex-direction: row-reverse;
+}
+.sage-rtl .sage-todo-content {
+		text-align: right;
+}
+.sage-rtl .sage-thinking-content,
+	.sage-rtl .sage-tool-content {
+		margin-left: 0px;
+		margin-right: 0.25rem;
+		border-left-width: 0px;
+		border-right-width: 1px;
+		border-color: var(--background-modifier-border);
+		padding-left: 0px;
+		padding-right: 0.375rem;
+}
+.sage-rtl .sage-mcp-panel {
+		right: auto;
+		left: 0px;
+}
+.sage-rtl .sage-mcp-panel-header {
+		flex-direction: row-reverse;
+}
+.sage-rtl .sage-mcp-panel-item-header {
+		flex-direction: row-reverse;
+}
+.sage-rtl .sage-mcp-panel-item-info {
+		text-align: right;
+}
+.sage-rtl .sage-mcp-server-item {
+		flex-direction: row-reverse;
+}
+.sage-rtl .sage-mcp-server-info {
+		text-align: right;
+}
+.sage-rtl .sage-mcp-server-controls {
+		flex-direction: row-reverse;
+}
+/* 코드 블록은 LTR 유지 */
+.sage-rtl .sage-code-block {
+		direction: ltr;
+		text-align: left;
+	}
+.sage-rtl .sage-code-header {
+		direction: rtl;
+		flex-direction: row-reverse;
+	}
+
+/* ==================== 전역 스타일 ==================== */
+
+/* 스크롤바 스타일 */
 ::-webkit-scrollbar {
 	width: 8px;
 }
@@ -16,1265 +1168,24 @@
 	background: var(--background-modifier-border-hover);
 }
 
+/* 애니메이션 */
 @keyframes fadeIn {
-	from { opacity: 0; transform: translateY(10px); }
-	to { opacity: 1; transform: translateY(0); }
-}
-
-/* Container styles */
-.sage-chat-container {
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-}
-
-.sage-chat-header {
-	display: flex;
-	justify-content: flex-end;
-	align-items: center;
-	padding-bottom: 4px;
-	background: var(--background-secondary);
-}
-
-.sage-chat-messages {
-	flex: 1;
-	row-gap: 12px;
-	overflow-y: auto;
-	padding: 12px 0 12px;
-	display: flex;
-	font-size: var(--font-small);
-	line-height: 1.5;
-	flex-direction: column;
-	user-select: text;
-	-webkit-user-select: text;
-	-moz-user-select: text;
-	-ms-user-select: text;
-}
-
-.sage-chat-body {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	overflow: hidden;
-	padding: 0;
-}
-
-.sage-chat-input-container {
-	display: flex;
-	flex-direction: column;
-	flex-shrink: 0;
-}
-
-
-/* Chat area header */
-.sage-chat-title{
-	margin-right: auto;
-    font-size: var(--font-smallest);
-	color: var(--text-muted);
-	opacity: 0.8;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-}
-
-.sage-header-buttons{
-	display: flex;
-	gap: 2px;
-}
-
-/* Model selector */
-.sage-model-selector-container {
-	display: flex;
-	align-items: center;
-	margin-left: auto;
-	margin-right: 8px;
-}
-
-.sage-model-selector {
-	appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	background: var(--background-primary);
-	border: 1px solid var(--background-modifier-border);
-	border-radius: var(--radius);
-	padding: 2px 20px 2px 6px;
-	font-size: var(--font-smallest);
-	color: var(--text-muted);
-	cursor: pointer;
-	transition: all 0.2s ease;
-	max-width: 160px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-
-	/* Custom dropdown arrow */
-	background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724%27 height=%2724%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23000%27 opacity=%270.9%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 %3E%3Cpath d=%27m7 15 5 5 5-5%27/%3E%3Cpath d=%27m7 9 5-5 5 5%27/%3E%3C/svg%3E");
-	background-repeat: no-repeat;
-	background-position: right 4px center;
-	background-size: 12px;
-}
-
-.sage-model-selector:hover {
-	border-color: var(--interactive-accent);
-	color: var(--text-normal);
-}
-
-.sage-model-selector:focus {
-	outline: none;
-	border-color: var(--interactive-accent);
-	box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
-}
-
-.sage-model-selector option {
-	background: var(--background-primary);
-	color: var(--text-normal);
-	padding: 4px;
-}
-
-/* New chat button */
-.sage-new-chat-button {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-	min-height: 1.4rem;
-	min-width: 1.4rem;
-	max-height: 1.4rem;
-	max-width: 1.4rem;
-	padding: 0;
-	background-color: transparent !important;
-	box-shadow: none !important;
-	transition: all 0.2s ease-in-out;
-}
-
-.sage-new-chat-button svg {
-	width: var(--font-small);
-	height: var(--font-small);
-}
-
-.sage-new-chat-button:hover {
-	background-color: var(--background-modifier-hover) !important;
-}
-
-.sage-new-chat-button:active, .sage-new-chat-button:focus {
-	transform: scale(0.95);
-}
-
-/* Examples button */
-.sage-examples-button {
-	display: none;
-	cursor: pointer;
-	height: 1.4rem !important;
-	box-shadow: none !important;
-	margin-right: 0.5rem;
-}
-
-/* Settings button */
-.sage-settings-button {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-	min-height: 1.4rem;
-	min-width: 1.4rem;
-	max-height: 1.4rem;
-	max-width: 1.4rem;
-	padding: 0;
-	background-color: transparent !important;
-	box-shadow: none !important;
-	transition: all 0.2s ease-in-out;
-}
-
-.sage-settings-button svg {
-	width: var(--font-small);
-	height: var(--font-small);
-}
-
-.sage-settings-button:hover {
-	background-color: var(--background-modifier-hover) !important;
-}
-
-.sage-settings-button:active, .sage-settings-button:focus {
-	transform: scale(0.95);
-}
-
-/* File context header */
-.sage-file-context-header {
-	display: flex;
-	align-items: center;
-	padding: 6px;
-	background: var(--background-primary);
-	border-top: 1px solid var(--background-modifier-border);
-	border-left: 1px solid var(--background-modifier-border);
-	border-right: 1px solid var(--background-modifier-border);
-	border-top-left-radius: var(--radius);
-	border-top-right-radius: var(--radius);
-}
-
-.sage-file-context-toggle {
-	display: inline-flex;
-	align-items: center;
-	gap: 4px;
-	padding: 2px 4px;
-	border-radius: var(--radius);
-	border: 1px solid var(--background-modifier-border);
-	color: var(--text-muted);
-	cursor: pointer;
-	transition: all 0.2s ease;
-	font-size: var(--font-smaller);
-	opacity: 0.4;
-	font-weight: 500;
-}
-
-.sage-file-context-toggle:hover {
-	opacity: 0.5;
-	color: var(--text-normal);
-}
-
-.sage-file-context-toggle.active {
-	color: var(--text-muted);
-	opacity: 1;
-}
-
-.sage-file-context-toggle.active .sage-file-context-icon svg {
-	color: var(--interactive-accent);
-}
-
-
-.sage-file-context-icon {
-	display: flex;
-}
-
-.sage-file-context-icon svg {
-	width: 14px;
-	height: 14px;
-}
-
-.sage-file-context-text {
-	font-size: var(--font-smaller);
-}
-
-/* Chat input container */
-.sage-chat-input {
-	width: 100%;
-	min-height: 2.5rem;
-	max-height: 180px;
-	padding: 3px 6px;
-	border-top: 0;
-	border-bottom: 0;
-	border-left: 1px solid var(--background-modifier-border);
-	border-right: 1px solid var(--background-modifier-border);
-	border-radius: 0;
-	background: var(--background-primary);
-	resize: none;
-	line-height: 1.5;
-	font-family: inherit;
-	overflow-y: auto;
-}
-.sage-chat-input:focus {
-	box-shadow: none !important;
-	border-left: 1px solid var(--background-modifier-border);
-	border-right: 1px solid var(--background-modifier-border);
-}
-
-/* Chat send button */
-.sage-chat-button-container {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-top: -4px;
-	background: var(--background-primary);
-	border-left: 1px solid var(--background-modifier-border);
-	border-right: 1px solid var(--background-modifier-border);
-	border-bottom: 1px solid var(--background-modifier-border);
-	border-bottom-right-radius: var(--radius);
-	border-bottom-left-radius: var(--radius);
-    padding: 6px;
-}
-
-.sage-chat-send-button {
-	border-radius: 100%;
-	font-size: var(--font-smaller);
-	min-height: 1.4rem;
-	min-width: 1.4rem;
-	max-height: 1.4rem;
-	max-width: 1.4rem;
-	padding: 0;
-	cursor: pointer;
-	transition: all 0.2s ease;
-	background: var(--text-normal) !important;
-	/* color: var(--text-normal) !important;
-	filter: invert(1); */
-	box-shadow: none !important;
-}
-
-.sage-chat-send-button svg {
-	width: var(--font-small);
-	height: var(--font-small);
-	stroke-width: 3px !important;
-	color: var(--text-normal) !important;
-	filter: invert(1);
-}
-
-.sage-chat-send-button:hover {
-	opacity: 0.9;
-}
-
-.sage-chat-send-button:active, .sage-chat-send-button:focus {
-	transform: scale(0.95);
-}
-
-/* Loading indicator */
-.sage-loading-indicator {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	margin-left: 6px;
-}
-
-.sage-loading-indicator.hidden {
-	opacity: 0;
-}
-
-.sage-loading-spinner {
-	width: 14px;
-	height: 14px;
-	border: 2px solid var(--background-modifier-border);
-	border-top-color: var(--interactive-accent);
-	border-radius: 50%;
-	animation: spinner 0.8s linear infinite;
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 @keyframes spinner {
-	to { transform: rotate(360deg); }
+	to {
+		transform: rotate(360deg);
+	}
 }
 
-/* Message styles */
-.sage-chat-message {
-	display: flex;
-	flex-direction: column;
-	animation: fadeIn 0.3s ease-in;
-}
-
-.sage-chat-message-user {
-	align-self: flex-start;
-	width: 100%;
-	padding: 6px;
-	background: var(--background-primary);
-	border: 1px solid var(--background-modifier-border);
-	border-radius: var(--radius);
-}
-
-.sage-chat-message-assistant {
-	align-self: flex-start;
-	width: 100%;
-	font-size: var(--font-smaller);
-	color: var(--text-muted);
-}
-
-.sage-message-content {
-	word-wrap: break-word;
-}
-
-.sage-message-timestamp {
-	color: var(--text-muted);
-	font-size: var(--font-smallest);
-	margin-top: 2px;
-}
-
-/* System init styles */
-.sage-system-init {
-	color: var(--text-muted);
-	opacity: 0.8;
-}
-
-/* Self thought styles */
-.sage-self-thought {
-	color: var(--text-muted);
-}
-
-/* Todo card styles */
-.sage-todo-card {
-	padding: 6px;
-	border: 1px solid var(--background-modifier-border);
-	background: var(--background-primary);
-	border-radius: var(--radius);
-}
-
-.sage-todo-header {
-	margin-bottom: 4px;
-}
-
-.sage-todo-title {
-	font-weight: 500;
-}
-
-.sage-todos-list {
-	display: flex;
-	flex-direction: column;
-	gap: 2px;
-}
-
-.sage-todo-item {
-	display: flex;
-	align-items: flex-start;
-	gap: 4px;
-}
-
-.sage-todo-status {
-	width: 14px;
-	padding-top: 1.5px;
-	text-align: center;
-}
-
-.sage-todo-status svg {
-	color: var(--interactive-accent);
-	width: 13px;
-	height: 13px;
-}
-
-.sage-todo-content {
-	flex: 1;
-}
-
-/* Collapsible content styles */
-.collapsed {
-	display: none !important;
-}
-
-/* Thinking message styles */
-.sage-thinking-header {
-	display: flex;
-	align-items: center;
-	background: var(--background-secondary);
-	transition: background 0.2s ease;
-}
-
-.sage-thinking-label, .sage-tool-name {
-	color: var(--text-muted);
-	opacity: 0.8;
-	cursor: pointer;
-}
-
-.sage-thinking-label:hover {
-	opacity: 1;
-}
-
-.sage-thinking-content, .sage-tool-content{
-	border-left: 1px solid var(--background-modifier-border);
-	margin-left: 4px;
-	padding-left: 6px;
-}
-
-.sage-thinking-content, .sage-tool-content, .sage-tool-result {
-	margin-top: 2px;
-}
-
-.sage-tool-result pre, .sage-tool-content pre{
-	font-size: var(--font-smaller);
-	margin: 0;
-	white-space: pre-wrap;
-	word-wrap: break-word;
-}
-
-/* Final response styles */
-.sage-chat-message-final-response {
-	align-self: flex-start;
-	width: 100%;
-}
-
-/* ==================== Phase 2-F: Quick Actions ==================== */
-.sage-quick-actions {
-	display: flex;
-	gap: 4px;
-	padding: 6px;
-	flex-wrap: wrap;
-}
-
-.sage-quick-action-button {
-	display: inline-flex;
-	align-items: center;
-	gap: 4px;
-	padding: 4px 8px;
-	border-radius: var(--radius);
-	border: 1px solid var(--background-modifier-border);
-	background: var(--background-primary);
-	color: var(--text-muted);
-	font-size: var(--font-smaller);
-	cursor: pointer;
-	transition: all 0.2s ease;
-	box-shadow: none !important;
-}
-
-.sage-quick-action-button:hover {
-	background: var(--background-modifier-hover);
-	color: var(--text-normal);
-	border-color: var(--interactive-accent);
-}
-
-.sage-quick-action-button:active {
-	transform: scale(0.98);
-}
-
-.sage-quick-action-icon {
-	display: flex;
-	align-items: center;
-}
-
-.sage-quick-action-icon svg {
-	width: 12px;
-	height: 12px;
-}
-
-.sage-quick-action-label {
-	font-weight: 500;
-}
-
-/* ==================== Phase 2-G: Code Block Styles ==================== */
-.sage-code-block {
-	margin: 8px 0;
-	border-radius: var(--radius);
-	border: 1px solid var(--background-modifier-border);
-	overflow: hidden;
-}
-
-.sage-code-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 4px 8px;
-	background: var(--background-secondary);
-	border-bottom: 1px solid var(--background-modifier-border);
-}
-
-.sage-code-language {
-	font-size: var(--font-smallest);
-	color: var(--text-muted);
-	text-transform: uppercase;
-	font-weight: 500;
-}
-
-.sage-copy-button {
-	padding: 2px 8px;
-	font-size: var(--font-smallest);
-	border-radius: var(--radius);
-	border: 1px solid var(--background-modifier-border);
-	background: var(--background-primary);
-	color: var(--text-muted);
-	cursor: pointer;
-	transition: all 0.2s ease;
-}
-
-.sage-copy-button:hover {
-	background: var(--background-modifier-hover);
-	color: var(--text-normal);
-}
-
-.sage-copy-button.copied {
-	background: var(--interactive-success);
-	color: var(--text-on-accent);
-	border-color: var(--interactive-success);
-}
-
-.sage-copy-button.copy-failed {
-	background: var(--background-modifier-error);
-	color: var(--color-red);
-	border-color: var(--color-red);
-}
-
-.sage-code-block pre {
-	margin: 0;
-	padding: 8px;
-	overflow-x: auto;
-	background: var(--background-primary);
-}
-
-.sage-code-block code {
-	font-family: var(--font-monospace);
-	font-size: var(--font-smaller);
-	line-height: 1.4;
-}
-
-.sage-inline-code {
-	padding: 1px 4px;
-	border-radius: 3px;
-	background: var(--background-secondary);
-	font-family: var(--font-monospace);
-	font-size: 0.9em;
-}
-
-/* ==================== MCP Server Settings ==================== */
-.sage-mcp-settings {
-	margin-top: 1rem;
-}
-
-.sage-mcp-server-list {
-	margin-top: 0.5rem;
-}
-
-.sage-mcp-no-servers {
-	padding: 1rem;
-	text-align: center;
-	color: var(--text-muted);
-	font-style: italic;
-	background: var(--background-secondary);
-	border-radius: var(--radius);
-	margin-bottom: 0.5rem;
-}
-
-.sage-mcp-server-item {
-	display: flex;
-	align-items: center;
-	flex-wrap: wrap;
-	gap: 0.5rem;
-	padding: 0.5rem;
-	background: var(--background-secondary);
-	border: 1px solid var(--background-modifier-border);
-	border-radius: var(--radius);
-	margin-bottom: 0.5rem;
-}
-
-.sage-mcp-server-item:hover {
-	border-color: var(--background-modifier-border-hover);
-}
-
-.sage-mcp-status-icon {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 20px;
-	height: 20px;
-	flex-shrink: 0;
-}
-
-.sage-mcp-status-icon svg {
-	width: 16px;
-	height: 16px;
-}
-
-.sage-mcp-status-connected {
-	color: var(--color-green);
-}
-
-.sage-mcp-status-failed {
-	color: var(--color-red);
-}
-
-.sage-mcp-status-pending {
-	color: var(--text-muted);
-}
-
-.sage-mcp-status-pending svg {
-	animation: spinner 1s linear infinite;
-}
-
-.sage-mcp-status-needs-auth {
-	color: var(--color-orange);
-}
-
-.sage-mcp-status-disabled {
-	color: var(--text-faint);
-}
-
-.sage-mcp-error-message {
-	width: 100%;
-	font-size: var(--font-smaller);
-	color: var(--text-error);
-	padding: 0.25rem 0.5rem;
-	margin-top: 0.25rem;
-	background: var(--background-modifier-error);
-	border-radius: var(--radius);
-}
-
-.sage-mcp-server-info {
-	flex: 1;
-	min-width: 0;
-}
-
-.sage-mcp-server-name {
-	font-weight: 500;
-	color: var(--text-normal);
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.sage-mcp-server-type {
-	font-size: var(--font-smaller);
-	color: var(--text-muted);
-}
-
-.sage-mcp-server-controls {
-	display: flex;
-	align-items: center;
-	gap: 0.25rem;
-	flex-shrink: 0;
-}
-
-/* Toggle switch component */
-.sage-mcp-toggle {
-	position: relative;
-	display: inline-block;
-	width: 32px;
-	height: 18px;
-	flex-shrink: 0;
-}
-
-.sage-mcp-toggle-checkbox {
-	opacity: 0;
-	width: 0;
-	height: 0;
-	position: absolute;
-}
-
-.sage-mcp-toggle-slider {
-	position: absolute;
-	cursor: pointer;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: var(--background-modifier-border);
-	transition: 0.2s;
-	border-radius: 18px;
-}
-
-.sage-mcp-toggle-slider::before {
-	position: absolute;
-	content: "";
-	height: 14px;
-	width: 14px;
-	left: 2px;
-	bottom: 2px;
-	background-color: white;
-	transition: 0.2s;
-	border-radius: 50%;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.sage-mcp-toggle-checkbox:checked + .sage-mcp-toggle-slider {
-	background-color: var(--interactive-accent);
-}
-
-.sage-mcp-toggle-checkbox:checked + .sage-mcp-toggle-slider::before {
-	transform: translateX(14px);
-}
-
-.sage-mcp-btn {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 24px;
-	height: 24px;
-	padding: 0;
-	background: transparent;
-	border: none;
-	border-radius: var(--radius);
-	color: var(--text-muted);
-	cursor: pointer;
-	transition: all 0.15s ease;
-}
-
-.sage-mcp-btn:hover {
-	background: var(--background-modifier-hover);
-	color: var(--text-normal);
-}
-
-.sage-mcp-btn svg {
-	width: 14px;
-	height: 14px;
-}
-
-.sage-mcp-btn-delete:hover {
-	color: var(--color-red);
-}
-
-.sage-mcp-error-message {
-	width: 100%;
-	margin-top: 0.25rem;
-	padding: 0.25rem 0.5rem;
-	font-size: var(--font-smaller);
-	color: var(--color-red);
-	background: var(--background-modifier-error);
-	border-radius: var(--radius);
-}
-
-/* MCP Form Styles */
-.sage-mcp-form {
-	margin-top: 1rem;
-	padding: 1rem;
-	background: var(--background-secondary);
-	border: 1px solid var(--background-modifier-border);
-	border-radius: var(--radius);
-}
-
-.sage-mcp-form h4 {
-	margin: 0 0 1rem 0;
-	font-size: var(--font-small);
-	font-weight: 600;
-}
-
-.sage-mcp-form-field {
-	margin-bottom: 0.5rem;
-}
-
-.sage-mcp-warning {
-	padding: 0.5rem;
-	font-size: var(--font-smaller);
-	color: var(--color-orange);
-	background: var(--background-modifier-error);
-	border-radius: var(--radius);
-	margin-top: 0.25rem;
-}
-
-.sage-mcp-command-error {
-	padding: 0.75rem;
-	margin-top: 0.5rem;
-	background: var(--background-modifier-error);
-	border: 1px solid var(--color-red);
-	border-radius: var(--radius);
-}
-
-.sage-mcp-command-error-title {
-	font-weight: 600;
-	color: var(--color-red);
-	margin-bottom: 0.25rem;
-}
-
-.sage-mcp-command-error-desc {
-	font-size: var(--font-smaller);
-	color: var(--text-muted);
-	word-break: break-all;
-}
-
-/* JSON validation error */
-.sage-mcp-json-error {
-	padding: 0.5rem;
-	font-size: var(--font-smaller);
-	color: var(--color-red);
-	background: var(--background-modifier-error);
-	border-radius: var(--radius);
-	margin-top: 0.25rem;
-}
-
-.sage-input-error {
-	border-color: var(--color-red) !important;
-}
-
-.sage-mcp-dynamic-fields {
-	margin-top: 0.5rem;
-}
-
-.sage-mcp-form-buttons {
-	display: flex;
-	gap: 0.5rem;
-	margin-top: 1rem;
-	padding-top: 1rem;
-	border-top: 1px solid var(--background-modifier-border);
-}
-
-.sage-mcp-form-buttons button {
-	padding: 0.5rem 1rem;
-}
-
-/* ==================== MCP Header Status Icon ==================== */
-.sage-mcp-header-status {
-	position: relative;
-	display: flex;
-	align-items: center;
-	margin-right: 0.5rem;
-}
-
-.sage-mcp-header-icon {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-	padding: 2px;
-	border-radius: var(--radius);
-	transition: all 0.2s ease;
-}
-
-.sage-mcp-header-icon svg {
-	width: 14px;
-	height: 14px;
-}
-
-.sage-mcp-header-icon:hover {
-	background: var(--background-modifier-hover);
-}
-
-.sage-mcp-header-connected {
-	color: var(--color-green);
-}
-
-.sage-mcp-header-failed {
-	color: var(--color-red);
-}
-
-.sage-mcp-header-pending {
-	color: var(--text-muted);
-}
-
-/* ==================== MCP Tools Panel ==================== */
-.sage-mcp-panel {
-	position: absolute;
-	top: 100%;
-	right: 0;
-	min-width: 280px;
-	max-width: 360px;
-	max-height: 400px;
-	background: var(--background-primary);
-	border: 1px solid var(--background-modifier-border);
-	border-radius: var(--radius);
-	box-shadow: var(--shadow);
-	z-index: 100;
-	display: flex;
-	flex-direction: column;
-	overflow: hidden;
-}
-
-.sage-mcp-panel-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 0.75rem 1rem;
-	border-bottom: 1px solid var(--background-modifier-border);
-	background: var(--background-secondary);
-}
-
-.sage-mcp-panel-title {
-	font-weight: 600;
-	font-size: var(--font-small);
-	color: var(--text-normal);
-}
-
-.sage-mcp-panel-settings {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 4px;
-	border: none;
-	background: transparent;
-	color: var(--text-muted);
-	cursor: pointer;
-	border-radius: var(--radius);
-	transition: all 0.15s ease;
-}
-
-.sage-mcp-panel-settings:hover {
-	background: var(--background-modifier-hover);
-	color: var(--text-normal);
-}
-
-.sage-mcp-panel-settings svg {
-	width: 16px;
-	height: 16px;
-}
-
-.sage-mcp-panel-list {
-	flex: 1;
-	overflow-y: auto;
-	padding: 0.5rem;
-}
-
-/* Empty state */
-.sage-mcp-panel-empty {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	padding: 2rem 1rem;
-	text-align: center;
-	gap: 0.5rem;
-}
-
-.sage-mcp-panel-empty-title {
-	font-weight: 500;
-	color: var(--text-normal);
-	font-size: var(--font-small);
-}
-
-.sage-mcp-panel-empty-desc {
-	color: var(--text-muted);
-	font-size: var(--font-smaller);
-}
-
-.sage-mcp-panel-empty-button {
-	margin-top: 0.5rem;
-	padding: 0.5rem 1rem;
-	background: var(--interactive-accent);
-	color: var(--text-on-accent);
-	border: none;
-	border-radius: var(--radius);
-	cursor: pointer;
-	font-size: var(--font-small);
-	transition: background 0.15s ease;
-}
-
-.sage-mcp-panel-empty-button:hover {
-	background: var(--interactive-accent-hover);
-}
-
-/* Server item */
-.sage-mcp-panel-item {
-	border-radius: var(--radius);
-	margin-bottom: 0.25rem;
-	background: var(--background-secondary);
-	overflow: hidden;
-}
-
-.sage-mcp-panel-item:last-child {
-	margin-bottom: 0;
-}
-
-.sage-mcp-panel-item-header {
-	display: flex;
-	align-items: center;
-	padding: 0.5rem 0.75rem;
-	cursor: pointer;
-	gap: 0.5rem;
-	transition: background 0.15s ease;
-}
-
-.sage-mcp-panel-item-header:hover {
-	background: var(--background-modifier-hover);
-}
-
-.sage-mcp-panel-item-status {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-shrink: 0;
-}
-
-.sage-mcp-panel-item-status svg {
-	width: 14px;
-	height: 14px;
-}
-
-.sage-mcp-panel-item-info {
-	flex: 1;
-	min-width: 0;
-	overflow: hidden;
-}
-
-.sage-mcp-panel-item-name {
-	font-weight: 500;
-	font-size: var(--font-small);
-	color: var(--text-normal);
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-.sage-mcp-panel-item-type {
-	font-size: var(--font-smaller);
-	color: var(--text-muted);
-}
-
-/* Toggle switch in panel */
-.sage-mcp-panel-item-toggle {
-	flex-shrink: 0;
-}
+/* ==================== 컴포넌트 레이어 ==================== */
 
-/* Tools list (expanded state) */
-.sage-mcp-panel-item--expanded .sage-mcp-panel-item-header {
-	border-bottom: 1px solid var(--background-modifier-border);
-}
-
-.sage-mcp-panel-tools {
-	padding: 0.5rem 0.75rem;
-	background: var(--background-primary);
-}
-
-.sage-mcp-panel-tools-message {
-	font-size: var(--font-smaller);
-	color: var(--text-muted);
-	font-style: italic;
-}
-
-.sage-mcp-panel-tools-error {
-	font-size: var(--font-smaller);
-	color: var(--text-error);
-	padding: 0.25rem 0.5rem;
-	background: var(--background-modifier-error);
-	border-radius: var(--radius);
-}
-
-.sage-mcp-panel-tools-count {
-	font-size: var(--font-smaller);
-	color: var(--text-muted);
-	margin-bottom: 0.5rem;
-}
-
-.sage-mcp-panel-tools-list {
-	display: flex;
-	flex-direction: column;
-	gap: 0.25rem;
-}
-
-.sage-mcp-panel-tool-item {
-	display: flex;
-	flex-direction: column;
-	padding: 0.25rem 0.5rem;
-	background: var(--background-secondary);
-	border-radius: var(--radius);
-}
-
-.sage-mcp-panel-tool-name {
-	font-size: var(--font-smaller);
-	font-weight: 500;
-	color: var(--text-normal);
-}
-
-.sage-mcp-panel-tool-desc {
-	font-size: var(--font-smaller);
-	color: var(--text-muted);
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
-/* ==================== RTL (Right-to-Left) Support ==================== */
-.sage-rtl {
-	direction: rtl;
-	text-align: right;
-}
-
-/* Header RTL adjustments */
-.sage-rtl .sage-chat-header {
-	flex-direction: row-reverse;
-}
-
-.sage-rtl .sage-chat-title {
-	margin-right: 0;
-	margin-left: auto;
-}
-
-.sage-rtl .sage-header-buttons {
-	flex-direction: row-reverse;
-}
-
-/* Model selector RTL */
-.sage-rtl .sage-model-selector-container {
-	margin-left: 0;
-	margin-right: auto;
-	margin-left: 8px;
-}
-
-.sage-rtl .sage-model-selector {
-	padding: 2px 6px 2px 20px;
-	background-position: left 4px center;
-}
-
-/* MCP header status RTL */
-.sage-rtl .sage-mcp-header-status {
-	margin-right: 0;
-	margin-left: 0.5rem;
-}
-
-/* File context header RTL */
-.sage-rtl .sage-file-context-header {
-	flex-direction: row-reverse;
-}
-
-.sage-rtl .sage-file-context-toggle {
-	flex-direction: row-reverse;
-}
-
-/* Quick actions RTL */
-.sage-rtl .sage-quick-actions {
-	flex-direction: row-reverse;
-}
-
-.sage-rtl .sage-quick-action-button {
-	flex-direction: row-reverse;
-}
-
-/* Chat input RTL */
-.sage-rtl .sage-chat-input {
-	text-align: right;
-}
-
-/* Button container RTL */
-.sage-rtl .sage-chat-button-container {
-	flex-direction: row-reverse;
-}
-
-/* Loading indicator RTL */
-.sage-rtl .sage-loading-indicator {
-	margin-left: 0;
-	margin-right: 6px;
-}
-
-/* Messages RTL */
-.sage-rtl .sage-chat-message-user {
-	text-align: right;
-}
-
-.sage-rtl .sage-chat-message-assistant {
-	text-align: right;
-}
-
-/* Todo card RTL */
-.sage-rtl .sage-todo-item {
-	flex-direction: row-reverse;
-}
-
-.sage-rtl .sage-todo-content {
-	text-align: right;
-}
-
-/* Thinking/Tool content RTL */
-.sage-rtl .sage-thinking-content,
-.sage-rtl .sage-tool-content {
-	border-left: none;
-	border-right: 1px solid var(--background-modifier-border);
-	margin-left: 0;
-	margin-right: 4px;
-	padding-left: 0;
-	padding-right: 6px;
-}
-
-/* MCP panel RTL */
-.sage-rtl .sage-mcp-panel {
-	right: auto;
-	left: 0;
-}
-
-.sage-rtl .sage-mcp-panel-header {
-	flex-direction: row-reverse;
-}
-
-.sage-rtl .sage-mcp-panel-item-header {
-	flex-direction: row-reverse;
-}
-
-.sage-rtl .sage-mcp-panel-item-info {
-	text-align: right;
-}
-
-/* MCP server item RTL */
-.sage-rtl .sage-mcp-server-item {
-	flex-direction: row-reverse;
-}
-
-.sage-rtl .sage-mcp-server-info {
-	text-align: right;
-}
-
-.sage-rtl .sage-mcp-server-controls {
-	flex-direction: row-reverse;
-}
-
-/* Code block RTL - keep LTR for code */
-.sage-rtl .sage-code-block {
-	direction: ltr;
-	text-align: left;
-}
-
-.sage-rtl .sage-code-header {
-	direction: rtl;
-	flex-direction: row-reverse;
-}
+/* ==================== 유틸리티 레이어 ==================== */
