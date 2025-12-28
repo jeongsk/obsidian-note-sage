@@ -57,10 +57,10 @@
 
 - [x] T009 [US1] Add maxBudgetUsd setting UI (conditional: only when apiKey is set) in `src/SettingsTab.ts`
 - [x] T010 [US1] Implement API key detection helper function for conditional UI rendering in `src/SettingsTab.ts`
-- [ ] T011 [US1] Add session cost display in result message rendering in `src/ChatView.ts`
-- [ ] T012 [US1] Add cost limit reached notification handler in `src/ChatView.ts`
+- [x] T011 [US1] Add session cost display in result message rendering in `src/ChatRenderer.ts`
+- [x] T012 [US1] Add cost limit reached notification handler in `src/ChatView.ts`
 
-**Checkpoint**: ⏳ API 키 사용자가 비용 한도를 설정 가능 (ChatView 통합 미완료)
+**Checkpoint**: ✅ API 키 사용자가 비용 한도를 설정하고 비용을 모니터링할 수 있음
 
 ---
 
@@ -74,9 +74,9 @@
 
 - [x] T013 [US2] Add maxTurns setting UI with number input field in `src/SettingsTab.ts`
 - [x] T014 [US2] Add input validation for maxTurns (range: 0-100) in `src/SettingsTab.ts`
-- [ ] T015 [US2] Add turn limit reached notification handler in `src/ChatView.ts`
+- [x] T015 [US2] Add turn limit reached notification handler in `src/ChatView.ts`
 
-**Checkpoint**: ⏳ 사용자가 턴 수 제한 설정 가능 (ChatView 통합 미완료)
+**Checkpoint**: ✅ 사용자가 턴 수 제한을 설정하고 한도 도달 시 알림을 받을 수 있음
 
 ---
 
@@ -90,9 +90,9 @@
 
 - [x] T016 [US3] Add enableExtendedThinking toggle setting UI in `src/SettingsTab.ts`
 - [x] T017 [US3] Add maxThinkingTokens slider/input (conditional: only when toggle is ON) in `src/SettingsTab.ts`
-- [ ] T018 [US3] Add thinking block rendering support in ChatView if not already present in `src/ChatView.ts`
+- [x] T018 [US3] Add thinking block rendering support in `src/ChatRenderer.ts` and `src/types.ts`
 
-**Checkpoint**: ⏳ 사용자가 Extended Thinking 설정 가능 (ChatView thinking 블록 렌더링 검토 필요)
+**Checkpoint**: ✅ 사용자가 Extended Thinking을 설정하고 사고 과정 블록을 볼 수 있음
 
 ---
 
@@ -117,8 +117,8 @@
 
 - [x] T021 [P] Add "Agent Options" section header in settings tab in `src/SettingsTab.ts`
 - [x] T022 [P] Ensure settings UI visual consistency with existing design in `src/SettingsTab.ts`
-- [ ] T023 Validate all settings persist correctly after plugin reload
-- [ ] T024 Run quickstart.md validation - test all 4 user stories
+- [x] T023 Validate all settings persist correctly after plugin reload
+- [x] T024 Run quickstart.md validation - test all 4 user stories
 
 ---
 
