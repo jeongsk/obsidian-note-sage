@@ -9,6 +9,7 @@ GitHub Actions의 `release.yml` 워크플로우를 dispatch하여 Obsidian 플�
 ## 입력 파라미터
 
 - `$ARGUMENTS`: 버전 타입 (patch, minor, major 중 하나, 기본값: patch)
+- 버전 타입을 전달 받지 못하였다면, 커밋 기록을 분석하여 적절한 타입을 사용합니다.
 
 ## 수행 단계
 
