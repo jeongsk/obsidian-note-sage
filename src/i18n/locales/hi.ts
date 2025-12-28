@@ -161,6 +161,37 @@ export const hi: TranslationKeys = {
 			webFetchDesc: 'वेब पेज कंटेंट प्राप्त करें और विश्लेषण करें',
 		},
 
+		// Agent Options
+		agentOptions: {
+			title: 'एजेंट विकल्प',
+			description: 'Claude Agent SDK उन्नत विकल्प कॉन्फ़िगर करें',
+			maxTurns: 'अधिकतम टर्न',
+			maxTurnsDesc: 'अधिकतम वार्तालाप टर्न की संख्या। असीमित के लिए 0 पर सेट करें।',
+			maxTurnsPlaceholder: '0 (असीमित)',
+			maxBudgetUsd: 'अधिकतम बजट (USD)',
+			maxBudgetUsdDesc: 'प्रति सत्र अधिकतम लागत USD में। असीमित के लिए 0 पर सेट करें।',
+			maxBudgetUsdPlaceholder: '0.00 (असीमित)',
+			enableExtendedThinking: 'Extended Thinking',
+			enableExtendedThinkingDesc: 'Claude को जटिल समस्याओं के बारे में गहराई से सोचने की अनुमति दें',
+			maxThinkingTokens: 'अधिकतम सोच टोकन',
+			maxThinkingTokensDesc: 'Extended Thinking के लिए अधिकतम टोकन (1,000 - 100,000)',
+			permissionMode: {
+				title: 'अनुमति मोड',
+				description: 'Claude की फ़ाइल और सिस्टम एक्सेस अनुमतियों को नियंत्रित करें',
+				bypassPermissions: 'अनुमतियाँ बायपास करें',
+				bypassPermissionsDesc: 'पुष्टि के बिना सभी ऑपरेशन की अनुमति दें (अधिकतम सुविधा)',
+				acceptEdits: 'संपादन स्वीकार करें',
+				acceptEditsDesc: 'केवल फ़ाइल संपादन को स्वचालित रूप से स्वीकृत करें',
+				default: 'डिफ़ॉल्ट',
+				defaultDesc: 'सभी ऑपरेशन के लिए पुष्टि आवश्यक',
+				plan: 'प्लान मोड',
+				planDesc: 'केवल योजना, कोई निष्पादन नहीं',
+			},
+			costDisplay: 'सत्र लागत: ${cost}',
+			costLimitReached: 'लागत सीमा पहुँच गई। सत्र समाप्त।',
+			turnLimitReached: 'टर्न सीमा पहुँच गई। सत्र समाप्त।',
+		},
+
 		// MCP Servers
 		mcp: {
 			title: 'MCP सर्वर',

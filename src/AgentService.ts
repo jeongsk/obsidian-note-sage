@@ -216,11 +216,14 @@ export class AgentService {
 	}
 
 	private buildQueryOptions(workingDirectory: string, sessionId: string | null | undefined, claudePath: string): Record<string, unknown> {
+		// T005: permissionMode 설정에서 읽기
+		const permissionMode = this.settings.permissionMode || 'bypassPermissions';
+
 		const options: Record<string, unknown> = {
 			model: this.settings.model || 'claude-sonnet-4-5',
 			cwd: workingDirectory,
-			permissionMode: 'bypassPermissions' as const,
-			allowDangerouslySkipPermissions: true,
+			permissionMode: permissionMode,
+			allowDangerouslySkipPermissions: permissionMode === 'bypassPermissions',
 			pathToClaudeCodeExecutable: claudePath,
 		};
 
@@ -231,6 +234,34 @@ export class AgentService {
 		// Phase 1-E: 시스템 프롬프트 적용
 		if (this.settings.systemPrompt && this.settings.systemPrompt.trim()) {
 			options.systemPrompt = this.settings.systemPrompt.trim();
+		}
+
+		// T006: maxTurns 옵션 적용 (0보다 클 때만)
+		if (this.settings.maxTurns && this.settings.maxTurns > 0) {
+			options.maxTurns = this.settings.maxTurns;
+
+			if (this.settings.debugContext) {
+				console.log('[AgentService] Max turns set to:', this.settings.maxTurns);
+			}
+		}
+
+		// T007: maxBudgetUsd 옵션 적용 (API 키가 설정되어 있고, 0보다 클 때만)
+		if (this.settings.apiKey && this.settings.maxBudgetUsd && this.settings.maxBudgetUsd > 0) {
+			options.maxBudgetUsd = this.settings.maxBudgetUsd;
+
+			if (this.settings.debugContext) {
+				console.log('[AgentService] Max budget set to:', this.settings.maxBudgetUsd);
+			}
+		}
+
+		// T008: Extended Thinking 옵션 적용 (활성화되어 있을 때)
+		if (this.settings.enableExtendedThinking) {
+			const maxThinkingTokens = this.settings.maxThinkingTokens || 10000;
+			options.maxThinkingTokens = maxThinkingTokens;
+
+			if (this.settings.debugContext) {
+				console.log('[AgentService] Extended thinking enabled with max tokens:', maxThinkingTokens);
+			}
 		}
 
 		// MCP 서버 설정 적용
@@ -249,6 +280,10 @@ export class AgentService {
 			if (this.settings.debugContext) {
 				console.log('[AgentService] Disabled built-in tools:', this.settings.disabledBuiltinTools);
 			}
+		}
+
+		if (this.settings.debugContext) {
+			console.log('[AgentService] Permission mode:', permissionMode);
 		}
 
 		return options;

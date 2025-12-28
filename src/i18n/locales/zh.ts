@@ -161,6 +161,37 @@ export const zh: TranslationKeys = {
 			webFetchDesc: '获取并分析网页内容',
 		},
 
+		// Agent Options
+		agentOptions: {
+			title: '代理选项',
+			description: '配置Claude Agent SDK高级选项',
+			maxTurns: '最大轮数',
+			maxTurnsDesc: '最大对话轮数。设置为0表示无限制。',
+			maxTurnsPlaceholder: '0（无限制）',
+			maxBudgetUsd: '最大预算（美元）',
+			maxBudgetUsdDesc: '每次会话的最大成本（美元）。设置为0表示无限制。',
+			maxBudgetUsdPlaceholder: '0.00（无限制）',
+			enableExtendedThinking: 'Extended Thinking',
+			enableExtendedThinkingDesc: '使Claude能够更深入地思考复杂问题',
+			maxThinkingTokens: '最大思考令牌',
+			maxThinkingTokensDesc: 'Extended Thinking的最大令牌数（1,000 - 100,000）',
+			permissionMode: {
+				title: '权限模式',
+				description: '控制Claude的文件和系统访问权限',
+				bypassPermissions: '绕过权限',
+				bypassPermissionsDesc: '无需确认即可执行所有操作（最大便利性）',
+				acceptEdits: '自动批准编辑',
+				acceptEditsDesc: '仅自动批准文件编辑',
+				default: '默认',
+				defaultDesc: '所有操作都需要确认',
+				plan: '计划模式',
+				planDesc: '仅计划，不执行',
+			},
+			costDisplay: '会话成本：${cost}',
+			costLimitReached: '已达到成本限制。会话已结束。',
+			turnLimitReached: '已达到轮数限制。会话已结束。',
+		},
+
 		// MCP Servers
 		mcp: {
 			title: 'MCP服务器',

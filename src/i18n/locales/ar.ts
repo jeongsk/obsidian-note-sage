@@ -161,6 +161,37 @@ export const ar: TranslationKeys = {
 			webFetchDesc: 'جلب وتحليل محتوى صفحات الويب',
 		},
 
+		// Agent Options
+		agentOptions: {
+			title: 'خيارات الوكيل',
+			description: 'تكوين الخيارات المتقدمة لـ Claude Agent SDK',
+			maxTurns: 'الحد الأقصى للأدوار',
+			maxTurnsDesc: 'الحد الأقصى لعدد أدوار المحادثة. اضبط على 0 للحصول على غير محدود.',
+			maxTurnsPlaceholder: '0 (غير محدود)',
+			maxBudgetUsd: 'الحد الأقصى للميزانية (دولار)',
+			maxBudgetUsdDesc: 'الحد الأقصى للتكلفة لكل جلسة بالدولار. اضبط على 0 للحصول على غير محدود.',
+			maxBudgetUsdPlaceholder: '0.00 (غير محدود)',
+			enableExtendedThinking: 'التفكير الموسع',
+			enableExtendedThinkingDesc: 'تمكين Claude من التفكير بعمق في المشكلات المعقدة',
+			maxThinkingTokens: 'الحد الأقصى لرموز التفكير',
+			maxThinkingTokensDesc: 'الحد الأقصى للرموز للتفكير الموسع (1,000 - 100,000)',
+			permissionMode: {
+				title: 'وضع الأذونات',
+				description: 'التحكم في أذونات وصول Claude إلى الملفات والنظام',
+				bypassPermissions: 'تجاوز الأذونات',
+				bypassPermissionsDesc: 'السماح بجميع العمليات دون تأكيد (أقصى راحة)',
+				acceptEdits: 'قبول التعديلات',
+				acceptEditsDesc: 'الموافقة التلقائية على تعديلات الملفات فقط',
+				default: 'افتراضي',
+				defaultDesc: 'يتطلب التأكيد لجميع العمليات',
+				plan: 'وضع التخطيط',
+				planDesc: 'التخطيط فقط، بدون تنفيذ',
+			},
+			costDisplay: 'تكلفة الجلسة: ${cost}',
+			costLimitReached: 'تم الوصول إلى حد التكلفة. انتهت الجلسة.',
+			turnLimitReached: 'تم الوصول إلى حد الأدوار. انتهت الجلسة.',
+		},
+
 		// MCP Servers
 		mcp: {
 			title: 'خوادم MCP',

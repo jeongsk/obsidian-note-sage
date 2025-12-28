@@ -161,6 +161,37 @@ export const de: TranslationKeys = {
 			webFetchDesc: 'Webseiteninhalte abrufen und analysieren',
 		},
 
+		// Agent Options
+		agentOptions: {
+			title: 'Agent-Optionen',
+			description: 'Claude Agent SDK erweiterte Optionen konfigurieren',
+			maxTurns: 'Maximale Züge',
+			maxTurnsDesc: 'Maximale Anzahl von Konversationszügen. Auf 0 setzen für unbegrenzt.',
+			maxTurnsPlaceholder: '0 (unbegrenzt)',
+			maxBudgetUsd: 'Maximales Budget (USD)',
+			maxBudgetUsdDesc: 'Maximale Kosten pro Sitzung in USD. Auf 0 setzen für unbegrenzt.',
+			maxBudgetUsdPlaceholder: '0.00 (unbegrenzt)',
+			enableExtendedThinking: 'Extended Thinking',
+			enableExtendedThinkingDesc: 'Claude ermöglichen, komplexe Probleme gründlicher zu durchdenken',
+			maxThinkingTokens: 'Maximale Denk-Tokens',
+			maxThinkingTokensDesc: 'Maximale Tokens für Extended Thinking (1.000 - 100.000)',
+			permissionMode: {
+				title: 'Berechtigungsmodus',
+				description: 'Claudes Datei- und Systemzugriffsberechtigungen steuern',
+				bypassPermissions: 'Berechtigungen umgehen',
+				bypassPermissionsDesc: 'Alle Operationen ohne Bestätigung erlauben (maximaler Komfort)',
+				acceptEdits: 'Bearbeitungen akzeptieren',
+				acceptEditsDesc: 'Nur Dateibearbeitungen automatisch genehmigen',
+				default: 'Standard',
+				defaultDesc: 'Bestätigung für alle Operationen erforderlich',
+				plan: 'Planungsmodus',
+				planDesc: 'Nur Planung, keine Ausführung',
+			},
+			costDisplay: 'Sitzungskosten: ${cost}',
+			costLimitReached: 'Kostenlimit erreicht. Sitzung beendet.',
+			turnLimitReached: 'Zuglimit erreicht. Sitzung beendet.',
+		},
+
 		// MCP Servers
 		mcp: {
 			title: 'MCP-Server',

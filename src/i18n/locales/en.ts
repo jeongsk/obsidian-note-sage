@@ -42,6 +42,36 @@ interface BuiltinToolsTranslations {
 	webFetchDesc: string;
 }
 
+interface AgentOptionsTranslations {
+	title: string;
+	description: string;
+	maxTurns: string;
+	maxTurnsDesc: string;
+	maxTurnsPlaceholder: string;
+	maxBudgetUsd: string;
+	maxBudgetUsdDesc: string;
+	maxBudgetUsdPlaceholder: string;
+	enableExtendedThinking: string;
+	enableExtendedThinkingDesc: string;
+	maxThinkingTokens: string;
+	maxThinkingTokensDesc: string;
+	permissionMode: {
+		title: string;
+		description: string;
+		bypassPermissions: string;
+		bypassPermissionsDesc: string;
+		acceptEdits: string;
+		acceptEditsDesc: string;
+		default: string;
+		defaultDesc: string;
+		plan: string;
+		planDesc: string;
+	};
+	costDisplay: string;
+	costLimitReached: string;
+	turnLimitReached: string;
+}
+
 interface McpSettingsTranslations {
 	title: string;
 	description: string;
@@ -133,6 +163,8 @@ interface SettingsTranslations {
 	pluginToolsDesc: string;
 	// Built-in Tools
 	builtinTools: BuiltinToolsTranslations;
+	// Agent Options
+	agentOptions: AgentOptionsTranslations;
 	// MCP Servers
 	mcp: McpSettingsTranslations;
 	about: string;
@@ -339,6 +371,37 @@ export const en: TranslationKeys = {
 			webSearchDesc: 'Search the web for current information',
 			webFetch: 'Web Fetch',
 			webFetchDesc: 'Fetch and analyze web page content',
+		},
+
+		// Agent Options
+		agentOptions: {
+			title: 'Agent Options',
+			description: 'Configure Claude Agent SDK advanced options',
+			maxTurns: 'Max turns',
+			maxTurnsDesc: 'Maximum number of conversation turns. Set to 0 for unlimited.',
+			maxTurnsPlaceholder: '0 (unlimited)',
+			maxBudgetUsd: 'Max budget (USD)',
+			maxBudgetUsdDesc: 'Maximum cost per session in USD. Set to 0 for unlimited.',
+			maxBudgetUsdPlaceholder: '0.00 (unlimited)',
+			enableExtendedThinking: 'Extended Thinking',
+			enableExtendedThinkingDesc: 'Enable Claude to think more deeply about complex problems',
+			maxThinkingTokens: 'Max thinking tokens',
+			maxThinkingTokensDesc: 'Maximum tokens for extended thinking (1,000 - 100,000)',
+			permissionMode: {
+				title: 'Permission mode',
+				description: 'Control Claude\'s file and system access permissions',
+				bypassPermissions: 'Bypass permissions',
+				bypassPermissionsDesc: 'Allow all operations without confirmation (maximum convenience)',
+				acceptEdits: 'Accept edits',
+				acceptEditsDesc: 'Auto-approve file edits only',
+				default: 'Default',
+				defaultDesc: 'Require confirmation for all operations',
+				plan: 'Plan mode',
+				planDesc: 'Planning only, no execution',
+			},
+			costDisplay: 'Session cost: ${cost}',
+			costLimitReached: 'Cost limit reached. Session ended.',
+			turnLimitReached: 'Turn limit reached. Session ended.',
 		},
 
 		// MCP Servers

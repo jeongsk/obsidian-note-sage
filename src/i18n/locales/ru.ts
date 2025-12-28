@@ -161,6 +161,37 @@ export const ru: TranslationKeys = {
 			webFetchDesc: 'Загрузка и анализ содержимого веб-страниц',
 		},
 
+		// Agent Options
+		agentOptions: {
+			title: 'Параметры агента',
+			description: 'Настроить расширенные параметры Claude Agent SDK',
+			maxTurns: 'Максимум ходов',
+			maxTurnsDesc: 'Максимальное количество ходов разговора. Установите 0 для неограниченного.',
+			maxTurnsPlaceholder: '0 (неограниченно)',
+			maxBudgetUsd: 'Максимальный бюджет (USD)',
+			maxBudgetUsdDesc: 'Максимальная стоимость за сессию в USD. Установите 0 для неограниченного.',
+			maxBudgetUsdPlaceholder: '0.00 (неограниченно)',
+			enableExtendedThinking: 'Extended Thinking',
+			enableExtendedThinkingDesc: 'Позволить Claude более глубоко обдумывать сложные проблемы',
+			maxThinkingTokens: 'Максимум токенов размышления',
+			maxThinkingTokensDesc: 'Максимум токенов для Extended Thinking (1 000 - 100 000)',
+			permissionMode: {
+				title: 'Режим разрешений',
+				description: 'Управлять правами доступа Claude к файлам и системе',
+				bypassPermissions: 'Обходить разрешения',
+				bypassPermissionsDesc: 'Разрешить все операции без подтверждения (максимальное удобство)',
+				acceptEdits: 'Принимать редактирование',
+				acceptEditsDesc: 'Автоматически одобрять только редактирование файлов',
+				default: 'По умолчанию',
+				defaultDesc: 'Требуется подтверждение для всех операций',
+				plan: 'Режим планирования',
+				planDesc: 'Только планирование, без выполнения',
+			},
+			costDisplay: 'Стоимость сессии: ${cost}',
+			costLimitReached: 'Достигнут лимит стоимости. Сессия завершена.',
+			turnLimitReached: 'Достигнут лимит ходов. Сессия завершена.',
+		},
+
 		// MCP Servers
 		mcp: {
 			title: 'MCP Серверы',

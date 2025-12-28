@@ -1,6 +1,16 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
 import type NoteSagePlugin from './main';
-import { AVAILABLE_MODELS, QUICK_ACTION_DEFINITIONS, DEFAULT_QUICK_ACTIONS, QuickActionConfig, TOGGLEABLE_BUILTIN_TOOLS } from './types';
+import {
+	AVAILABLE_MODELS,
+	QUICK_ACTION_DEFINITIONS,
+	DEFAULT_QUICK_ACTIONS,
+	QuickActionConfig,
+	TOGGLEABLE_BUILTIN_TOOLS,
+	AGENT_OPTIONS_LIMITS,
+	AGENT_OPTIONS_DEFAULTS,
+	PERMISSION_MODE_OPTIONS,
+	PermissionMode
+} from './types';
 import { t, setLanguage, AVAILABLE_LANGUAGES, SupportedLanguage } from './i18n';
 import { McpSettingsUI } from './mcp/McpSettingsUI';
 import { CONTENT_LIMITS } from './constants';
@@ -144,6 +154,14 @@ export class NoteSageSettingTab extends PluginSettingTab {
 			.setHeading();
 
 		this.renderBuiltinToolsSettings(containerEl);
+
+		// ==================== Agent Options 설정 ====================
+		new Setting(containerEl)
+			.setName(t('settings.agentOptions.title'))
+			.setDesc(t('settings.agentOptions.description'))
+			.setHeading();
+
+		this.renderAgentOptionsSettings(containerEl);
 
 		// ==================== MCP 서버 설정 ====================
 		const mcpContainer = containerEl.createDiv({ cls: 'sage-mcp-settings' });
@@ -390,5 +408,155 @@ export class NoteSageSettingTab extends PluginSettingTab {
 			// 설정 컨테이너에 클래스 추가
 			setting.settingEl.addClass('sage-quick-action-setting');
 		}
+	}
+
+	// T010: API 키 설정 여부 확인 헬퍼
+	private hasApiKey(): boolean {
+		return !!(this.plugin.settings.apiKey && this.plugin.settings.apiKey.trim());
+	}
+
+	// Agent Options 설정 UI 렌더링
+	private renderAgentOptionsSettings(containerEl: HTMLElement): void {
+		// T013, T014: maxTurns 설정 UI
+		new Setting(containerEl)
+			.setName(t('settings.agentOptions.maxTurns'))
+			.setDesc(t('settings.agentOptions.maxTurnsDesc'))
+			.addText(text => {
+				text
+					.setPlaceholder(t('settings.agentOptions.maxTurnsPlaceholder'))
+					.setValue(String(this.plugin.settings.maxTurns ?? AGENT_OPTIONS_DEFAULTS.maxTurns))
+					.onChange(async (value) => {
+						const parsed = parseInt(value, 10);
+						const numValue = Number.isNaN(parsed) ? AGENT_OPTIONS_DEFAULTS.maxTurns : parsed;
+						// T014: 범위 검증 (0-100)
+						this.plugin.settings.maxTurns = Math.max(
+							AGENT_OPTIONS_LIMITS.maxTurns.min,
+							Math.min(AGENT_OPTIONS_LIMITS.maxTurns.max, numValue)
+						);
+						await this.plugin.saveSettings();
+						this.updateViews();
+					});
+				text.inputEl.type = 'number';
+				text.inputEl.min = String(AGENT_OPTIONS_LIMITS.maxTurns.min);
+				text.inputEl.max = String(AGENT_OPTIONS_LIMITS.maxTurns.max);
+				text.inputEl.style.width = '80px';
+			});
+
+		// T009: maxBudgetUsd 설정 UI (조건부: API 키가 설정된 경우만)
+		if (this.hasApiKey()) {
+			new Setting(containerEl)
+				.setName(t('settings.agentOptions.maxBudgetUsd'))
+				.setDesc(t('settings.agentOptions.maxBudgetUsdDesc'))
+				.addText(text => {
+					text
+						.setPlaceholder(t('settings.agentOptions.maxBudgetUsdPlaceholder'))
+						.setValue(String(this.plugin.settings.maxBudgetUsd ?? AGENT_OPTIONS_DEFAULTS.maxBudgetUsd))
+						.onChange(async (value) => {
+							const parsed = parseFloat(value);
+							const numValue = Number.isNaN(parsed) ? AGENT_OPTIONS_DEFAULTS.maxBudgetUsd : parsed;
+							// 소수점 2자리까지, 범위 검증 (0-100)
+							this.plugin.settings.maxBudgetUsd = Math.max(
+								AGENT_OPTIONS_LIMITS.maxBudgetUsd.min,
+								Math.min(AGENT_OPTIONS_LIMITS.maxBudgetUsd.max, Math.round(numValue * 100) / 100)
+							);
+							await this.plugin.saveSettings();
+							this.updateViews();
+						});
+					text.inputEl.type = 'number';
+					text.inputEl.min = String(AGENT_OPTIONS_LIMITS.maxBudgetUsd.min);
+					text.inputEl.max = String(AGENT_OPTIONS_LIMITS.maxBudgetUsd.max);
+					text.inputEl.step = '0.01';
+					text.inputEl.style.width = '80px';
+				});
+		}
+
+		// T016: Extended Thinking 토글
+		new Setting(containerEl)
+			.setName(t('settings.agentOptions.enableExtendedThinking'))
+			.setDesc(t('settings.agentOptions.enableExtendedThinkingDesc'))
+			.addToggle(toggle => {
+				toggle
+					.setValue(this.plugin.settings.enableExtendedThinking ?? AGENT_OPTIONS_DEFAULTS.enableExtendedThinking)
+					.onChange(async (value) => {
+						this.plugin.settings.enableExtendedThinking = value;
+						await this.plugin.saveSettings();
+						this.updateViews();
+						// 설정 탭 다시 렌더링하여 조건부 UI 업데이트
+						this.display();
+					});
+			});
+
+		// T017: maxThinkingTokens 설정 (조건부: Extended Thinking이 ON일 때만)
+		if (this.plugin.settings.enableExtendedThinking) {
+			new Setting(containerEl)
+				.setName(t('settings.agentOptions.maxThinkingTokens'))
+				.setDesc(t('settings.agentOptions.maxThinkingTokensDesc'))
+				.addSlider(slider => {
+					slider
+						.setLimits(
+							AGENT_OPTIONS_LIMITS.maxThinkingTokens.min,
+							AGENT_OPTIONS_LIMITS.maxThinkingTokens.max,
+							1000
+						)
+						.setValue(this.plugin.settings.maxThinkingTokens ?? AGENT_OPTIONS_DEFAULTS.maxThinkingTokens)
+						.setDynamicTooltip()
+						.onChange(async (value) => {
+							this.plugin.settings.maxThinkingTokens = value;
+							await this.plugin.saveSettings();
+							this.updateViews();
+						});
+				})
+				.addText(text => {
+					text
+						.setValue(String(this.plugin.settings.maxThinkingTokens ?? AGENT_OPTIONS_DEFAULTS.maxThinkingTokens))
+						.onChange(async (value) => {
+							const parsed = parseInt(value, 10);
+							const numValue = Number.isNaN(parsed) ? AGENT_OPTIONS_DEFAULTS.maxThinkingTokens : parsed;
+							this.plugin.settings.maxThinkingTokens = Math.max(
+								AGENT_OPTIONS_LIMITS.maxThinkingTokens.min,
+								Math.min(AGENT_OPTIONS_LIMITS.maxThinkingTokens.max, numValue)
+							);
+							await this.plugin.saveSettings();
+							this.updateViews();
+							// 슬라이더 값 동기화를 위해 다시 렌더링
+							this.display();
+						});
+					text.inputEl.type = 'number';
+					text.inputEl.min = String(AGENT_OPTIONS_LIMITS.maxThinkingTokens.min);
+					text.inputEl.max = String(AGENT_OPTIONS_LIMITS.maxThinkingTokens.max);
+					text.inputEl.style.width = '80px';
+				});
+		}
+
+		// T019, T020: Permission Mode 드롭다운
+		new Setting(containerEl)
+			.setName(t('settings.agentOptions.permissionMode.title'))
+			.setDesc(t('settings.agentOptions.permissionMode.description'))
+			.addDropdown(dropdown => {
+				for (const option of PERMISSION_MODE_OPTIONS) {
+					// 라벨에 설명 추가
+					const label = t(option.labelKey);
+					dropdown.addOption(option.value, label);
+				}
+				dropdown
+					.setValue(this.plugin.settings.permissionMode ?? AGENT_OPTIONS_DEFAULTS.permissionMode)
+					.onChange(async (value) => {
+						this.plugin.settings.permissionMode = value as PermissionMode;
+						await this.plugin.saveSettings();
+						this.updateViews();
+					});
+			});
+
+		// 선택된 권한 모드의 설명 표시
+		const currentMode = this.plugin.settings.permissionMode ?? AGENT_OPTIONS_DEFAULTS.permissionMode;
+		const modeDescKey = `settings.agentOptions.permissionMode.${currentMode}Desc`;
+		const modeDescEl = containerEl.createEl('div', { cls: 'setting-item-description' });
+		modeDescEl.createEl('small', {
+			text: t(modeDescKey)
+		});
+		modeDescEl.style.marginTop = '-10px';
+		modeDescEl.style.marginBottom = '10px';
+		modeDescEl.style.paddingLeft = '10px';
+		modeDescEl.style.fontStyle = 'italic';
 	}
 }
