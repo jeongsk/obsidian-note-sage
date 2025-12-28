@@ -151,6 +151,16 @@ export const zh: TranslationKeys = {
 		pluginTools: '插件管理工具',
 		pluginToolsDesc: '允许代理列出、启用和禁用Obsidian插件',
 
+		// Built-in Tools
+		builtinTools: {
+			title: '内置工具',
+			description: '启用或禁用内置Claude工具。如果您更喜欢使用MCP替代方案，请禁用。',
+			webSearch: '网络搜索',
+			webSearchDesc: '在网络上搜索当前信息',
+			webFetch: '网页获取',
+			webFetchDesc: '获取并分析网页内容',
+		},
+
 		// MCP Servers
 		mcp: {
 			title: 'MCP服务器',

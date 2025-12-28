@@ -33,6 +33,15 @@ interface PromptsTranslations {
 	codeReview: string;
 }
 
+interface BuiltinToolsTranslations {
+	title: string;
+	description: string;
+	webSearch: string;
+	webSearchDesc: string;
+	webFetch: string;
+	webFetchDesc: string;
+}
+
 interface McpSettingsTranslations {
 	title: string;
 	description: string;
@@ -122,6 +131,8 @@ interface SettingsTranslations {
 	// Plugin Tools
 	pluginTools: string;
 	pluginToolsDesc: string;
+	// Built-in Tools
+	builtinTools: BuiltinToolsTranslations;
 	// MCP Servers
 	mcp: McpSettingsTranslations;
 	about: string;
@@ -319,6 +330,16 @@ export const en: TranslationKeys = {
 		// Plugin Tools
 		pluginTools: 'Plugin management tools',
 		pluginToolsDesc: 'Allow agent to list, enable, and disable Obsidian plugins',
+
+		// Built-in Tools
+		builtinTools: {
+			title: 'Built-in Tools',
+			description: 'Enable or disable built-in Claude tools. Disable if you prefer using MCP alternatives.',
+			webSearch: 'Web Search',
+			webSearchDesc: 'Search the web for current information',
+			webFetch: 'Web Fetch',
+			webFetchDesc: 'Fetch and analyze web page content',
+		},
 
 		// MCP Servers
 		mcp: {
