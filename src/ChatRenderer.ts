@@ -36,6 +36,14 @@ export class ChatRenderer {
 	 */
 	async renderMessage(chatMessage: ChatMessage): Promise<void> {
 		try {
+			// assistant 메시지 중 텍스트 블록만 있는 경우 건너뛰기 (result와 중복 방지)
+			if (chatMessage.type === 'assistant') {
+				const hasOnlyText = this.hasOnlyTextBlocks(chatMessage);
+				if (hasOnlyText) {
+					return; // result 메시지에서 표시하므로 건너뛰기
+				}
+			}
+
 			const messageEl = this.createMessageElement(chatMessage);
 
 			if (chatMessage.type === 'user' && !chatMessage.isUserInput) {
@@ -54,6 +62,16 @@ export class ChatRenderer {
 		} catch (error) {
 			console.error('Error rendering message:', error, chatMessage);
 		}
+	}
+
+	/**
+	 * assistant 메시지가 텍스트 블록만 포함하는지 확인
+	 * (tool_use, thinking 등이 없는 경우 true)
+	 */
+	private hasOnlyTextBlocks(chatMessage: ChatMessage): boolean {
+		if (chatMessage.type !== 'assistant') return false;
+		const content = chatMessage.message?.content || [];
+		return content.length > 0 && content.every(block => block.type === 'text');
 	}
 
 	/**
