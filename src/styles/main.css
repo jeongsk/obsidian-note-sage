@@ -396,23 +396,27 @@
 		@apply tw-font-medium;
 	}
 
-	/* ==================== Code Block ==================== */
-	.sage-code-block {
-		@apply tw-my-2 tw-rounded-obs tw-border tw-border-obs-border tw-overflow-hidden;
+	/* ==================== Code Block (Obsidian 기본 스타일 + 복사 버튼) ==================== */
+	.sage-code-wrapper {
+		@apply tw-relative tw-my-2;
 	}
 
-	.sage-code-header {
-		@apply tw-flex tw-justify-between tw-items-center tw-px-2 tw-py-1 tw-bg-obs-bg-secondary tw-border-b tw-border-obs-border;
-	}
-
-	.sage-code-language {
-		@apply tw-text-obs-text-muted tw-uppercase tw-font-medium;
-		font-size: var(--font-smallest);
+	.sage-code-wrapper pre {
+		@apply tw-m-0;
 	}
 
 	.sage-copy-button {
-		@apply tw-px-2 tw-py-0.5 tw-rounded-obs tw-border tw-border-obs-border tw-bg-obs-bg tw-text-obs-text-muted tw-cursor-pointer tw-transition-all tw-duration-200;
+		@apply tw-absolute tw-top-2 tw-right-2;
+		@apply tw-inline-flex tw-items-center tw-gap-1;
+		@apply tw-px-2 tw-py-1 tw-rounded-obs tw-border tw-border-obs-border tw-bg-obs-bg tw-text-obs-text-muted;
+		@apply tw-cursor-pointer tw-opacity-0;
+		@apply tw-z-10;
 		font-size: var(--font-smallest);
+		transition: opacity 200ms ease, background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+	}
+
+	.sage-code-wrapper:hover .sage-copy-button {
+		@apply tw-opacity-100;
 	}
 
 	.sage-copy-button:hover {
@@ -420,29 +424,27 @@
 	}
 
 	.sage-copy-button.copied {
-		@apply tw-text-obs-text-on-accent tw-border-obs-success;
+		@apply tw-opacity-100 tw-text-obs-text-on-accent tw-border-obs-success;
 		background: var(--interactive-success);
 	}
 
 	.sage-copy-button.copy-failed {
-		@apply tw-text-obs-red tw-border-obs-red;
+		@apply tw-opacity-100 tw-text-obs-red tw-border-obs-red;
 		background: var(--background-modifier-error);
 	}
 
-	.sage-code-block pre {
-		@apply tw-m-0 tw-p-2 tw-overflow-x-auto tw-bg-obs-bg;
+	.sage-copy-icon {
+		@apply tw-flex tw-items-center tw-justify-center;
+		width: 14px;
+		height: 14px;
 	}
 
-	.sage-code-block code {
-		font-family: var(--font-monospace);
-		font-size: var(--font-smaller);
-		line-height: 1.4;
+	.sage-copy-icon svg {
+		@apply tw-w-full tw-h-full;
 	}
 
-	.sage-inline-code {
-		@apply tw-px-1 tw-py-px tw-rounded-sm tw-bg-obs-bg-secondary;
-		font-family: var(--font-monospace);
-		font-size: 0.9em;
+	.sage-copy-text {
+		@apply tw-font-medium;
 	}
 
 	/* ==================== MCP Server Settings ==================== */
@@ -906,14 +908,13 @@
 	}
 
 	/* 코드 블록은 LTR 유지 */
-	.sage-rtl .sage-code-block {
+	.sage-rtl .sage-code-wrapper {
 		direction: ltr;
 		text-align: left;
 	}
 
-	.sage-rtl .sage-code-header {
-		direction: rtl;
-		@apply tw-flex-row-reverse;
+	.sage-rtl .sage-code-wrapper .sage-copy-button {
+		@apply tw-left-2 tw-right-auto;
 	}
 }
 

@@ -482,48 +482,39 @@
 .sage-quick-action-label {
 		font-weight: 500;
 }
-/* ==================== Code Block ==================== */
-.sage-code-block {
+/* ==================== Code Block (Obsidian 기본 스타일 + 복사 버튼) ==================== */
+.sage-code-wrapper {
+		position: relative;
 		margin-top: 0.5rem;
 		margin-bottom: 0.5rem;
-		overflow: hidden;
-		border-radius: var(--radius-s);
-		border-width: 1px;
-		border-color: var(--background-modifier-border);
 }
-.sage-code-header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		border-bottom-width: 1px;
-		border-color: var(--background-modifier-border);
-		background-color: var(--background-secondary);
-		padding-left: 0.5rem;
-		padding-right: 0.5rem;
-		padding-top: 0.25rem;
-		padding-bottom: 0.25rem;
-}
-.sage-code-language {
-		font-weight: 500;
-		text-transform: uppercase;
-		color: var(--text-muted);
-		font-size: var(--font-smallest);
+.sage-code-wrapper pre {
+		margin: 0px;
 }
 .sage-copy-button {
-		cursor: pointer;
+		position: absolute;
+		top: 0.5rem;
+		right: 0.5rem;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
 		border-radius: var(--radius-s);
 		border-width: 1px;
 		border-color: var(--background-modifier-border);
 		background-color: var(--background-primary);
 		padding-left: 0.5rem;
 		padding-right: 0.5rem;
-		padding-top: 0.125rem;
-		padding-bottom: 0.125rem;
+		padding-top: 0.25rem;
+		padding-bottom: 0.25rem;
 		color: var(--text-muted);
-		transition-property: all;
-		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-		transition-duration: 200ms;
+		cursor: pointer;
+		opacity: 0;
+		z-index: 10;
 		font-size: var(--font-smallest);
+		transition: opacity 200ms ease, background-color 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+.sage-code-wrapper:hover .sage-copy-button {
+		opacity: 1;
 }
 .sage-copy-button:hover {
 		background-color: var(--background-modifier-hover);
@@ -532,33 +523,28 @@
 .sage-copy-button.copied {
 		border-color: var(--interactive-success);
 		color: var(--text-on-accent);
+		opacity: 1;
 		background: var(--interactive-success);
 }
 .sage-copy-button.copy-failed {
 		border-color: var(--color-red);
 		color: var(--color-red);
+		opacity: 1;
 		background: var(--background-modifier-error);
 }
-.sage-code-block pre {
-		margin: 0px;
-		overflow-x: auto;
-		background-color: var(--background-primary);
-		padding: 0.5rem;
+.sage-copy-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 14px;
+		height: 14px;
 }
-.sage-code-block code {
-		font-family: var(--font-monospace);
-		font-size: var(--font-smaller);
-		line-height: 1.4;
-	}
-.sage-inline-code {
-		border-radius: 0.125rem;
-		background-color: var(--background-secondary);
-		padding-left: 0.25rem;
-		padding-right: 0.25rem;
-		padding-top: 1px;
-		padding-bottom: 1px;
-		font-family: var(--font-monospace);
-		font-size: 0.9em;
+.sage-copy-icon svg {
+		height: 100%;
+		width: 100%;
+}
+.sage-copy-text {
+		font-weight: 500;
 }
 /* ==================== MCP Server Settings ==================== */
 .sage-mcp-settings {
@@ -1144,14 +1130,14 @@
 		flex-direction: row-reverse;
 }
 /* 코드 블록은 LTR 유지 */
-.sage-rtl .sage-code-block {
+.sage-rtl .sage-code-wrapper {
 		direction: ltr;
 		text-align: left;
 	}
-.sage-rtl .sage-code-header {
-		direction: rtl;
-		flex-direction: row-reverse;
-	}
+.sage-rtl .sage-code-wrapper .sage-copy-button {
+		left: 0.5rem;
+		right: auto;
+}
 
 /* ==================== 전역 스타일 ==================== */
 

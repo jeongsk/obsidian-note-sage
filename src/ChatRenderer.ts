@@ -1,4 +1,4 @@
-import { Component, sanitizeHTMLToDom, setIcon } from 'obsidian';
+import { App, Component, MarkdownRenderer, setIcon } from 'obsidian';
 import type {
 	ChatMessage,
 	ContentBlock,
@@ -23,28 +23,30 @@ import { t } from './i18n';
 export class ChatRenderer {
 	private messagesContainer: HTMLElement;
 	private component: Component;
+	private app: App;
 
-	constructor(messagesContainer: HTMLElement, component: Component) {
+	constructor(messagesContainer: HTMLElement, component: Component, app: App) {
 		this.messagesContainer = messagesContainer;
 		this.component = component;
+		this.app = app;
 	}
 
 	/**
 	 * 메인 렌더링 메서드 - 메시지 타입에 따라 적절한 렌더러 호출
 	 */
-	renderMessage(chatMessage: ChatMessage): void {
+	async renderMessage(chatMessage: ChatMessage): Promise<void> {
 		try {
 			const messageEl = this.createMessageElement(chatMessage);
 
 			if (chatMessage.type === 'user' && !chatMessage.isUserInput) {
-				this.renderThinkingMessage(messageEl, chatMessage);
+				await this.renderThinkingMessage(messageEl, chatMessage);
 			} else if (chatMessage.type === 'assistant') {
-				this.renderAssistantThought(messageEl, chatMessage);
+				await this.renderAssistantThought(messageEl, chatMessage);
 			} else if (chatMessage.type === 'result') {
-				this.renderFinalResponse(messageEl, chatMessage);
+				await this.renderFinalResponse(messageEl, chatMessage);
 			} else {
 				const contentEl = messageEl.createEl('div', { cls: 'sage-message-content' });
-				this.renderMessageContent(contentEl, chatMessage);
+				await this.renderMessageContent(contentEl, chatMessage);
 			}
 
 			this.renderTimestamp(messageEl, chatMessage);
@@ -97,17 +99,17 @@ export class ChatRenderer {
 	/**
 	 * 메시지 콘텐츠 렌더링 - 콘텐츠 블록 타입별 처리
 	 */
-	renderMessageContent(container: HTMLElement, chatMessage: ChatMessage): void {
+	async renderMessageContent(container: HTMLElement, chatMessage: ChatMessage): Promise<void> {
 		try {
 			if (chatMessage.type === 'user' || chatMessage.type === 'assistant') {
-				this.renderContentBlocks(container, chatMessage.message.content);
+				await this.renderContentBlocks(container, chatMessage.message.content);
 			} else if (chatMessage.type === 'result' && chatMessage.result) {
-				this.renderResult(container, chatMessage.result);
+				await this.renderResult(container, chatMessage.result);
 			} else if (chatMessage.type === 'system') {
 				if (chatMessage.subtype === 'init') {
 					this.renderInitMessage(container);
 				} else if (chatMessage.result) {
-					this.renderResult(container, chatMessage.result);
+					await this.renderResult(container, chatMessage.result);
 				} else if (chatMessage.subtype) {
 					container.createEl('div', { text: `${t('system')}: ${chatMessage.subtype}` });
 				}
@@ -124,11 +126,11 @@ export class ChatRenderer {
 	/**
 	 * 콘텐츠 블록 배열 렌더링
 	 */
-	private renderContentBlocks(container: HTMLElement, contents: ContentBlock[]): void {
-		contents.forEach((content: ContentBlock) => {
+	private async renderContentBlocks(container: HTMLElement, contents: ContentBlock[]): Promise<void> {
+		for (const content of contents) {
 			switch (content.type) {
 				case 'text':
-					this.renderTextBlock(container, content);
+					await this.renderTextBlock(container, content);
 					break;
 				case 'tool_use':
 					this.renderToolUseBlock(container, content);
@@ -138,75 +140,90 @@ export class ChatRenderer {
 					break;
 				case 'thinking':
 					// T018: Extended Thinking 블록 렌더링
-					this.renderThinkingBlock(container, content);
+					await this.renderThinkingBlock(container, content);
 					break;
 			}
-		});
+		}
 	}
 
 	/**
-	 * 텍스트 블록 렌더링
+	 * 텍스트 블록 렌더링 (Obsidian MarkdownRenderer 사용)
 	 */
-	private renderTextBlock(container: HTMLElement, content: TextBlock): void {
+	private async renderTextBlock(container: HTMLElement, content: TextBlock): Promise<void> {
 		const textEl = container.createEl('div', { cls: 'sage-message-text' });
-		const sanitizedDom = sanitizeHTMLToDom(this.formatText(content.text));
-		textEl.appendChild(sanitizedDom);
+		await MarkdownRenderer.render(this.app, content.text, textEl, '', this.component);
 
-		// Phase 2-G: 복사 버튼 이벤트 리스너 추가
-		this.attachCopyButtonListeners(textEl);
+		// 코드 블럭에 복사 버튼 주입
+		this.injectCopyButtons(textEl);
 	}
 
 	/**
-	 * Phase 2-G: 복사 버튼 이벤트 리스너 부착
+	 * 코드 블럭에 복사 버튼 주입
+	 * MarkdownRenderer로 렌더링된 pre > code 요소에 복사 버튼 추가
 	 */
-	private attachCopyButtonListeners(container: HTMLElement): void {
-		const copyButtons = container.querySelectorAll('.sage-copy-button');
-		copyButtons.forEach(button => {
-			this.component.registerDomEvent(button as HTMLElement, 'click', async (e) => {
+	private injectCopyButtons(container: HTMLElement): void {
+		const codeBlocks = container.querySelectorAll('pre > code');
+		codeBlocks.forEach((codeEl) => {
+			const preEl = codeEl.parentElement;
+			if (!preEl || preEl.parentElement?.classList.contains('sage-code-wrapper')) return;
+
+			// 래퍼 생성
+			const wrapper = createEl('div', { cls: 'sage-code-wrapper' });
+			preEl.parentElement?.insertBefore(wrapper, preEl);
+			wrapper.appendChild(preEl);
+
+			// 복사 버튼 생성
+			const copyBtn = wrapper.createEl('button', { cls: 'sage-copy-button' });
+			const iconSpan = copyBtn.createSpan({ cls: 'sage-copy-icon' });
+			setIcon(iconSpan, 'copy');
+			copyBtn.createSpan({ cls: 'sage-copy-text', text: t('copy') });
+
+			// 복사 이벤트 리스너
+			this.component.registerDomEvent(copyBtn, 'click', async (e) => {
 				e.preventDefault();
 				e.stopPropagation();
 
-				const target = e.target as HTMLElement;
-				const code = target.getAttribute('data-code');
+				const codeText = codeEl.textContent || '';
+				const iconSpanEl = copyBtn.querySelector('.sage-copy-icon') as HTMLElement;
+				const textSpanEl = copyBtn.querySelector('.sage-copy-text') as HTMLElement;
 
-				if (code) {
-					const originalText = target.textContent;
-					try {
-						// HTML 엔티티 디코딩
-						const decodedCode = this.decodeHtmlEntities(code);
-						await navigator.clipboard.writeText(decodedCode);
+				try {
+					await navigator.clipboard.writeText(codeText);
 
-						// 성공 피드백
-						target.textContent = t('copied');
-						target.classList.add('copied');
-
-						window.setTimeout(() => {
-							target.textContent = originalText;
-							target.classList.remove('copied');
-						}, 2000);
-					} catch (error) {
-						console.error('Failed to copy:', error);
-						// 실패 피드백
-						target.textContent = t('copyFailed');
-						target.classList.add('copy-failed');
-
-						window.setTimeout(() => {
-							target.textContent = originalText;
-							target.classList.remove('copy-failed');
-						}, 2000);
+					// 성공 피드백
+					copyBtn.classList.add('copied');
+					if (iconSpanEl) {
+						iconSpanEl.empty();
+						setIcon(iconSpanEl, 'check');
 					}
+					if (textSpanEl) textSpanEl.textContent = t('copied');
+
+					window.setTimeout(() => {
+						copyBtn.classList.remove('copied');
+						if (iconSpanEl) {
+							iconSpanEl.empty();
+							setIcon(iconSpanEl, 'copy');
+						}
+						if (textSpanEl) textSpanEl.textContent = t('copy');
+					}, 2000);
+				} catch (error) {
+					console.error('Failed to copy:', error);
+
+					// 실패 피드백
+					copyBtn.classList.add('copy-failed');
+					if (textSpanEl) textSpanEl.textContent = t('copyFailed');
+
+					window.setTimeout(() => {
+						copyBtn.classList.remove('copy-failed');
+						if (iconSpanEl) {
+							iconSpanEl.empty();
+							setIcon(iconSpanEl, 'copy');
+						}
+						if (textSpanEl) textSpanEl.textContent = t('copy');
+					}, 2000);
 				}
 			});
 		});
-	}
-
-	/**
-	 * HTML 엔티티 디코딩
-	 */
-	private decodeHtmlEntities(text: string): string {
-		const parser = new DOMParser();
-		const doc = parser.parseFromString(`<!DOCTYPE html><body>${text}</body>`, 'text/html');
-		return doc.body.textContent || '';
 	}
 
 	/**
@@ -237,7 +254,7 @@ export class ChatRenderer {
 	 * T018: Extended Thinking 블록 렌더링
 	 * 접을 수 있는 형태로 Claude의 사고 과정을 표시
 	 */
-	private renderThinkingBlock(container: HTMLElement, content: ThinkingBlock): void {
+	private async renderThinkingBlock(container: HTMLElement, content: ThinkingBlock): Promise<void> {
 		const thinkingEl = container.createEl('div', { cls: 'sage-thinking-block' });
 
 		const headerEl = thinkingEl.createEl('div', { cls: 'sage-thinking-block-header clickable' });
@@ -246,19 +263,19 @@ export class ChatRenderer {
 		headerEl.createEl('span', { text: t('extendedThinking'), cls: 'sage-thinking-block-label' });
 
 		const contentEl = thinkingEl.createEl('div', { cls: 'sage-thinking-block-content collapsed' });
-		const sanitizedDom = sanitizeHTMLToDom(this.formatText(content.thinking));
-		contentEl.appendChild(sanitizedDom);
+		await MarkdownRenderer.render(this.app, content.thinking, contentEl, '', this.component);
+		this.injectCopyButtons(contentEl);
 
 		this.addCollapseToggle(headerEl, contentEl);
 	}
 
 	/**
-	 * 결과 메시지 렌더링
+	 * 결과 메시지 렌더링 (Obsidian MarkdownRenderer 사용)
 	 */
-	private renderResult(container: HTMLElement, result: string): void {
+	private async renderResult(container: HTMLElement, result: string): Promise<void> {
 		const resultEl = container.createEl('div', { cls: 'sage-final-result' });
-		const sanitizedDom = sanitizeHTMLToDom(this.formatText(result));
-		resultEl.appendChild(sanitizedDom);
+		await MarkdownRenderer.render(this.app, result, resultEl, '', this.component);
+		this.injectCopyButtons(resultEl);
 	}
 
 	/**
@@ -339,7 +356,7 @@ export class ChatRenderer {
 	/**
 	 * Thinking 메시지 렌더링 (접을 수 있는 형태)
 	 */
-	renderThinkingMessage(messageEl: HTMLElement, chatMessage: UserChatMessage): void {
+	async renderThinkingMessage(messageEl: HTMLElement, chatMessage: UserChatMessage): Promise<void> {
 		const hasToolResults = chatMessage.message.content.some(
 			content => content.type === 'tool_result'
 		);
@@ -349,7 +366,7 @@ export class ChatRenderer {
 		headerEl.createEl('span', { text: headerText, cls: 'sage-thinking-label' });
 
 		const contentEl = messageEl.createEl('div', { cls: 'sage-thinking-content collapsed' });
-		this.renderMessageContent(contentEl, chatMessage);
+		await this.renderMessageContent(contentEl, chatMessage);
 
 		this.addCollapseToggle(headerEl, contentEl);
 	}
@@ -357,17 +374,17 @@ export class ChatRenderer {
 	/**
 	 * Assistant 사고 메시지 렌더링
 	 */
-	renderAssistantThought(messageEl: HTMLElement, chatMessage: AssistantChatMessage): void {
+	async renderAssistantThought(messageEl: HTMLElement, chatMessage: AssistantChatMessage): Promise<void> {
 		const contentEl = messageEl.createEl('div', { cls: 'sage-message-content sage-self-thought' });
-		this.renderMessageContent(contentEl, chatMessage);
+		await this.renderMessageContent(contentEl, chatMessage);
 	}
 
 	/**
 	 * 최종 응답 렌더링
 	 */
-	renderFinalResponse(messageEl: HTMLElement, chatMessage: ChatMessage): void {
+	async renderFinalResponse(messageEl: HTMLElement, chatMessage: ChatMessage): Promise<void> {
 		const contentEl = messageEl.createEl('div', { cls: 'sage-message-content sage-final-response' });
-		this.renderMessageContent(contentEl, chatMessage);
+		await this.renderMessageContent(contentEl, chatMessage);
 
 		// T011: 세션 비용 표시 (ResultChatMessage이고 total_cost_usd가 있을 때)
 		if (chatMessage.type === 'result') {
@@ -410,58 +427,6 @@ export class ChatRenderer {
 		this.component.registerDomEvent(headerEl, 'click', () => {
 			contentEl.toggleClass('collapsed', !contentEl.hasClass('collapsed'));
 		});
-	}
-
-	/**
-	 * 텍스트 마크다운 포맷팅
-	 */
-	formatText(text: string): string {
-		// Phase 2-G: 코드 블록을 복사 버튼이 있는 형태로 변환
-		let formatted = text;
-
-		// 멀티라인 코드 블록 처리 (```language ... ```)
-		formatted = formatted.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => {
-			const codeId = `code-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-			const escapedCode = this.escapeHtml(code.trim());
-			const languageLabel = lang || 'code';
-			return `<div class="sage-code-block" data-code-id="${codeId}">
-				<div class="sage-code-header">
-					<span class="sage-code-language">${languageLabel}</span>
-					<button class="sage-copy-button" data-code="${this.escapeForAttribute(code.trim())}">${t('copy')}</button>
-				</div>
-				<pre><code class="language-${lang}">${escapedCode}</code></pre>
-			</div>`;
-		});
-
-		// 인라인 포맷팅
-		formatted = formatted
-			.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-			.replace(/\*(.*?)\*/g, '<em>$1</em>')
-			.replace(/`([^`]+)`/g, '<code class="sage-inline-code">$1</code>')
-			.replace(/\n/g, '<br>');
-
-		return formatted;
-	}
-
-	/**
-	 * HTML 이스케이프
-	 */
-	private escapeHtml(text: string): string {
-		const div = document.createElement('div');
-		div.textContent = text;
-		return div.innerHTML;
-	}
-
-	/**
-	 * 속성값용 이스케이프
-	 */
-	private escapeForAttribute(text: string): string {
-		return text
-			.replace(/&/g, '&amp;')
-			.replace(/"/g, '&quot;')
-			.replace(/'/g, '&#39;')
-			.replace(/</g, '&lt;')
-			.replace(/>/g, '&gt;');
 	}
 
 	/**

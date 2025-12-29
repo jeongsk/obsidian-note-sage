@@ -126,7 +126,7 @@ export class NoteSageView extends ItemView {
 		this.updateTextDirection(container);
 
 		this.createChatInterface(container);
-		this.renderer = new ChatRenderer(this.messagesContainer, this);
+		this.renderer = new ChatRenderer(this.messagesContainer, this, this.app);
 
 		// MCP 서버 로컬 검증 (백그라운드)
 		this.triggerMcpValidation();
