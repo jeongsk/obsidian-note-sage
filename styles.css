@@ -505,15 +505,6 @@
 }
 .sage-code-wrapper pre {
 		margin: 0px;
-		background-color: var(--code-background);
-		padding: 1rem;
-		border-radius: var(--radius-s);
-		overflow-x: auto;
-}
-
-.sage-code-wrapper pre code {
-		background-color: transparent;
-		padding: 0;
 }
 /* Obsidian 기본 복사 버튼 숨기기 (중복 방지) */
 .sage-code-wrapper .copy-code-button {
@@ -549,10 +540,10 @@
 		color: var(--text-normal);
 }
 .sage-copy-button.copied {
-		border-color: transparent;
-		color: #fff;
+		border-color: var(--interactive-success);
+		color: var(--text-on-accent);
 		opacity: 1;
-		background: var(--color-green);
+		background: var(--interactive-success);
 }
 .sage-copy-button.copy-failed {
 		border-color: var(--color-red);

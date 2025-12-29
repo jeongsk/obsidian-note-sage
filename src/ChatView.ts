@@ -229,7 +229,7 @@ export class NoteSageView extends ItemView {
 			attr: { 'aria-label': t('newChat') }
 		});
 		setIcon(newChatButton, 'plus');
-		this.registerDomEvent(newChatButton, 'click', () => this.startNewChat());
+		this.registerDomEvent(newChatButton, 'click', async () => await this.startNewChat());
 	}
 
 	private createModelSelector(headerEl: HTMLElement): void {
@@ -859,9 +859,14 @@ export class NoteSageView extends ItemView {
 		return null;
 	}
 
-	private startNewChat(): void {
+	private async startNewChat(): Promise<void> {
 		if (this.isProcessing) {
 			this.cancelExecution();
+		}
+
+		// 자동 저장 설정이 활성화되어 있고 대화가 있으면 저장
+		if (this.settings.autoSaveConversations && this.messages.length > 0) {
+			await this.saveConversation();
 		}
 
 		this.currentSessionId = null;
@@ -869,8 +874,8 @@ export class NoteSageView extends ItemView {
 		this.renderer.clear();
 	}
 
-	private showExamples(): void {
-		this.startNewChat();
+	private async showExamples(): Promise<void> {
+		await this.startNewChat();
 		const exampleMessages = createExampleMessages();
 		exampleMessages.forEach(message => this.addMessage(message));
 	}
@@ -919,8 +924,8 @@ export class NoteSageView extends ItemView {
 	}
 
 	// Phase 1-D: 외부에서 새 채팅 시작
-	startNewChatFromCommand(): void {
-		this.startNewChat();
+	async startNewChatFromCommand(): Promise<void> {
+		await this.startNewChat();
 	}
 
 	// Phase 2-B: 대화 저장
