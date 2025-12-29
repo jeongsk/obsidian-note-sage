@@ -46,7 +46,7 @@ export const ko: TranslationKeys = {
 	errorRenderingMessage: '메시지 렌더링 중 오류 발생',
 
 	// Chat messages
-	cooking: '처리 중...',
+	cooking: '생각 중...',
 	thinking: '생각 중...',
 	extendedThinking: '확장 사고',
 	toolResult: '도구 결과',
