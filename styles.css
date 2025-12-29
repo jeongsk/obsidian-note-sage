@@ -540,10 +540,10 @@
 		color: var(--text-normal);
 }
 .sage-copy-button.copied {
-		border-color: var(--interactive-success);
-		color: var(--text-on-accent);
+		border-color: #28a745;
+		color: #fff;
 		opacity: 1;
-		background: var(--interactive-success);
+		background: #28a745;
 }
 .sage-copy-button.copy-failed {
 		border-color: var(--color-red);
