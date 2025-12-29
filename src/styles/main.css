@@ -405,6 +405,11 @@
 		@apply tw-m-0;
 	}
 
+	/* Obsidian 기본 복사 버튼 숨기기 (중복 방지) */
+	.sage-code-wrapper .copy-code-button {
+		@apply tw-hidden;
+	}
+
 	.sage-copy-button {
 		@apply tw-absolute tw-top-2 tw-right-2;
 		@apply tw-inline-flex tw-items-center tw-gap-1;
