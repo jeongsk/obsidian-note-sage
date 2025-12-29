@@ -215,6 +215,34 @@ export class AgentService {
 		}
 	}
 
+	/**
+	 * 시스템 프롬프트를 구성합니다.
+	 * 볼트 경로 컨텍스트를 항상 포함하고, 사용자 커스텀 프롬프트와 병합합니다.
+	 */
+	private buildSystemPrompt(workingDirectory: string): string | { type: 'preset'; preset: 'claude_code'; append: string } {
+		// 볼트 경로 컨텍스트 (항상 포함)
+		const vaultContext = [
+			`IMPORTANT: You are working in an Obsidian vault.`,
+			`Vault path: ${workingDirectory}`,
+			`All file operations (create, read, write, delete) must be performed within this vault directory.`,
+			`When creating new files, always use paths relative to this vault or absolute paths within the vault.`,
+		].join('\n');
+
+		const userPrompt = this.settings.systemPrompt?.trim();
+
+		if (userPrompt) {
+			// 사용자 커스텀 프롬프트가 있으면 볼트 컨텍스트와 병합
+			return `${vaultContext}\n\n--- User Instructions ---\n${userPrompt}`;
+		}
+
+		// 기본: Claude Code preset + 볼트 컨텍스트
+		return {
+			type: 'preset',
+			preset: 'claude_code',
+			append: `\n\n${vaultContext}`
+		};
+	}
+
 	private buildQueryOptions(workingDirectory: string, sessionId: string | null | undefined, claudePath: string): Record<string, unknown> {
 		// T005: permissionMode 설정에서 읽기
 		const permissionMode = this.settings.permissionMode || 'bypassPermissions';
@@ -231,10 +259,8 @@ export class AgentService {
 			options.resume = sessionId;
 		}
 
-		// Phase 1-E: 시스템 프롬프트 적용
-		if (this.settings.systemPrompt && this.settings.systemPrompt.trim()) {
-			options.systemPrompt = this.settings.systemPrompt.trim();
-		}
+		// 시스템 프롬프트 적용 (볼트 경로 컨텍스트 항상 포함)
+		options.systemPrompt = this.buildSystemPrompt(workingDirectory);
 
 		// T006: maxTurns 옵션 적용 (0보다 클 때만)
 		if (this.settings.maxTurns && this.settings.maxTurns > 0) {
@@ -284,6 +310,10 @@ export class AgentService {
 
 		if (this.settings.debugContext) {
 			console.log('[AgentService] Permission mode:', permissionMode);
+			console.log('[AgentService] System prompt configured:',
+				typeof options.systemPrompt === 'string'
+					? options.systemPrompt.substring(0, 300) + '...'
+					: JSON.stringify(options.systemPrompt));
 		}
 
 		return options;
