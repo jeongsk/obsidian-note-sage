@@ -340,8 +340,23 @@
 .sage-message-content {
 		overflow-wrap: break-word;
 }
+.sage-message-footer {
+		margin-top: 0.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+}
 .sage-message-timestamp {
-		margin-top: 0.125rem;
+		color: var(--text-muted);
+		font-size: var(--font-smallest);
+}
+.sage-cost-badge {
+		border-radius: 9999px;
+		background-color: var(--background-secondary);
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
+		padding-top: 0.125rem;
+		padding-bottom: 0.125rem;
 		color: var(--text-muted);
 		font-size: var(--font-smallest);
 }

@@ -277,8 +277,17 @@
 		@apply tw-break-words;
 	}
 
+	.sage-message-footer {
+		@apply tw-flex tw-justify-between tw-items-center tw-mt-2;
+	}
+
 	.sage-message-timestamp {
-		@apply tw-text-obs-text-muted tw-mt-0.5;
+		@apply tw-text-obs-text-muted;
+		font-size: var(--font-smallest);
+	}
+
+	.sage-cost-badge {
+		@apply tw-px-2 tw-py-0.5 tw-rounded-full tw-text-obs-text-muted tw-bg-obs-bg-secondary;
 		font-size: var(--font-smallest);
 	}
 

@@ -92,7 +92,7 @@ export class ChatRenderer {
 	}
 
 	/**
-	 * 타임스탬프 렌더링
+	 * 타임스탬프 렌더링 (result 메시지의 경우 비용도 함께 표시)
 	 */
 	private renderTimestamp(messageEl: HTMLElement, chatMessage: ChatMessage): void {
 		const showTimestamp =
@@ -100,8 +100,24 @@ export class ChatRenderer {
 			((chatMessage.type === 'user' && chatMessage.isUserInput) || chatMessage.type === 'result');
 
 		if (showTimestamp && chatMessage.timestamp) {
-			const timestampEl = messageEl.createEl('div', { cls: 'sage-message-timestamp' });
-			timestampEl.setText(chatMessage.timestamp.toLocaleTimeString());
+			const footerEl = messageEl.createEl('div', { cls: 'sage-message-footer' });
+
+			// 타임스탬프
+			footerEl.createEl('span', {
+				text: chatMessage.timestamp.toLocaleTimeString(),
+				cls: 'sage-message-timestamp'
+			});
+
+			// result 메시지인 경우 비용 배지 표시
+			if (chatMessage.type === 'result') {
+				const resultMessage = chatMessage as ResultChatMessage;
+				if (resultMessage.total_cost_usd !== undefined && resultMessage.total_cost_usd > 0) {
+					footerEl.createEl('span', {
+						text: `$${resultMessage.total_cost_usd.toFixed(4)}`,
+						cls: 'sage-cost-badge'
+					});
+				}
+			}
 		}
 	}
 
@@ -403,39 +419,7 @@ export class ChatRenderer {
 	async renderFinalResponse(messageEl: HTMLElement, chatMessage: ChatMessage): Promise<void> {
 		const contentEl = messageEl.createEl('div', { cls: 'sage-message-content sage-final-response' });
 		await this.renderMessageContent(contentEl, chatMessage);
-
-		// T011: 세션 비용 표시 (ResultChatMessage이고 total_cost_usd가 있을 때)
-		if (chatMessage.type === 'result') {
-			const resultMessage = chatMessage as ResultChatMessage;
-			this.renderSessionStats(messageEl, resultMessage);
-		}
-	}
-
-	/**
-	 * 세션 통계 렌더링 (비용, 턴 수)
-	 * T011: 결과 메시지에 세션 비용 표시
-	 */
-	private renderSessionStats(messageEl: HTMLElement, resultMessage: ResultChatMessage): void {
-		const { total_cost_usd, num_turns } = resultMessage;
-
-		// 비용이나 턴 수가 있을 때만 표시
-		if (total_cost_usd === undefined && num_turns === undefined) {
-			return;
-		}
-
-		const statsEl = messageEl.createEl('div', { cls: 'sage-session-stats' });
-
-		// 비용 표시
-		if (total_cost_usd !== undefined && total_cost_usd > 0) {
-			const costText = t('settings.agentOptions.costDisplay').replace('${cost}', `$${total_cost_usd.toFixed(4)}`);
-			statsEl.createEl('span', { text: costText, cls: 'sage-session-cost' });
-		}
-
-		// 턴 수 표시
-		if (num_turns !== undefined && num_turns > 0) {
-			const turnsText = `${num_turns} ${num_turns === 1 ? 'turn' : 'turns'}`;
-			statsEl.createEl('span', { text: turnsText, cls: 'sage-session-turns' });
-		}
+		// 비용은 renderTimestamp에서 타임스탬프와 함께 표시됨
 	}
 
 	/**
