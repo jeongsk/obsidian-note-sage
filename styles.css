@@ -1564,6 +1564,9 @@
 		margin-left: 0;
 		margin-right: 2px;
 	}
+.tw-mb-2 {
+		margin-bottom: 0.5rem;
+}
 .tw-mb-4 {
 		margin-bottom: 1rem;
 }
@@ -1581,6 +1584,20 @@
 }
 .tw-max-h-48 {
 		max-height: 12rem;
+}
+.tw-max-h-64 {
+		max-height: 16rem;
+}
+@keyframes tw-spin {
+		to {
+				transform: rotate(360deg);
+		}
+}
+.tw-animate-spin {
+		animation: tw-spin 1s linear infinite;
+}
+.tw-items-center {
+		align-items: center;
 }
 .tw-justify-end {
 		justify-content: flex-end;
@@ -1606,6 +1623,10 @@
 }
 .tw-p-4 {
 		padding: 1rem;
+}
+.tw-py-4 {
+		padding-top: 1rem;
+		padding-bottom: 1rem;
 }
 .tw-font-mono {
 		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
