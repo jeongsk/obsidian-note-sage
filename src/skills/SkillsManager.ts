@@ -224,12 +224,16 @@ export class SkillsManager {
 	 *
 	 * @param name Skill 이름 (kebab-case)
 	 * @param description Skill 설명 (선택)
+	 * @param instructions Instructions 섹션 내용 (선택)
+	 * @param examples Examples 섹션 내용 (선택)
 	 * @returns 생성된 SKILL.md 파일 경로
 	 * @throws Error SKILL.md 파일이 이미 존재하는 경우
 	 */
 	async createSkillFromTemplate(
 		name: string,
-		description = ''
+		description = '',
+		instructions = '',
+		examples = ''
 	): Promise<string> {
 		await this.ensureSkillsDirectory();
 
@@ -255,7 +259,7 @@ export class SkillsManager {
 			}
 		}
 
-		const content = this.generateTemplate(name, description);
+		const content = this.generateTemplate(name, description, instructions, examples);
 
 		try {
 			await this.app.vault.create(filePath, content);
@@ -385,9 +389,19 @@ export class SkillsManager {
 	 *
 	 * @param name Skill 이름
 	 * @param description Skill 설명
+	 * @param instructions Instructions 섹션 내용
+	 * @param examples Examples 섹션 내용
 	 * @returns SKILL.md 파일 내용
 	 */
-	private generateTemplate(name: string, description = ''): string {
+	private generateTemplate(
+		name: string,
+		description = '',
+		instructions = '',
+		examples = ''
+	): string {
+		const instructionsContent = instructions || '<!-- Add your instructions here -->';
+		const examplesContent = examples || '<!-- Add examples here -->';
+
 		return `---
 name: ${name}
 description: ${description || 'Add your Skill description here'}
@@ -397,11 +411,11 @@ description: ${description || 'Add your Skill description here'}
 
 ## Instructions
 
-<!-- Add your instructions here -->
+${instructionsContent}
 
 ## Examples
 
-<!-- Add examples here -->
+${examplesContent}
 `;
 	}
 
