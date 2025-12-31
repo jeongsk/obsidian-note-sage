@@ -74,7 +74,8 @@ export class SkillAIWizardModal extends Modal {
 		this.modalEl.addClass('sage-skill-ai-wizard-modal');
 
 		// 모달 제목
-		contentEl.createEl('h2', { text: t('settings.skills.createAIWizard') });
+		this.setTitle(t('settings.skills.createAIWizard'));
+		contentEl.createEl('div');
 
 		// 설명
 		contentEl.createEl('p', {

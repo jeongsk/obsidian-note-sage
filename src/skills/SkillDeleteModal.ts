@@ -26,10 +26,8 @@ export class SkillDeleteModal extends Modal {
 		contentEl.addClass('sage-skill-delete-modal');
 
 		// 제목
-		contentEl.createEl('h3', {
-			text: t('settings.skills.deleteTitle'),
-			cls: 'sage-modal-title',
-		});
+		this.setTitle(t('settings.skills.deleteTitle'));
+		contentEl.createEl('div');
 
 		// 경고 메시지 (안전한 DOM 메서드 사용)
 		const messageEl = contentEl.createEl('p', {

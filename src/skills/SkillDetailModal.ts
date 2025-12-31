@@ -22,10 +22,8 @@ export class SkillDetailModal extends Modal {
 		const { contentEl } = this;
 
 		// 모달 제목
-		contentEl.createEl('h2', {
-			text: this.skill.metadata.name || this.skill.id,
-			cls: 'sage-skill-detail-title',
-		});
+		this.setTitle(this.skill.metadata.name || this.skill.id);
+		contentEl.createEl('div');
 
 		// 경로 표시
 		contentEl.createEl('p', {

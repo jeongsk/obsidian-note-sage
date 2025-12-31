@@ -37,7 +37,8 @@ export class SkillTemplateModal extends Modal {
 		const { contentEl } = this;
 
 		// 모달 제목
-		contentEl.createEl('h2', { text: t('settings.skills.createTemplate') });
+		this.setTitle(t('settings.skills.createTemplate'));
+		contentEl.createEl('div');
 
 		// 이름 입력 필드
 		new Setting(contentEl)
