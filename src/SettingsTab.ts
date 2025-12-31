@@ -531,9 +531,12 @@ export class NoteSageSettingTab extends PluginSettingTab {
 		editBtn.setAttribute('aria-label', t('settings.skills.edit'));
 		editBtn.addEventListener('click', async () => {
 			// 스킬 파일을 Obsidian에서 열기
-			const skillPath = `.claude/skills/${skill.id}.md`;
-			const file = this.app.vault.getAbstractFileByPath(skillPath);
-			if (file) {
+			// skill.path는 이미 올바른 경로 (예: .claude/skills/my-skill/SKILL.md)
+			const skillPath = skill.path;
+			// .claude/ 숨김 폴더는 vault.getAbstractFileByPath()가 인식하지 못할 수 있으므로
+			// vault.adapter.exists()로 존재 여부 확인
+			const exists = await this.app.vault.adapter.exists(skillPath);
+			if (exists) {
 				await this.app.workspace.openLinkText(skillPath, '', false);
 			}
 		});
