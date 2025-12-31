@@ -170,3 +170,10 @@ npm run test         # 테스트 실행
 ### Build Output
 - `main.js` - 번들된 플러그인 코드 (수정 금지)
 - `styles.css` - 생성된 CSS (수정 금지, src/styles/main.css 편집)
+
+## Active Technologies
+- TypeScript 5.9+ + Obsidian API, @anthropic-ai/claude-agent-sdk ^0.1.76, TailwindCSS 3.4.19 (001-skills-management)
+- Obsidian Vault 파일 시스템 (`.claude/skills/` 디렉토리), 플러그인 데이터 (settings) (001-skills-management)
+
+## Recent Changes
+- 001-skills-management: Added TypeScript 5.9+ + Obsidian API, @anthropic-ai/claude-agent-sdk ^0.1.76, TailwindCSS 3.4.19
