@@ -10,7 +10,7 @@ import type { App, PluginManifest } from 'obsidian';
 import type { PluginManager } from '../types/obsidian-internal';
 
 /** 보호된 플러그인 ID 목록 (비활성화 불가) */
-const PROTECTED_PLUGINS = ['obsidian-note-sage'];
+const PROTECTED_PLUGINS = ['note-sage'];
 
 /** 플러그인 정보 인터페이스 */
 interface PluginInfo {

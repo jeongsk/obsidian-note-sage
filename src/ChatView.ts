@@ -297,7 +297,7 @@ export class NoteSageView extends ItemView {
 			plugins: { plugins: Record<string, { settings: NoteSageSettings; saveSettings: () => Promise<void> }> }
 		};
 
-		const plugin = app.plugins.plugins['obsidian-note-sage'];
+		const plugin = app.plugins.plugins['note-sage'];
 		if (plugin) {
 			plugin.settings.model = newModel;
 			try {
@@ -1021,7 +1021,7 @@ export class NoteSageView extends ItemView {
 			setting: { open: () => void; openTabById: (id: string) => void }
 		};
 		app.setting.open();
-		app.setting.openTabById('obsidian-note-sage');
+		app.setting.openTabById('note-sage');
 	}
 
 	// ==================== 공개 메서드 ====================
