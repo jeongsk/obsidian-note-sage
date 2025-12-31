@@ -122,13 +122,13 @@ export class McpSettingsUI {
 		const controlsEl = itemEl.createDiv({ cls: 'sage-mcp-server-controls' });
 
 		// 활성화/비활성화 토글
-		const toggleLabel = controlsEl.createEl('label', { cls: 'sage-mcp-toggle' });
+		const toggleLabel = controlsEl.createEl('label', { cls: 'sage-toggle-sm' });
 		const toggleInput = toggleLabel.createEl('input', {
 			type: 'checkbox',
-			cls: 'sage-mcp-toggle-checkbox'
+			cls: 'sage-toggle-sm-checkbox'
 		});
 		toggleInput.checked = server.enabled;
-		toggleLabel.createSpan({ cls: 'sage-mcp-toggle-slider' });
+		toggleLabel.createSpan({ cls: 'sage-toggle-sm-slider' });
 		toggleInput.addEventListener('change', async () => {
 			try {
 				server.enabled = toggleInput.checked;

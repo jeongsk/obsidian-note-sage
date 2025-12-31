@@ -548,13 +548,13 @@ export class NoteSageSettingTab extends PluginSettingTab {
 
 		// 활성화/비활성화 토글 (에러가 없는 경우에만)
 		if (!skill.hasError) {
-			const toggleLabel = controlsEl.createEl('label', { cls: 'sage-skill-toggle' });
+			const toggleLabel = controlsEl.createEl('label', { cls: 'sage-toggle-sm' });
 			const toggleInput = toggleLabel.createEl('input', {
 				type: 'checkbox',
-				cls: 'sage-skill-toggle-checkbox',
+				cls: 'sage-toggle-sm-checkbox',
 			});
 			toggleInput.checked = skill.enabled;
-			toggleLabel.createSpan({ cls: 'sage-skill-toggle-slider' });
+			toggleLabel.createSpan({ cls: 'sage-toggle-sm-slider' });
 			toggleInput.addEventListener('change', async () => {
 				const disabledSkills = this.plugin.settings.disabledSkills || [];
 				if (toggleInput.checked) {
