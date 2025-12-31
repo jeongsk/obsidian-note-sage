@@ -822,6 +822,15 @@ export class NoteSageView extends ItemView {
 		// 에이전트 실행 시작 - 파일 수정 시 에디터 재렌더링 활성화
 		this.plugin.setAgentExecuting(true);
 
+		// 디버깅 모드: request message 출력
+		if (this.settings.debugContext) {
+			console.log('=== REQUEST MESSAGE DEBUG ===');
+			console.log('Request prompt:', prompt);
+			console.log('Working directory:', vaultPath);
+			console.log('Session ID:', this.currentSessionId);
+			console.log('=============================');
+		}
+
 		try {
 			const sessionId = await this.agentService.execute({
 				prompt,
