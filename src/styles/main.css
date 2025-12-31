@@ -68,7 +68,7 @@
 	}
 
 	.sage-chat-input-container {
-		@apply tw-flex tw-flex-col tw-flex-shrink-0;
+		@apply tw-flex tw-flex-col tw-flex-shrink-0 tw-relative;
 	}
 
 	/* 헤더 영역 */
@@ -958,6 +958,199 @@
 
 	.sage-rtl .sage-code-wrapper .sage-copy-button {
 		@apply tw-left-2 tw-right-auto;
+	}
+
+	/* ==================== @ 멘션 자동완성 ==================== */
+
+	/* 자동완성 팝업 컨테이너 */
+	.sage-autocomplete-popup {
+		position: absolute;
+		bottom: 100%;
+		left: 0;
+		right: 0;
+		z-index: 100;
+		max-height: 300px;
+		overflow-y: auto;
+		border-radius: var(--radius-s);
+		border: 1px solid var(--background-modifier-border);
+		background-color: var(--background-primary);
+		box-shadow: var(--shadow-s);
+		margin-bottom: 4px;
+	}
+
+	/* 자동완성 항목 */
+	.sage-autocomplete-item {
+		@apply tw-flex tw-items-center tw-gap-2 tw-py-2 tw-px-3 tw-cursor-pointer tw-transition-colors tw-duration-150;
+	}
+
+	.sage-autocomplete-item:hover {
+		background-color: var(--background-modifier-hover);
+	}
+
+	.sage-autocomplete-item.selected {
+		background-color: var(--interactive-accent);
+		color: var(--text-on-accent);
+	}
+
+	.sage-autocomplete-item.selected .sage-autocomplete-item-path {
+		color: var(--text-on-accent);
+		opacity: 0.8;
+	}
+
+	.sage-autocomplete-item.selected .sage-autocomplete-item-type {
+		background-color: rgba(255, 255, 255, 0.2);
+		color: var(--text-on-accent);
+	}
+
+	/* 자동완성 항목 아이콘 */
+	.sage-autocomplete-item-icon {
+		@apply tw-flex tw-items-center tw-justify-center tw-flex-shrink-0;
+		width: 20px;
+		height: 20px;
+		color: var(--text-muted);
+	}
+
+	.sage-autocomplete-item.selected .sage-autocomplete-item-icon {
+		color: var(--text-on-accent);
+	}
+
+	.sage-autocomplete-item-icon svg {
+		width: 16px;
+		height: 16px;
+	}
+
+	/* 자동완성 항목 정보 */
+	.sage-autocomplete-item-info {
+		@apply tw-flex tw-flex-col tw-flex-1 tw-min-w-0;
+		gap: 2px;
+	}
+
+	.sage-autocomplete-item-name {
+		@apply tw-font-medium tw-truncate;
+	}
+
+	.sage-autocomplete-item-path {
+		@apply tw-truncate;
+		font-size: var(--font-smallest);
+		color: var(--text-muted);
+	}
+
+	/* 자동완성 항목 타입 배지 */
+	.sage-autocomplete-item-type {
+		@apply tw-flex-shrink-0;
+		padding: 2px 6px;
+		border-radius: var(--radius-s);
+		background-color: var(--background-modifier-hover);
+		font-size: var(--font-smallest);
+		color: var(--text-muted);
+	}
+
+	/* 결과 없음 상태 */
+	.sage-autocomplete-empty {
+		@apply tw-py-3 tw-px-4 tw-text-center;
+		color: var(--text-muted);
+		font-size: var(--font-small);
+	}
+
+	/* 멘션 칩 컨테이너 */
+	.sage-mention-chips {
+		@apply tw-flex tw-flex-wrap tw-gap-1.5 tw-p-2;
+		border-bottom: 1px solid var(--background-modifier-border);
+	}
+
+	.sage-mention-chips:empty {
+		@apply tw-hidden;
+	}
+
+	/* 개별 멘션 칩 */
+	.sage-mention-chip {
+		@apply tw-inline-flex tw-items-center tw-gap-1 tw-py-1 tw-px-2 tw-rounded-obs;
+		background-color: var(--interactive-accent);
+		color: var(--text-on-accent);
+		font-size: var(--font-smaller);
+		animation: chipFadeIn 150ms ease;
+	}
+
+	.sage-mention-chip.removing {
+		animation: chipFadeOut 150ms ease forwards;
+	}
+
+	/* 멘션 칩 아이콘 */
+	.sage-mention-chip-icon {
+		@apply tw-flex tw-items-center tw-justify-center;
+		width: 14px;
+		height: 14px;
+	}
+
+	.sage-mention-chip-icon svg {
+		width: 12px;
+		height: 12px;
+	}
+
+	/* 멘션 칩 이름 */
+	.sage-mention-chip-name {
+		@apply tw-truncate;
+		max-width: 150px;
+	}
+
+	/* 멘션 칩 삭제 버튼 */
+	.sage-mention-chip-remove {
+		@apply tw-flex tw-items-center tw-justify-center tw-p-0 tw-border-none tw-bg-transparent tw-cursor-pointer tw-transition-opacity tw-duration-150;
+		width: 14px;
+		height: 14px;
+		margin-left: 2px;
+		opacity: 0.7;
+		color: inherit;
+	}
+
+	.sage-mention-chip-remove:hover {
+		opacity: 1;
+	}
+
+	.sage-mention-chip-remove svg {
+		width: 12px;
+		height: 12px;
+	}
+
+	/* 멘션 RTL 지원 */
+	.sage-rtl .sage-autocomplete-item {
+		@apply tw-flex-row-reverse;
+	}
+
+	.sage-rtl .sage-autocomplete-item-info {
+		@apply tw-text-right;
+	}
+
+	.sage-rtl .sage-mention-chip {
+		@apply tw-flex-row-reverse;
+	}
+
+	.sage-rtl .sage-mention-chip-remove {
+		margin-left: 0;
+		margin-right: 2px;
+	}
+}
+
+/* 멘션 칩 애니메이션 */
+@keyframes chipFadeIn {
+	from {
+		opacity: 0;
+		transform: scale(0.9);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+@keyframes chipFadeOut {
+	from {
+		opacity: 1;
+		transform: scale(1);
+	}
+	to {
+		opacity: 0;
+		transform: scale(0.9);
 	}
 }
 

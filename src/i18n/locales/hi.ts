@@ -247,4 +247,22 @@ export const hi: TranslationKeys = {
 		aboutText1: 'यह प्लगइन Obsidian के भीतर सीधे AI-संचालित सहायता प्रदान करने के लिए Claude Agent SDK का उपयोग करता है।',
 		aboutText2: 'एजेंट फ़ाइलें पढ़ सकता है, कमांड निष्पादित कर सकता है, और आपके vault में विभिन्न कार्यों में मदद कर सकता है।',
 	},
+
+	// Mention system
+	mention: {
+		noResults: 'कोई परिणाम नहीं मिला',
+		file: 'फ़ाइल',
+		folder: 'फ़ोल्डर',
+		binaryFile: 'बाइनरी फ़ाइल',
+		fileNotFound: 'फ़ाइल नहीं मिली',
+		fileReadError: 'फ़ाइल पढ़ने में त्रुटि',
+		contentTruncated: '... सामग्री काटी गई ...',
+	},
+
+	// Large file warning
+	largeFileWarningTitle: 'बड़ी फ़ाइल चेतावनी',
+	largeFileWarningMessage: "फ़ाइल '{path}' 100KB से बड़ी है ({size})। बड़ी फ़ाइलें प्रतिक्रिया को धीमा कर सकती हैं।",
+	largeFileWarningQuestion: 'क्या आप फिर भी इस फ़ाइल को शामिल करना चाहते हैं?',
+	includeAnyway: 'फिर भी शामिल करें',
+	cancel: 'रद्द करें',
 };

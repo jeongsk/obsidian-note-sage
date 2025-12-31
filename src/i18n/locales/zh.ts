@@ -247,4 +247,22 @@ export const zh: TranslationKeys = {
 		aboutText1: '此插件使用Claude Agent SDK在Obsidian中直接提供AI驱动的帮助。',
 		aboutText2: '代理可以读取文件、执行命令，并帮助处理vault中的各种任务。',
 	},
+
+	// Mention system
+	mention: {
+		noResults: '未找到结果',
+		file: '文件',
+		folder: '文件夹',
+		binaryFile: '二进制文件',
+		fileNotFound: '文件未找到',
+		fileReadError: '文件读取错误',
+		contentTruncated: '... 内容已截断 ...',
+	},
+
+	// Large file warning
+	largeFileWarningTitle: '大文件警告',
+	largeFileWarningMessage: "文件 '{path}' 大于100KB ({size})。大文件可能会减慢响应速度。",
+	largeFileWarningQuestion: '是否仍要包含此文件？',
+	includeAnyway: '仍然包含',
+	cancel: '取消',
 };

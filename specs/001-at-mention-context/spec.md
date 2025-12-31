@@ -1,115 +1,138 @@
-# Feature Specification: [FEATURE NAME]
+# Feature Specification: @ 멘션 컨텍스트 추가
 
-**Feature Branch**: `[###-feature-name]`  
-**Created**: [DATE]  
-**Status**: Draft  
-**Input**: User description: "$ARGUMENTS"
+**Feature Branch**: `001-at-mention-context`
+**Created**: 2025-12-31
+**Status**: Draft
+**Input**: User description: "@ 기호를 사용하여 폴더(파일 리스트 포함), 파일(내용 포함) 할 수 있는 기능 추가"
+
+## Clarifications
+
+### Session 2025-12-31
+
+- Q: 대용량 파일(100KB 초과) 처리 시 어떻게 동작해야 하나요? → A: 경고 표시 후 사용자가 포함 여부 선택
+- Q: 숨김 파일/폴더 (.obsidian, .git 등) 표시 여부? → A: 기본 제외 (보안 및 UX 고려)
 
 ## User Scenarios & Testing *(mandatory)*
 
-<!--
-  IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
-  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
-  you should still have a viable MVP (Minimum Viable Product) that delivers value.
-  
-  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
-  Think of each story as a standalone slice of functionality that can be:
-  - Developed independently
-  - Tested independently
-  - Deployed independently
-  - Demonstrated to users independently
--->
+### User Story 1 - 파일 멘션으로 컨텍스트 추가 (Priority: P1)
 
-### User Story 1 - [Brief Title] (Priority: P1)
+사용자는 채팅 입력창에서 `@` 기호를 입력하여 Obsidian vault 내의 특정 파일을 검색하고 선택할 수 있습니다. 선택된 파일의 내용이 AI에게 전달되는 컨텍스트에 포함됩니다.
 
-[Describe this user journey in plain language]
+**Why this priority**: 파일 단위 컨텍스트 추가는 가장 기본적이고 핵심적인 기능입니다. 사용자가 특정 노트의 내용을 AI와 공유하여 더 정확한 답변을 얻을 수 있게 합니다.
 
-**Why this priority**: [Explain the value and why it has this priority level]
-
-**Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
+**Independent Test**: 사용자가 `@README.md`를 입력하고 선택하면 해당 파일 내용이 AI 메시지에 포함되어 전송되는지 확인할 수 있습니다.
 
 **Acceptance Scenarios**:
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
-2. **Given** [initial state], **When** [action], **Then** [expected outcome]
+1. **Given** 사용자가 채팅 입력창에 커서를 위치시킨 상태, **When** `@` 문자를 입력하면, **Then** 자동완성 드롭다운이 나타나 vault 내 파일/폴더 목록을 보여줍니다.
+
+2. **Given** 자동완성 드롭다운이 열린 상태, **When** 사용자가 파일 이름의 일부를 입력하면, **Then** 입력 내용과 일치하는 파일들로 목록이 필터링됩니다.
+
+3. **Given** 필터링된 파일 목록이 표시된 상태, **When** 사용자가 특정 파일을 클릭하거나 Enter로 선택하면, **Then** 해당 파일이 멘션으로 입력창에 추가되고 시각적으로 구분됩니다.
+
+4. **Given** 파일 멘션이 포함된 메시지가 준비된 상태, **When** 사용자가 메시지를 전송하면, **Then** 멘션된 파일의 전체 내용이 AI에게 전달되는 컨텍스트에 포함됩니다.
 
 ---
 
-### User Story 2 - [Brief Title] (Priority: P2)
+### User Story 2 - 폴더 멘션으로 파일 리스트 추가 (Priority: P2)
 
-[Describe this user journey in plain language]
+사용자는 채팅 입력창에서 `@` 기호를 입력하여 Obsidian vault 내의 폴더를 검색하고 선택할 수 있습니다. 선택된 폴더의 파일 목록(이름과 경로)이 AI에게 전달되는 컨텍스트에 포함됩니다.
 
-**Why this priority**: [Explain the value and why it has this priority level]
+**Why this priority**: 폴더 단위 컨텍스트는 프로젝트 구조 파악이나 여러 파일에 대한 작업 시 유용합니다. 파일 내용 전체가 아닌 목록만 제공하여 효율적인 컨텍스트 전달이 가능합니다.
 
-**Independent Test**: [Describe how this can be tested independently]
+**Independent Test**: 사용자가 `@src/` 폴더를 선택하면 해당 폴더의 파일 리스트가 AI 메시지에 포함되어 전송되는지 확인할 수 있습니다.
 
 **Acceptance Scenarios**:
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+1. **Given** 자동완성 드롭다운이 열린 상태, **When** 사용자가 폴더를 선택하면, **Then** 해당 폴더가 멘션으로 입력창에 추가되고 폴더임을 나타내는 아이콘/표시가 함께 표시됩니다.
+
+2. **Given** 폴더 멘션이 포함된 메시지가 준비된 상태, **When** 사용자가 메시지를 전송하면, **Then** 멘션된 폴더 내의 파일 목록(이름, 경로, 파일 타입)이 AI에게 전달되는 컨텍스트에 포함됩니다.
+
+3. **Given** 중첩된 폴더 구조가 있는 상태, **When** 사용자가 상위 폴더를 멘션하면, **Then** 하위 폴더와 파일 정보도 계층적으로 포함됩니다.
 
 ---
 
-### User Story 3 - [Brief Title] (Priority: P3)
+### User Story 3 - 다중 멘션 지원 (Priority: P3)
 
-[Describe this user journey in plain language]
+사용자는 하나의 메시지에 여러 개의 파일과 폴더를 동시에 멘션할 수 있습니다. 모든 멘션된 항목의 컨텍스트가 AI에게 함께 전달됩니다.
 
-**Why this priority**: [Explain the value and why it has this priority level]
+**Why this priority**: 복잡한 질문이나 여러 파일을 참조하는 작업 시 필수적인 기능입니다. 기본 기능이 완성된 후 확장하여 구현합니다.
 
-**Independent Test**: [Describe how this can be tested independently]
+**Independent Test**: 사용자가 `@file1.md @file2.md @folder/`를 함께 입력하고 전송하면 모든 컨텍스트가 포함되는지 확인할 수 있습니다.
 
 **Acceptance Scenarios**:
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+1. **Given** 사용자가 이미 하나의 파일을 멘션한 상태, **When** 다시 `@`를 입력하면, **Then** 새로운 자동완성 드롭다운이 나타나 추가 멘션을 할 수 있습니다.
+
+2. **Given** 여러 멘션이 포함된 메시지가 준비된 상태, **When** 사용자가 메시지를 전송하면, **Then** 모든 멘션된 항목의 컨텍스트가 순서대로 AI에게 전달됩니다.
 
 ---
 
-[Add more user stories as needed, each with an assigned priority]
+### User Story 4 - 멘션 제거 및 수정 (Priority: P4)
+
+사용자는 입력창에 추가된 멘션을 삭제하거나 수정할 수 있습니다.
+
+**Why this priority**: 사용성을 높이는 보조 기능으로, 핵심 기능이 완성된 후 구현합니다.
+
+**Independent Test**: 멘션된 항목을 백스페이스로 삭제하거나 클릭하여 제거할 수 있는지 확인합니다.
+
+**Acceptance Scenarios**:
+
+1. **Given** 멘션이 입력창에 추가된 상태, **When** 사용자가 멘션 옆의 삭제 버튼을 클릭하거나 백스페이스를 누르면, **Then** 해당 멘션이 입력창에서 제거됩니다.
+
+2. **Given** 멘션이 제거된 상태, **When** 메시지를 전송하면, **Then** 제거된 멘션의 컨텍스트는 AI에게 전달되지 않습니다.
+
+---
 
 ### Edge Cases
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right edge cases.
--->
-
-- What happens when [boundary condition]?
-- How does system handle [error scenario]?
+- **빈 폴더 멘션**: 파일이 없는 빈 폴더를 멘션하면 "빈 폴더입니다" 메시지가 컨텍스트에 포함됩니다.
+- **존재하지 않는 파일/폴더**: 삭제되었거나 이름이 변경된 파일/폴더 멘션 시 오류 메시지를 표시하고 해당 멘션은 무시됩니다.
+- **매우 큰 파일**: 파일 크기가 100KB를 초과하는 경우 경고 다이얼로그를 표시하고, 사용자가 "포함" 또는 "제외"를 선택할 수 있습니다.
+- **바이너리 파일**: 이미지, PDF 등 텍스트가 아닌 파일은 파일명과 타입 정보만 포함합니다.
+- **특수 문자가 포함된 파일명**: 공백, 한글, 특수문자가 포함된 파일명도 정상적으로 처리됩니다.
+- **자동완성 중 ESC 키**: ESC 키를 누르면 자동완성 드롭다운이 닫히고 `@` 문자는 일반 텍스트로 유지됩니다.
+- **동일 파일 중복 멘션**: 같은 파일을 여러 번 멘션해도 컨텍스트에는 한 번만 포함됩니다.
+- **숨김 파일/폴더**: `.`으로 시작하는 파일/폴더(예: `.obsidian`, `.git`)는 자동완성 목록에서 기본 제외됩니다.
 
 ## Requirements *(mandatory)*
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right functional requirements.
--->
-
 ### Functional Requirements
 
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
-- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
-- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
-- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+- **FR-001**: 시스템은 사용자가 `@` 문자를 입력하면 자동완성 드롭다운을 표시해야 합니다.
+- **FR-002**: 시스템은 vault 내의 파일과 폴더를 자동완성 목록에 표시해야 합니다 (숨김 파일/폴더 제외: `.`으로 시작하는 항목).
+- **FR-003**: 시스템은 사용자 입력에 따라 실시간으로 자동완성 목록을 필터링해야 합니다.
+- **FR-004**: 시스템은 파일과 폴더를 시각적으로 구분하여 표시해야 합니다 (아이콘 또는 표시자 사용).
+- **FR-005**: 시스템은 선택된 파일의 전체 내용을 읽어 컨텍스트에 포함해야 합니다.
+- **FR-006**: 시스템은 선택된 폴더의 파일 목록(이름, 경로, 타입)을 컨텍스트에 포함해야 합니다.
+- **FR-007**: 시스템은 하나의 메시지에 여러 개의 멘션을 허용해야 합니다.
+- **FR-008**: 시스템은 멘션된 항목을 입력창에서 시각적으로 구분하여 표시해야 합니다 (태그 또는 칩 형태).
+- **FR-009**: 시스템은 사용자가 멘션을 삭제할 수 있는 방법을 제공해야 합니다.
+- **FR-010**: 시스템은 키보드 탐색(위/아래 화살표, Enter, ESC)을 지원해야 합니다.
+- **FR-011**: 시스템은 존재하지 않는 파일/폴더 멘션 시 사용자에게 오류를 알려야 합니다.
+- **FR-012**: 시스템은 텍스트가 아닌 바이너리 파일의 경우 파일 정보만 컨텍스트에 포함해야 합니다.
 
-*Example of marking unclear requirements:*
+### Key Entities
 
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
-
-### Key Entities *(include if feature involves data)*
-
-- **[Entity 1]**: [What it represents, key attributes without implementation]
-- **[Entity 2]**: [What it represents, relationships to other entities]
+- **Mention (멘션)**: 사용자가 선택한 파일 또는 폴더에 대한 참조. 타입(파일/폴더), 경로, 표시 이름 속성을 가집니다.
+- **Context Attachment (컨텍스트 첨부)**: AI에게 전달되는 추가 정보. 멘션으로부터 생성되며, 파일의 경우 내용을, 폴더의 경우 파일 목록을 포함합니다.
+- **Autocomplete Suggestion (자동완성 제안)**: 드롭다운에 표시되는 개별 항목. 파일/폴더 경로, 표시 이름, 타입, 아이콘 정보를 포함합니다.
 
 ## Success Criteria *(mandatory)*
 
-<!--
-  ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
--->
-
 ### Measurable Outcomes
 
-- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
-- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+- **SC-001**: 사용자가 `@` 입력 후 300ms 이내에 자동완성 드롭다운이 표시됩니다.
+- **SC-002**: 1000개 이상의 파일이 있는 vault에서도 자동완성 필터링이 100ms 이내에 완료됩니다.
+- **SC-003**: 사용자가 파일 멘션부터 메시지 전송까지 평균 5초 이내에 완료할 수 있습니다.
+- **SC-004**: 멘션된 파일/폴더 컨텍스트가 100% 정확하게 AI에게 전달됩니다.
+- **SC-005**: 사용자의 90%가 첫 번째 시도에서 원하는 파일/폴더를 성공적으로 멘션할 수 있습니다.
+- **SC-006**: 키보드만으로도 멘션 전체 흐름(입력 → 선택 → 전송)을 완료할 수 있습니다.
+
+## Assumptions
+
+- Obsidian vault 내의 파일 시스템 접근은 Obsidian API를 통해 가능합니다.
+- 텍스트 파일의 기본 인코딩은 UTF-8입니다.
+- 폴더 내 파일 목록은 최대 3단계 깊이까지 포함합니다.
+- 대용량 파일의 기준은 100KB로 설정합니다 (초과 시 경고 표시).
+- 자동완성 목록은 최대 50개 항목까지 표시합니다.

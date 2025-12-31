@@ -172,6 +172,16 @@ interface SettingsTranslations {
 	aboutText2: string;
 }
 
+interface MentionTranslations {
+	noResults: string;
+	file: string;
+	folder: string;
+	binaryFile: string;
+	fileNotFound: string;
+	fileReadError: string;
+	contentTruncated: string;
+}
+
 export interface TranslationKeys {
 	appTitle: string;
 	examples: string;
@@ -212,6 +222,14 @@ export interface TranslationKeys {
 	commands: CommandsTranslations;
 	prompts: PromptsTranslations;
 	settings: SettingsTranslations;
+	// Mention system
+	mention: MentionTranslations;
+	// Large file warning
+	largeFileWarningTitle: string;
+	largeFileWarningMessage: string;
+	largeFileWarningQuestion: string;
+	includeAnyway: string;
+	cancel: string;
 }
 
 export const en: TranslationKeys = {
@@ -460,4 +478,22 @@ export const en: TranslationKeys = {
 		aboutText1: 'This plugin uses the Claude Agent SDK to provide AI-powered assistance directly within Obsidian.',
 		aboutText2: 'The agent can read files, execute commands, and help with various tasks in your vault.',
 	},
+
+	// Mention system
+	mention: {
+		noResults: 'No results found',
+		file: 'File',
+		folder: 'Folder',
+		binaryFile: 'Binary file',
+		fileNotFound: 'File not found',
+		fileReadError: 'File read error',
+		contentTruncated: '... content truncated ...',
+	},
+
+	// Large file warning
+	largeFileWarningTitle: 'Large File Warning',
+	largeFileWarningMessage: "The file '{path}' is larger than 100KB ({size}). Large files may slow down the response.",
+	largeFileWarningQuestion: 'Do you want to include this file anyway?',
+	includeAnyway: 'Include Anyway',
+	cancel: 'Cancel',
 };

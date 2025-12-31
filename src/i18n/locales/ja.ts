@@ -247,4 +247,22 @@ export const ja: TranslationKeys = {
 		aboutText1: 'このプラグインはClaude Agent SDKを使用して、Obsidian内で直接AIアシスタンスを提供します。',
 		aboutText2: 'エージェントはファイルの読み取り、コマンドの実行、vault内のさまざまなタスクを支援できます。',
 	},
+
+	// Mention system
+	mention: {
+		noResults: '検索結果がありません',
+		file: 'ファイル',
+		folder: 'フォルダ',
+		binaryFile: 'バイナリファイル',
+		fileNotFound: 'ファイルが見つかりません',
+		fileReadError: 'ファイル読み取りエラー',
+		contentTruncated: '... コンテンツが切り捨てられました ...',
+	},
+
+	// Large file warning
+	largeFileWarningTitle: '大容量ファイル警告',
+	largeFileWarningMessage: "ファイル '{path}' は100KB以上です ({size})。大容量ファイルは応答速度を低下させる可能性があります。",
+	largeFileWarningQuestion: 'それでもこのファイルを含めますか？',
+	includeAnyway: 'それでも含める',
+	cancel: 'キャンセル',
 };

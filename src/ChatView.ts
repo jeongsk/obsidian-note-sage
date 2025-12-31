@@ -1,4 +1,4 @@
-import { ItemView, WorkspaceLeaf, setIcon, MarkdownView, TFile, Notice } from 'obsidian';
+import { ItemView, WorkspaceLeaf, setIcon, MarkdownView, TFile, Notice, Modal } from 'obsidian';
 import type { NoteSageSettings, ChatMessage, QuickActionConfig, McpServerStatus, UserChatMessage, TextBlock, ResultChatMessage } from './types';
 import { AVAILABLE_MODELS, QUICK_ACTION_DEFINITIONS, DEFAULT_QUICK_ACTIONS } from './types';
 import { AgentService } from './AgentService';
@@ -11,6 +11,8 @@ import { McpToolsPanel } from './mcp/McpToolsPanel';
 import { t, setLanguage, getTextDirection } from './i18n';
 import { UI_CONSTANTS, CONTENT_LIMITS, UNICODE_CONSTANTS } from './constants';
 import type NoteSagePlugin from './main';
+import { MentionService, MentionInput, AutocompletePopup, MENTION_CONSTANTS } from './mention';
+import type { Mention } from './mention';
 
 export const VIEW_TYPE_NOTE_SAGE = 'note-sage-view';
 
@@ -47,6 +49,12 @@ export class NoteSageView extends ItemView {
 	private modelSelector: HTMLSelectElement;
 	private quickActionsContainer: HTMLElement;
 	private mcpStatusContainer: HTMLElement;
+
+	// 멘션 관련
+	private mentionService: MentionService;
+	private mentionInput: MentionInput;
+	private autocompletePopup: AutocompletePopup;
+	private mentionChipsContainer: HTMLElement;
 
 	// MCP 상태 구독 해제 함수
 	private unsubscribeMcpStatus?: () => void;
@@ -404,8 +412,10 @@ export class NoteSageView extends ItemView {
 
 		this.createQuickActions();
 		this.createFileContextToggle();
+		this.createMentionChipsContainer();
 		this.createInputField();
 		this.createButtonContainer();
+		this.initializeMentionSystem();
 	}
 
 	// Quick Actions 설정 헬퍼
@@ -479,6 +489,81 @@ export class NoteSageView extends ItemView {
 		this.registerDomEvent(fileContextToggle, 'click', () => {
 			this.includeFileContext = !this.includeFileContext;
 			fileContextToggle.toggleClass('active', this.includeFileContext);
+		});
+	}
+
+	/**
+	 * 멘션 칩 컨테이너 생성
+	 */
+	private createMentionChipsContainer(): void {
+		this.mentionChipsContainer = this.inputContainer.createEl('div', {
+			cls: 'sage-mention-chips'
+		});
+	}
+
+	/**
+	 * 멘션 시스템 초기화
+	 */
+	private initializeMentionSystem(): void {
+		// MentionService 초기화
+		this.mentionService = new MentionService(this.app);
+
+		// AutocompletePopup 초기화
+		this.autocompletePopup = new AutocompletePopup({
+			parentEl: this.inputContainer,
+			callbacks: {
+				onSelect: (suggestion) => {
+					this.mentionInput.selectSuggestion(suggestion);
+				},
+				onClose: () => {
+					// 팝업이 닫힐 때 추가 처리 필요시
+				}
+			},
+			maxItems: MENTION_CONSTANTS.MAX_SUGGESTIONS,
+			maxHeight: MENTION_CONSTANTS.MAX_DROPDOWN_HEIGHT
+		});
+
+		// MentionInput 초기화
+		this.mentionInput = new MentionInput({
+			inputEl: this.inputField,
+			mentionChipsContainer: this.mentionChipsContainer,
+			mentionService: this.mentionService,
+			autocompletePopup: this.autocompletePopup,
+			callbacks: {
+				onMentionAdd: (mention) => {
+					// 멘션 추가 시 처리 (선택적 로깅)
+					if (this.settings.debugContext) {
+						console.log('[Mention] Added:', mention.path);
+					}
+				},
+				onMentionRemove: (mentionId) => {
+					// 멘션 제거 시 처리 (선택적 로깅)
+					if (this.settings.debugContext) {
+						console.log('[Mention] Removed:', mentionId);
+					}
+				},
+				onSubmit: (text, mentions) => {
+					// MentionInput에서 직접 제출 처리 (현재는 Enter 키로 처리)
+				},
+				onLargeFileWarning: async (path, size) => {
+					return await this.showLargeFileWarning(path, size);
+				}
+			}
+		});
+	}
+
+	/**
+	 * 대용량 파일 경고 다이얼로그
+	 */
+	private async showLargeFileWarning(path: string, size: number): Promise<boolean> {
+		return new Promise((resolve) => {
+			const modal = new LargeFileWarningModal(
+				this.app,
+				path,
+				size,
+				(result) => resolve(result)
+			);
+			modal.open();
 		});
 	}
 
@@ -575,13 +660,17 @@ export class NoteSageView extends ItemView {
 		const messageText = this.inputField.value.trim();
 		if (!messageText || this.isProcessing) return;
 
+		// 멘션 목록 복사 (입력 초기화 전에)
+		const mentions = this.mentionInput.getMentions();
+
 		// Race condition 방지: 즉시 처리 상태로 전환
 		this.setProcessingState(true);
 		this.inputField.value = '';
+		this.mentionInput.clearMentions();
 		this.autoResizeTextarea();
 
 		try {
-			const finalMessage = await this.buildFinalMessage(messageText);
+			const finalMessage = await this.buildFinalMessage(messageText, mentions);
 			this.logDebugContext(messageText, finalMessage);
 
 			const userMessage = MessageFactory.createUserInputMessage(messageText, this.currentSessionId);
@@ -593,51 +682,62 @@ export class NoteSageView extends ItemView {
 		}
 	}
 
-	private async buildFinalMessage(messageText: string): Promise<string> {
-		if (!this.includeFileContext) {
-			return messageText;
-		}
-
-		const activeFile = this.app.workspace.getActiveFile();
-		if (!activeFile) {
-			return messageText;
-		}
-
+	private async buildFinalMessage(messageText: string, mentions: Mention[] = []): Promise<string> {
 		const contextParts: string[] = [];
-		const vaultPath = this.getVaultBasePath();
-		const filePath = vaultPath ? `${vaultPath}/${activeFile.path}` : activeFile.path;
 
-		// 파일 경로 추가
-		contextParts.push(`${t('currentFile')}: ${filePath}`);
-
-		// Phase 1-A: 파일 내용 컨텍스트
-		if (this.settings.includeFileContent) {
-			try {
-				// 선택 영역이 있는 경우 선택 영역만 포함
-				if (this.settings.includeSelection) {
-					const selection = this.getActiveSelection();
-					if (selection) {
-						contextParts.push(`\n${t('selectedText')}:\n\`\`\`\n${selection}\n\`\`\``);
-					} else {
-						// 선택 영역이 없으면 전체 파일 내용 포함
-						const content = await this.getFileContent(activeFile);
-						if (content) {
-							contextParts.push(`\n${t('fileContent')}:\n\`\`\`\n${content}\n\`\`\``);
-						}
-					}
-				} else {
-					// 선택 영역 옵션이 비활성화된 경우 전체 파일 내용 포함
-					const content = await this.getFileContent(activeFile);
-					if (content) {
-						contextParts.push(`\n${t('fileContent')}:\n\`\`\`\n${content}\n\`\`\``);
-					}
-				}
-			} catch (error) {
-				console.warn('Failed to read file content:', error);
+		// @ 멘션 컨텍스트 추가
+		if (mentions.length > 0) {
+			const mentionContext = await this.mentionService.buildContextString(mentions);
+			if (mentionContext) {
+				contextParts.push(mentionContext);
 			}
 		}
 
-		return `${contextParts.join('\n')}\n\n${messageText}`;
+		// 현재 파일 컨텍스트 추가 (기존 로직)
+		if (this.includeFileContext) {
+			const activeFile = this.app.workspace.getActiveFile();
+			if (activeFile) {
+				const vaultPath = this.getVaultBasePath();
+				const filePath = vaultPath ? `${vaultPath}/${activeFile.path}` : activeFile.path;
+
+				// 파일 경로 추가
+				contextParts.push(`${t('currentFile')}: ${filePath}`);
+
+				// 파일 내용 컨텍스트
+				if (this.settings.includeFileContent) {
+					try {
+						// 선택 영역이 있는 경우 선택 영역만 포함
+						if (this.settings.includeSelection) {
+							const selection = this.getActiveSelection();
+							if (selection) {
+								contextParts.push(`\n${t('selectedText')}:\n\`\`\`\n${selection}\n\`\`\``);
+							} else {
+								// 선택 영역이 없으면 전체 파일 내용 포함
+								const content = await this.getFileContent(activeFile);
+								if (content) {
+									contextParts.push(`\n${t('fileContent')}:\n\`\`\`\n${content}\n\`\`\``);
+								}
+							}
+						} else {
+							// 선택 영역 옵션이 비활성화된 경우 전체 파일 내용 포함
+							const content = await this.getFileContent(activeFile);
+							if (content) {
+								contextParts.push(`\n${t('fileContent')}:\n\`\`\`\n${content}\n\`\`\``);
+							}
+						}
+					} catch (error) {
+						console.warn('Failed to read file content:', error);
+					}
+				}
+			}
+		}
+
+		// 컨텍스트가 없으면 메시지만 반환
+		if (contextParts.length === 0) {
+			return messageText;
+		}
+
+		return `${contextParts.join('\n\n')}\n\n${messageText}`;
 	}
 
 	private getActiveSelection(): string | null {
@@ -1018,5 +1118,68 @@ export class NoteSageView extends ItemView {
 		}
 
 		return lines.join('\n');
+	}
+}
+
+/**
+ * 대용량 파일 경고 모달
+ */
+class LargeFileWarningModal extends Modal {
+	private path: string;
+	private size: number;
+	private onResult: (result: boolean) => void;
+
+	constructor(
+		app: import('obsidian').App,
+		path: string,
+		size: number,
+		onResult: (result: boolean) => void
+	) {
+		super(app);
+		this.path = path;
+		this.size = size;
+		this.onResult = onResult;
+	}
+
+	onOpen(): void {
+		const { contentEl } = this;
+		contentEl.empty();
+
+		contentEl.createEl('h3', { text: t('largeFileWarningTitle') });
+
+		const sizeKB = Math.round(this.size / 1024);
+		const message = t('largeFileWarningMessage')
+			.replace('{path}', this.path)
+			.replace('{size}', `${sizeKB}KB`);
+		contentEl.createEl('p', { text: message });
+
+		contentEl.createEl('p', {
+			text: t('largeFileWarningQuestion'),
+			cls: 'mod-warning'
+		});
+
+		const buttonContainer = contentEl.createDiv({ cls: 'modal-button-container' });
+
+		const cancelButton = buttonContainer.createEl('button', {
+			text: t('cancel')
+		});
+		cancelButton.addEventListener('click', () => {
+			this.onResult(false);
+			this.close();
+		});
+
+		const includeButton = buttonContainer.createEl('button', {
+			text: t('includeAnyway'),
+			cls: 'mod-cta'
+		});
+		includeButton.addEventListener('click', () => {
+			this.onResult(true);
+			this.close();
+		});
+	}
+
+	onClose(): void {
+		const { contentEl } = this;
+		contentEl.empty();
 	}
 }
