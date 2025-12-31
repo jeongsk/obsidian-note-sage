@@ -492,7 +492,14 @@ export class SkillsManager {
 			// 폴더가 이미 존재하는지 확인
 			const folderExists = await this.app.vault.adapter.exists(skillPath);
 			if (!folderExists) {
-				await this.app.vault.createFolder(skillPath);
+				try {
+					await this.app.vault.createFolder(skillPath);
+				} catch (error) {
+					// 폴더가 이미 존재하는 경우 무시 (race condition 방지)
+					if (!(error instanceof Error && error.message.includes('already exists'))) {
+						throw error;
+					}
+				}
 			}
 
 			// 파일 생성
@@ -614,5 +621,57 @@ ${examplesContent}
 	 */
 	getSkillsPath(): string {
 		return this.skillsPath;
+	}
+
+	/**
+	 * Skill 파일 전체 내용 읽기
+	 *
+	 * @param id Skill ID (디렉토리명)
+	 * @returns 파일 전체 내용
+	 */
+	async readSkillFile(id: string): Promise<string> {
+		const filePath = `${this.skillsPath}/${id}/SKILL.md`;
+		const exists = await this.app.vault.adapter.exists(filePath);
+		if (!exists) {
+			throw new Error(`Skill file not found: ${filePath}`);
+		}
+		return await this.app.vault.adapter.read(filePath);
+	}
+
+	/**
+	 * Skill 파일 업데이트
+	 *
+	 * @param id Skill ID (디렉토리명)
+	 * @param name Skill 이름 (YAML frontmatter용)
+	 * @param description Skill 설명 (YAML frontmatter용)
+	 * @param body Markdown 본문 (YAML frontmatter 제외)
+	 */
+	async updateSkillFile(id: string, name: string, description: string, body: string): Promise<void> {
+		const filePath = `${this.skillsPath}/${id}/SKILL.md`;
+		const content = this.generateSkillFileContent(name, description, body);
+		await this.app.vault.adapter.write(filePath, content);
+	}
+
+	/**
+	 * SKILL.md 파일 내용 생성 (YAML frontmatter + 본문)
+	 */
+	private generateSkillFileContent(name: string, description: string, body: string): string {
+		return `---
+name: ${name}
+description: ${description || 'Add your Skill description here'}
+---
+
+${body}`;
+	}
+
+	/**
+	 * SKILL.md 파일에서 본문 추출 (YAML frontmatter 제외)
+	 *
+	 * @param fileContent 파일 전체 내용
+	 * @returns YAML frontmatter를 제외한 본문
+	 */
+	parseSkillBody(fileContent: string): string {
+		const match = fileContent.match(/^---\n[\s\S]*?\n---\n([\s\S]*)$/);
+		return match ? match[1].trim() : fileContent;
 	}
 }
