@@ -4,13 +4,13 @@ import type { SkillsManager } from './SkillsManager';
 import { t } from '../i18n';
 
 /**
- * Skill 생성 마법사 모달
+ * Skill 템플릿 생성 모달
  *
  * @description
  * 이름과 설명을 입력받아 SKILL.md 파일을 생성합니다.
  * 실시간 미리보기 기능을 제공합니다.
  */
-export class SkillCreatorModal extends Modal {
+export class SkillTemplateModal extends Modal {
 	private skillsManager: SkillsManager;
 	private existingSkills: SkillEntry[];
 	private onSubmit: (filePath: string) => void;
@@ -35,7 +35,7 @@ export class SkillCreatorModal extends Modal {
 		const { contentEl } = this;
 
 		// 모달 제목
-		contentEl.createEl('h2', { text: t('settings.skills.createWizard') });
+		contentEl.createEl('h2', { text: t('settings.skills.createTemplate') });
 
 		// 이름 입력 필드
 		new Setting(contentEl)

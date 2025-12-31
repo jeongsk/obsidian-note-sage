@@ -15,8 +15,8 @@ import { t, setLanguage, AVAILABLE_LANGUAGES, SupportedLanguage } from './i18n';
 import { McpSettingsUI } from './mcp/McpSettingsUI';
 import { SkillsManager } from './skills/SkillsManager';
 import { SkillDetailModal } from './skills/SkillDetailModal';
-import { SkillCreatorModal } from './skills/SkillCreatorModal';
-import { SkillNamePrompt } from './skills/SkillNamePrompt';
+import { SkillTemplateModal } from './skills/SkillCreatorModal';
+import { SkillAIWizardModal } from './skills/SkillAIWizardModal';
 import type { SkillEntry } from './types';
 import { CONTENT_LIMITS } from './constants';
 
@@ -387,7 +387,7 @@ export class NoteSageSettingTab extends PluginSettingTab {
 		new Setting(buttonContainer)
 			.addButton((btn) =>
 				btn.setButtonText(t('settings.skills.createTemplate')).onClick(() => {
-					new SkillNamePrompt(
+					new SkillTemplateModal(
 						this.plugin.app,
 						this.skillsManager,
 						this.skills,
@@ -405,11 +405,12 @@ export class NoteSageSettingTab extends PluginSettingTab {
 			)
 			.addButton((btn) =>
 				btn
-					.setButtonText(t('settings.skills.createWizard'))
+					.setButtonText(t('settings.skills.createAIWizard'))
 					.setCta()
 					.onClick(() => {
-						new SkillCreatorModal(
+						new SkillAIWizardModal(
 							this.plugin.app,
+							this.plugin,
 							this.skillsManager,
 							this.skills,
 							async (filePath) => {
