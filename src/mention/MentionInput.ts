@@ -335,6 +335,9 @@ export class MentionInput {
 			e.stopPropagation();
 			this.removeMention(mention.id);
 		});
+
+		// 컨테이너에 has-mentions 클래스 업데이트
+		this.updateHasMentionsClass();
 	}
 
 	/**
@@ -412,7 +415,14 @@ export class MentionInput {
 		);
 		if (chipEl) {
 			chipEl.addClass('removing');
-			setTimeout(() => chipEl.remove(), 150);
+			setTimeout(() => {
+				chipEl.remove();
+				// 애니메이션 완료 후 클래스 업데이트
+				this.updateHasMentionsClass();
+			}, 150);
+		} else {
+			// 즉시 클래스 업데이트
+			this.updateHasMentionsClass();
 		}
 
 		// 콜백 호출
@@ -425,6 +435,21 @@ export class MentionInput {
 	clearMentions(): void {
 		this.mentions = [];
 		this.mentionChipsContainer.empty();
+		this.updateHasMentionsClass();
+	}
+
+	/**
+	 * 멘션 존재 여부에 따라 컨테이너에 has-mentions 클래스 토글
+	 */
+	private updateHasMentionsClass(): void {
+		const parentContainer = this.mentionChipsContainer.parentElement;
+		if (!parentContainer) return;
+
+		if (this.mentions.length > 0) {
+			parentContainer.addClass('has-mentions');
+		} else {
+			parentContainer.removeClass('has-mentions');
+		}
 	}
 
 	/**

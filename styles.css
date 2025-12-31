@@ -229,28 +229,23 @@
 .sage-file-context-text {
 		font-size: var(--font-smaller);
 	}
-/* 채팅 입력 */
+/* 채팅 입력 - 파일 컨텍스트 헤더 아래에 위치하므로 테두리/모서리 없음 */
 .sage-chat-input {
 		width: 100%;
 		resize: none;
 		overflow-y: auto;
-		border-radius: 0px;
-		border-left-width: 1px;
-		border-right-width: 1px;
-		border-color: var(--background-modifier-border);
 		background-color: var(--background-primary);
 		min-height: 2.5rem;
 		max-height: 180px;
 		padding: 3px 6px;
-		border-top: 0;
-		border-bottom: 0;
+		border: 0;
+		border-radius: 0;
 		line-height: 1.5;
 		font-family: inherit;
 }
 .sage-chat-input:focus {
 		box-shadow: none !important;
-		border-left: 1px solid var(--background-modifier-border);
-		border-right: 1px solid var(--background-modifier-border);
+		border: 0;
 	}
 /* 전송 버튼 컨테이너 */
 .sage-chat-button-container {
@@ -1312,16 +1307,17 @@
 		color: var(--text-muted);
 		font-size: var(--font-small);
 }
-/* 멘션 칩 컨테이너 */
+/* 멘션 칩 컨테이너 - 기본적으로 숨김, 파일 컨텍스트 헤더 아래에 위치 */
 .sage-mention-chips {
-		display: flex;
+		display: none;
 		flex-wrap: wrap;
 		gap: 0.375rem;
+		background-color: var(--background-primary);
 		padding: 0.5rem;
-		border-bottom: 1px solid var(--background-modifier-border);
 }
-.sage-mention-chips:empty {
-		display: none;
+/* 멘션이 있을 때 칩 컨테이너 표시 */
+.sage-chat-input-container.has-mentions .sage-mention-chips {
+		display: flex;
 }
 /* 개별 멘션 칩 */
 .sage-mention-chip {
