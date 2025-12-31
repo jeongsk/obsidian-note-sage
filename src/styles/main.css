@@ -489,6 +489,41 @@
 		@apply tw-font-medium;
 	}
 
+	/* ==================== Common Components ==================== */
+
+	/* 소형 토글 스위치 - MCP 서버, Skills 등에서 사용 */
+	.sage-toggle-sm {
+		@apply tw-relative tw-inline-block tw-flex-shrink-0;
+		width: 32px;
+		height: 18px;
+	}
+
+	.sage-toggle-sm-checkbox {
+		@apply tw-opacity-0 tw-w-0 tw-h-0 tw-absolute;
+	}
+
+	.sage-toggle-sm-slider {
+		@apply tw-absolute tw-cursor-pointer tw-inset-0 tw-bg-obs-border tw-rounded-full tw-transition-all tw-duration-200;
+	}
+
+	.sage-toggle-sm-slider::before {
+		@apply tw-absolute tw-rounded-full tw-bg-white tw-transition-all tw-duration-200;
+		content: "";
+		height: 14px;
+		width: 14px;
+		left: 2px;
+		bottom: 2px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	}
+
+	.sage-toggle-sm-checkbox:checked + .sage-toggle-sm-slider {
+		@apply tw-bg-obs-accent;
+	}
+
+	.sage-toggle-sm-checkbox:checked + .sage-toggle-sm-slider::before {
+		transform: translateX(14px);
+	}
+
 	/* ==================== MCP Server Settings ==================== */
 	.sage-mcp-settings {
 		@apply tw-mt-4;
@@ -564,39 +599,6 @@
 
 	.sage-mcp-server-controls {
 		@apply tw-flex tw-items-center tw-gap-1 tw-flex-shrink-0;
-	}
-
-	/* 토글 스위치 */
-	.sage-mcp-toggle {
-		@apply tw-relative tw-inline-block tw-flex-shrink-0;
-		width: 32px;
-		height: 18px;
-	}
-
-	.sage-mcp-toggle-checkbox {
-		@apply tw-opacity-0 tw-w-0 tw-h-0 tw-absolute;
-	}
-
-	.sage-mcp-toggle-slider {
-		@apply tw-absolute tw-cursor-pointer tw-inset-0 tw-bg-obs-border tw-rounded-full tw-transition-all tw-duration-200;
-	}
-
-	.sage-mcp-toggle-slider::before {
-		@apply tw-absolute tw-rounded-full tw-bg-white tw-transition-all tw-duration-200;
-		content: "";
-		height: 14px;
-		width: 14px;
-		left: 2px;
-		bottom: 2px;
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-	}
-
-	.sage-mcp-toggle-checkbox:checked + .sage-mcp-toggle-slider {
-		@apply tw-bg-obs-accent;
-	}
-
-	.sage-mcp-toggle-checkbox:checked + .sage-mcp-toggle-slider::before {
-		transform: translateX(14px);
 	}
 
 	.sage-mcp-btn {
@@ -965,39 +967,6 @@
 
 	.sage-skill-controls {
 		@apply tw-flex tw-items-center tw-gap-1.5 tw-flex-shrink-0;
-	}
-
-	/* Skills 토글 - MCP와 동일 */
-	.sage-skill-toggle {
-		@apply tw-relative tw-inline-block tw-flex-shrink-0;
-		width: 36px;
-		height: 20px;
-	}
-
-	.sage-skill-toggle-checkbox {
-		@apply tw-opacity-0 tw-w-0 tw-h-0 tw-absolute;
-	}
-
-	.sage-skill-toggle-slider {
-		@apply tw-absolute tw-cursor-pointer tw-inset-0 tw-bg-obs-border tw-rounded-full tw-transition-all tw-duration-200;
-	}
-
-	.sage-skill-toggle-slider::before {
-		@apply tw-absolute tw-rounded-full tw-bg-white tw-transition-all tw-duration-200;
-		content: "";
-		height: 16px;
-		width: 16px;
-		left: 2px;
-		bottom: 2px;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-	}
-
-	.sage-skill-toggle-checkbox:checked + .sage-skill-toggle-slider {
-		@apply tw-bg-obs-accent;
-	}
-
-	.sage-skill-toggle-checkbox:checked + .sage-skill-toggle-slider::before {
-		transform: translateX(16px);
 	}
 
 	.sage-skill-btn {
