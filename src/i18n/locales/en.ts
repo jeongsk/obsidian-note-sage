@@ -123,6 +123,13 @@ interface SkillsSettingsTranslations {
 	validationErrors: string;
 	retrying: string;
 	noContentError: string;
+	// Edit Modal
+	editTitle: string;
+	contentLabel: string;
+	contentDesc: string;
+	contentPlaceholder: string;
+	updateSuccess: string;
+	updateError: string;
 }
 
 interface McpSettingsTranslations {
@@ -589,6 +596,13 @@ export const en: TranslationKeys = {
 			validationErrors: 'Content has validation errors:\n{errors}',
 			retrying: 'Fixing issues... (attempt {attempt}/{max})',
 			noContentError: 'No content generated. Please click "Generate" first.',
+			// Edit Modal
+			editTitle: 'Edit Skill',
+			contentLabel: 'Content',
+			contentDesc: 'Full markdown body (free editing)',
+			contentPlaceholder: '# skill-name\n\n## Instructions\n\n...',
+			updateSuccess: 'Skill updated successfully',
+			updateError: 'Error updating skill',
 		},
 
 		// About
