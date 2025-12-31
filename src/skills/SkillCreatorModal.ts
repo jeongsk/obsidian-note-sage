@@ -20,6 +20,7 @@ export class SkillTemplateModal extends Modal {
 	private examplesValue = '';
 	private previewEl: HTMLElement | null = null;
 	private errorEl: HTMLElement | null = null;
+	private nameInputEl: HTMLInputElement | null = null;
 
 	constructor(
 		app: App,
@@ -45,11 +46,21 @@ export class SkillTemplateModal extends Modal {
 			.setName(t('settings.skills.nameLabel'))
 			.setDesc(t('settings.skills.nameDesc'))
 			.addText((text) => {
+				this.nameInputEl = text.inputEl;
 				text.setPlaceholder('my-skill').onChange((value) => {
 					this.nameValue = value;
 					this.validateNameFormat();
-				this.updatePreview();
+					this.updatePreview();
 				});
+
+				// 입력 박스 아래에 에러 메시지 영역 생성
+				const controlEl = text.inputEl.parentElement;
+				if (controlEl) {
+					controlEl.style.flexWrap = 'wrap';
+					this.errorEl = controlEl.createDiv({
+						cls: 'sage-skill-name-error tw-text-red-500 tw-text-xs tw-mt-1 tw-hidden tw-w-full',
+					});
+				}
 
 				// 포커스
 				setTimeout(() => text.inputEl.focus(), 50);
@@ -100,11 +111,6 @@ export class SkillTemplateModal extends Modal {
 				text.inputEl.style.width = '100%';
 			});
 
-		// 에러 메시지 영역
-		this.errorEl = contentEl.createDiv({
-			cls: 'sage-skill-creator-error tw-text-red-500 tw-text-sm tw-mt-2 tw-hidden',
-		});
-
 		// 미리보기 섹션
 		contentEl.createEl('h3', {
 			text: t('settings.skills.preview'),
@@ -140,10 +146,12 @@ export class SkillTemplateModal extends Modal {
 		if (!validation.valid) {
 			this.errorEl.textContent = validation.error || '';
 			this.errorEl.removeClass('tw-hidden');
+			this.nameInputEl?.addClass('sage-input-error');
 			return false;
 		}
 
 		this.errorEl.addClass('tw-hidden');
+		this.nameInputEl?.removeClass('sage-input-error');
 		return true;
 	}
 

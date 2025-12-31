@@ -659,6 +659,12 @@
 		border-color: var(--color-red) !important;
 	}
 
+	/* 스킬 이름 에러 메시지 - 입력 박스 아래에 표시 */
+	.sage-skill-name-error {
+		flex-basis: 100%;
+		order: 99;
+	}
+
 	.sage-mcp-dynamic-fields {
 		@apply tw-mt-2;
 	}
