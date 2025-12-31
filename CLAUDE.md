@@ -1,242 +1,172 @@
 # CLAUDE.md
 
-This file provides guidance for AI assistants working with the Note Sage (obsidian-note-sage) codebase.
+Note Sage 코드베이스 작업을 위한 AI 어시스턴트 가이드.
 
 ## Project Overview
 
-**Note Sage** is an Obsidian plugin that integrates Claude AI directly into the Obsidian workspace. It uses the Claude Agent SDK (`@anthropic-ai/claude-agent-sdk`) to provide an AI chat interface in Obsidian's right sidebar, allowing users to interact with Claude while working in their vault.
+**Note Sage**는 Obsidian에서 Claude AI와 직접 대화할 수 있는 플러그인. Claude Agent SDK를 사용하여 우측 사이드바에 AI 채팅 인터페이스 제공.
 
 ### Key Features
-- Chat with Claude directly within Obsidian
-- Automatic file context inclusion from the current active note
-- Session management for conversation continuity
-- Real-time streaming of AI responses
-- Task/todo tracking display
-- Multiple Claude model support
+- AI 채팅 인터페이스 (실시간 스트리밍)
+- @ 멘션으로 파일/폴더 컨텍스트 추가
+- MCP 서버 통합 (자동 명령어 탐지)
+- Agent Options: maxTurns, budget, Extended Thinking, permissionMode
+- Built-in Tools Toggle (WebSearch, WebFetch)
+- Quick Action 버튼
+- 11개 언어 i18n 지원
+- 대화 자동 저장 및 세션 관리
+
+## Tech Stack
+
+- TypeScript 5.9+ + Obsidian API
+- @anthropic-ai/claude-agent-sdk ^0.1.76
+- TailwindCSS 3.4.19 (`tw-` prefix, no preflight)
+- Vitest for testing
+- Node.js >=22.0.0
 
 ## Codebase Structure
 
 ```
 obsidian-note-sage/
-├── src/                     # Source code directory
-│   ├── main.ts              # Plugin entry point, lifecycle management
-│   ├── AgentService.ts      # Claude Agent SDK integration layer
-│   ├── ChatView.ts          # UI component for the chat interface
-│   ├── ChatRenderer.ts      # Chat message rendering utilities
-│   ├── MessageFactory.ts    # Message creation utilities
-│   ├── SettingsTab.ts       # Plugin settings configuration UI
-│   ├── types.ts             # TypeScript type definitions
-│   └── exampleMessages.ts   # Example message data for testing
-├── styles.css               # Chat interface styling
-├── esbuild.config.mjs       # Build configuration
-├── manifest.json            # Obsidian plugin manifest
-├── package.json             # Dependencies and scripts
-├── tsconfig.json            # TypeScript configuration
-└── .eslintrc                # ESLint configuration
+├── src/
+│   ├── main.ts              # 플러그인 진입점
+│   ├── AgentService.ts      # Claude SDK 통합
+│   ├── ChatView.ts          # 채팅 UI (ItemView)
+│   ├── ChatRenderer.ts      # 메시지 렌더링
+│   ├── MessageFactory.ts    # 메시지 생성
+│   ├── SettingsTab.ts       # 설정 UI
+│   ├── types.ts             # 타입 정의
+│   ├── constants.ts         # 상수
+│   ├── i18n/                # 11개 언어 지원
+│   │   ├── index.ts
+│   │   └── locales/*.ts
+│   ├── mcp/                 # MCP 서버 관리
+│   │   ├── McpServerManager.ts
+│   │   ├── McpSettingsUI.ts
+│   │   └── McpToolsPanel.ts
+│   ├── mention/             # @ 멘션 컨텍스트
+│   │   ├── MentionService.ts
+│   │   ├── MentionInput.ts
+│   │   └── AutocompletePopup.ts
+│   ├── tools/               # 플러그인 도구
+│   │   └── ObsidianPluginTools.ts
+│   └── styles/
+│       └── main.css         # Tailwind 소스
+├── tailwind.config.js
+├── esbuild.config.mjs
+└── styles.css               # 생성됨 (수정 금지)
 ```
-
-### Core Files
-
-| File | Purpose |
-|------|---------|
-| `src/main.ts` | Plugin class extending Obsidian's `Plugin`. Handles loading/unloading, settings, and view registration. |
-| `src/AgentService.ts` | Wraps the Claude Agent SDK `query()` function. Manages streaming responses, session IDs, and abort handling. |
-| `src/ChatView.ts` | Extends Obsidian's `ItemView`. Renders the chat UI, handles user input, displays messages, and manages chat state. |
-| `src/ChatRenderer.ts` | Utility class for rendering chat messages and content blocks. |
-| `src/MessageFactory.ts` | Factory for creating structured chat messages. |
-| `src/SettingsTab.ts` | Plugin settings tab for API key, model selection, and debug mode. |
-| `src/types.ts` | Type definitions for settings, messages, content blocks, and SDK message types. |
 
 ## Architecture
 
 ### Data Flow
 ```
-User Input → ChatView.handleSendMessage()
-    → AgentService.execute()
-        → Claude Agent SDK query()
-            → Streaming messages back
-                → ChatView.addMessage() → UI render
+User Input → ChatView → AgentService → Claude SDK → Streaming → ChatView
 ```
 
-### Key Classes
+### Key Modules
 
-**NoteSagePlugin** (`src/main.ts`)
-- Entry point extending `Plugin`
-- Registers the custom view type `note-sage-view`
-- Manages settings persistence
-- Activates the chat view in the right sidebar
+| 모듈 | 역할 |
+|------|------|
+| AgentService | SDK 래퍼, 세션/취소 관리 |
+| ChatView | Obsidian ItemView, UI 라이프사이클 |
+| McpServerManager | MCP 서버 상태, SDK 설정 변환 |
+| MentionService | 파일/폴더 검색, 컨텍스트 생성 |
+| i18n | 번역 함수 `t()`, RTL 지원 |
 
-**AgentService** (`src/AgentService.ts`)
-- Manages Claude Agent SDK interactions
-- Handles streaming message conversion
-- Provides cancellation support via `AbortController`
-- Converts SDK messages to internal `ChatMessage` format
+### Settings (src/types.ts)
+`NoteSageSettings`: apiKey, model, mcpServers[], disabledBuiltinTools[], maxTurns, maxBudgetUsd, enableExtendedThinking, permissionMode, quickActions[] 등
 
-**NoteSageView** (`src/ChatView.ts`)
-- Obsidian `ItemView` implementation
-- Manages chat UI lifecycle
-- Handles message rendering (user, assistant, tool use, tool results)
-- Supports file context toggling
-- Processing state management (loading/cancel)
+## TailwindCSS Guidelines
 
-### Message Types
+### 설정
+- Config: `tailwind.config.js` (prefix: `tw-`, preflight: false)
+- Source: `src/styles/main.css`
+- Build: PostCSS + Tailwind (esbuild.config.mjs)
 
-The plugin handles several message types from the Claude Agent SDK:
+### Obsidian 색상 매핑
+`obs-*` 색상은 Obsidian CSS 변수에 매핑:
+- `tw-bg-obs-bg` → `var(--background-primary)`
+- `tw-text-obs-text` → `var(--text-normal)`
+- `tw-border-obs-border` → `var(--background-modifier-border)`
+- 전체 매핑: `tailwind.config.js` 참조
 
-- `system` (with subtype `init`) - Session initialization
-- `assistant` - Claude's text responses and tool calls
-- `user` - Tool results and user input
-- `result` - Final response with execution stats
-
-## Development Workflow
-
-### Prerequisites
-- Node.js (v18+)
-- npm
-- An Obsidian vault for testing
-
-### Setup
-```bash
-npm install
-```
-
-### Development Mode
-```bash
-npm run dev
-```
-Starts esbuild in watch mode with inline source maps.
-
-### Production Build
-```bash
-npm run build
-```
-Runs TypeScript type checking and creates a minified bundle.
-
-### Testing in Obsidian
-1. Create a symlink or copy the plugin folder to your vault's `.obsidian/plugins/` directory
-2. Enable the plugin in Obsidian's Community Plugins settings
-3. Reload Obsidian after code changes (or use hot reload if available)
-
-## Code Conventions
-
-### TypeScript
-- Use explicit type annotations for function parameters and return types
-- Prefer interfaces over types for object shapes
-- Use `readonly` for immutable properties where applicable
-- Follow the existing patterns in `src/types.ts` for new type definitions
-
-### Naming Conventions
-- **Classes**: PascalCase (e.g., `NoteSageView`, `AgentService`)
-- **Interfaces**: PascalCase (e.g., `ChatMessage`, `NoteSageSettings`)
-- **Methods/Functions**: camelCase (e.g., `handleSendMessage`, `renderMessage`)
-- **Constants**: UPPER_SNAKE_CASE for true constants (e.g., `VIEW_TYPE_NOTE_SAGE`, `DEFAULT_SETTINGS`)
-- **CSS Classes**: kebab-case with `sage-` prefix (e.g., `sage-chat-container`, `sage-message-content`)
-
-### Code Style
-- Use tabs for indentation (per `.editorconfig`)
-- Single quotes for strings (per ESLint config)
-- No unused variables (enforced by ESLint)
-- Prefer async/await over raw promises
-- Use optional chaining (`?.`) and nullish coalescing (`??`) where appropriate
-
-### CSS Conventions
-- All CSS classes prefixed with `sage-` to avoid conflicts
-- Use CSS custom properties (CSS variables) from Obsidian's theme (e.g., `var(--background-primary)`)
-- Responsive design considerations for sidebar width
-
-## Key Integration Points
-
-### Obsidian API Usage
-- `Plugin` - Base class for plugin lifecycle
-- `ItemView` - Base class for custom views
-- `WorkspaceLeaf` - Container for views
-- `PluginSettingTab` - Settings interface
-- `setIcon` - Icon rendering utility
-
-### Claude Agent SDK
-- `query()` - Main function for sending prompts and receiving streaming responses
-- Uses `permissionMode: 'bypassPermissions'` for full functionality
-- Session resumption via `resume` option
-
-### Environment Variables
-- `ANTHROPIC_API_KEY` - Set from plugin settings for API authentication
-
-## Configuration
-
-### Settings (`src/types.ts`)
-```typescript
-interface NoteSageSettings {
-  apiKey?: string;        // Anthropic API key
-  model?: string;         // Claude model identifier
-  debugContext?: boolean; // Enable debug logging
+### 컴포넌트 패턴
+`@layer components`에서 `@apply` 사용:
+```css
+.sage-component {
+  @apply tw-flex tw-items-center tw-gap-2 tw-bg-obs-bg tw-rounded-obs;
 }
 ```
 
-### Available Models (`src/types.ts`)
-- `claude-opus-4-5` - Most capable
-- `claude-sonnet-4-5` - Default
-- `claude-haiku-4-5` - Fastest
+### 규칙
+1. 유틸리티 클래스: `tw-` 접두사 필수 (`tw-flex`, `tw-p-2`)
+2. 컴포넌트 클래스: `sage-` 접두사 (`sage-button`, `sage-panel`)
+3. 색상: Obsidian 매핑 색상(`obs-*`) 사용, raw Tailwind 색상 금지
+4. Preflight 비활성화: Obsidian 기본 스타일 유지
+
+## Development
+
+```bash
+npm install          # 설치
+npm run dev          # 개발 모드 (watch)
+npm run build        # 프로덕션 빌드
+npm run test         # 테스트 실행
+```
+
+### Testing in Obsidian
+1. 플러그인 폴더를 vault의 `.obsidian/plugins/`에 심링크
+2. Community Plugins에서 활성화
+3. 코드 변경 후 Obsidian 리로드
+
+## Code Conventions
+
+### Naming
+- **Classes/Interfaces**: PascalCase (`NoteSageView`, `ChatMessage`)
+- **Methods/Functions**: camelCase (`handleSendMessage`)
+- **Constants**: UPPER_SNAKE_CASE (`VIEW_TYPE_NOTE_SAGE`)
+- **CSS Classes**: `sage-` prefix (`sage-chat-container`)
+
+### TypeScript
+- 명시적 타입 어노테이션 사용
+- interfaces 선호 (object shapes)
+- `readonly` 적극 활용
+- async/await 선호, optional chaining (`?.`), nullish coalescing (`??`)
+
+### Code Style
+- Tabs for indentation
+- Single quotes for strings
+- No unused variables
 
 ## Common Tasks
 
-### Adding a New Setting
-1. Add the property to `NoteSageSettings` interface in `src/types.ts`
-2. Add default value to `DEFAULT_SETTINGS` in `src/types.ts`
-3. Add UI control in `src/SettingsTab.ts` `display()` method
-4. Update relevant components to use the new setting
+### 새 설정 추가
+1. `NoteSageSettings` 인터페이스 업데이트 (types.ts)
+2. `DEFAULT_SETTINGS` 기본값 추가
+3. `SettingsTab.ts`에 UI 컨트롤 추가
 
-### Adding a New Message Type
-1. Define the type in `src/types.ts` (update `ChatMessage` or create new interface)
-2. Handle the new type in `src/AgentService.convertSDKMessage()`
-3. Add rendering logic in `src/ChatView.renderMessage()` or `renderMessageContent()`
-4. Add corresponding CSS styles in `styles.css`
-
-### Modifying the Chat UI
-- UI components are in `src/ChatView.ts`
-- Styles are in `styles.css`
-- Use Obsidian's `createEl()` for DOM creation
-- Follow existing patterns for collapsible sections
+### 새 메시지 타입 추가
+1. types.ts에 타입 정의
+2. AgentService.convertSDKMessage() 핸들링
+3. ChatView 렌더링 로직 추가
+4. styles/main.css에 스타일 추가
 
 ## Debugging
 
-### Enable Debug Mode
-1. Open plugin settings in Obsidian
-2. Enable "Debug mode" toggle
-3. Open Developer Console: `Cmd+Opt+I` (Mac) or `Ctrl+Shift+I` (Windows/Linux)
-
-### Debug Output
-When debug mode is enabled, the plugin logs:
-- API key configuration status
-- Model selection
-- Message context (original and final message with file context)
-- Session ID tracking
-- Streaming messages as they arrive
+1. 설정에서 "Debug mode" 활성화
+2. Developer Console: `Cmd+Opt+I` (Mac) / `Ctrl+Shift+I` (Windows)
+3. 로그 출력: API 상태, 모델, 메시지 컨텍스트, 세션 ID
 
 ## Important Notes
 
-### Security Considerations
-- The plugin uses `bypassPermissions` mode - it can read/write files and execute commands
-- API keys are stored in Obsidian's plugin data (not encrypted)
-- Consider vault backup before use in production
+### Security
+- `bypassPermissions` 모드 사용 - 파일 읽기/쓰기/명령 실행 가능
+- API 키는 플러그인 데이터에 저장 (암호화되지 않음)
+- 프로덕션 사용 전 vault 백업 권장
 
 ### Desktop Only
-This plugin is desktop-only (`isDesktopOnly: true` in manifest) as it relies on Node.js and file system access.
+`isDesktopOnly: true` - Node.js 및 파일 시스템 접근 필요
 
 ### Build Output
-- `main.js` - Bundled plugin code (generated, do not edit)
-- Source maps are inline in development, disabled in production
-
-## Active Technologies
-- TypeScript 5.7+ + Obsidian API, @anthropic-ai/claude-agent-sdk (001-quick-action-buttons)
-- Obsidian Plugin Settings (JSON file in `.obsidian/plugins/` folder) (001-quick-action-buttons)
-- TypeScript 5.7+ (기존 프로젝트와 동일) + @anthropic-ai/claude-agent-sdk ^0.1.5, Obsidian API, Zod ^4.2.1 (002-mcp-server)
-- Obsidian 플러그인 설정 (JSON, data.json) (002-mcp-server)
-- TypeScript 5.7+ + Obsidian API, @anthropic-ai/claude-agent-sdk ^0.1.5 (004-mcp-tools-panel)
-- Obsidian Plugin Settings (data.json) (004-mcp-tools-panel)
-- TypeScript 5.9+ + @anthropic-ai/claude-agent-sdk ^0.1.76, Obsidian API (006-builtin-tools-toggle)
-- Obsidian plugin data.json (via `this.plugin.saveSettings()`) (006-builtin-tools-toggle)
-- TypeScript 5.9+ + @anthropic-ai/claude-agent-sdk ^0.1.76, obsidian API (latest) (001-at-mention-context)
-- N/A (Obsidian vault 파일 시스템 직접 접근) (001-at-mention-context)
-
-## Recent Changes
-- 001-quick-action-buttons: Added TypeScript 5.7+ + Obsidian API, @anthropic-ai/claude-agent-sdk
+- `main.js` - 번들된 플러그인 코드 (수정 금지)
+- `styles.css` - 생성된 CSS (수정 금지, src/styles/main.css 편집)
