@@ -767,6 +767,10 @@ export class NoteSageView extends ItemView {
 						this.renderMcpStatusIcon();
 						this.mcpStatusRenderTimeout = undefined;
 					}, UI_CONSTANTS.MCP_STATUS_DEBOUNCE_MS);
+				},
+				onFileModified: (filePath: string) => {
+					// 에이전트가 수정한 파일 경로를 플러그인에 등록
+					this.plugin.addAgentModifiedFile(filePath);
 				}
 			});
 
@@ -786,6 +790,8 @@ export class NoteSageView extends ItemView {
 		} finally {
 			// 에이전트 실행 완료 - 파일 수정 시 에디터 재렌더링 비활성화
 			this.plugin.setAgentExecuting(false);
+			// 수정된 파일 추적 데이터 초기화
+			this.plugin.resetAgentModifiedFiles();
 		}
 	}
 
