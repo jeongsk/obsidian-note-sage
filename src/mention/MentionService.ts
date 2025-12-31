@@ -307,6 +307,7 @@ export class MentionService {
 				isBinary: false,
 			};
 		} catch (error) {
+			console.error(`[Mention] Failed to read file "${path}":`, error);
 			return {
 				type: 'file',
 				path,
@@ -463,8 +464,14 @@ export class MentionService {
 	 * @returns 100KB 초과 여부
 	 */
 	async isLargeFile(path: string): Promise<boolean> {
-		const stat = await this.app.vault.adapter.stat(path);
-		return (stat?.size || 0) > MENTION_CONSTANTS.LARGE_FILE_THRESHOLD;
+		try {
+			const stat = await this.app.vault.adapter.stat(path);
+			return (stat?.size || 0) > MENTION_CONSTANTS.LARGE_FILE_THRESHOLD;
+		} catch (error) {
+			console.warn(`[Mention] Failed to check file size for "${path}":`, error);
+			// 안전하게 대용량으로 간주하여 경고 표시
+			return true;
+		}
 	}
 
 	/**

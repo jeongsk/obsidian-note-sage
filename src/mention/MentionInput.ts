@@ -62,12 +62,26 @@ export class MentionInput {
 	private isComposing = false;
 	private debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
+	// 바인딩된 이벤트 핸들러 참조 (cleanup을 위해 저장)
+	private boundHandleInput: () => void;
+	private boundHandleKeyDown: (e: KeyboardEvent) => void;
+	private boundHandleCompositionStart: () => void;
+	private boundHandleCompositionEnd: () => void;
+	private boundHandleBlur: () => void;
+
 	constructor(options: MentionInputOptions) {
 		this.inputEl = options.inputEl;
 		this.mentionChipsContainer = options.mentionChipsContainer;
 		this.callbacks = options.callbacks;
 		this.mentionService = options.mentionService;
 		this.autocompletePopup = options.autocompletePopup;
+
+		// 이벤트 핸들러 바인딩 (cleanup을 위해 참조 저장)
+		this.boundHandleInput = this.handleInput.bind(this);
+		this.boundHandleKeyDown = this.handleKeyDown.bind(this);
+		this.boundHandleCompositionStart = this.handleCompositionStart.bind(this);
+		this.boundHandleCompositionEnd = this.handleCompositionEnd.bind(this);
+		this.boundHandleBlur = this.handleBlur.bind(this);
 
 		this.setupEventListeners();
 	}
@@ -77,23 +91,17 @@ export class MentionInput {
 	 */
 	private setupEventListeners(): void {
 		// 입력 이벤트
-		this.inputEl.addEventListener('input', this.handleInput.bind(this));
+		this.inputEl.addEventListener('input', this.boundHandleInput);
 
 		// 키보드 이벤트
-		this.inputEl.addEventListener('keydown', this.handleKeyDown.bind(this));
+		this.inputEl.addEventListener('keydown', this.boundHandleKeyDown);
 
 		// IME 조합 이벤트 (한글 입력)
-		this.inputEl.addEventListener(
-			'compositionstart',
-			this.handleCompositionStart.bind(this)
-		);
-		this.inputEl.addEventListener(
-			'compositionend',
-			this.handleCompositionEnd.bind(this)
-		);
+		this.inputEl.addEventListener('compositionstart', this.boundHandleCompositionStart);
+		this.inputEl.addEventListener('compositionend', this.boundHandleCompositionEnd);
 
 		// 포커스 이벤트
-		this.inputEl.addEventListener('blur', this.handleBlur.bind(this));
+		this.inputEl.addEventListener('blur', this.boundHandleBlur);
 	}
 
 	/**
@@ -132,14 +140,19 @@ export class MentionInput {
 				selectedIndex: 0,
 			};
 
-			// 자동완성 검색
-			const suggestions = await this.mentionService.search(
-				triggerResult.query
-			);
+			try {
+				// 자동완성 검색
+				const suggestions = await this.mentionService.search(
+					triggerResult.query
+				);
 
-			// 팝업 표시
-			const position = this.calculatePopupPosition();
-			this.autocompletePopup.show(position, suggestions);
+				// 팝업 표시
+				const position = this.calculatePopupPosition();
+				this.autocompletePopup.show(position, suggestions);
+			} catch (error) {
+				console.error('[MentionInput] Search failed:', error);
+				this.resetState();
+			}
 		} else {
 			// 멘션 입력 모드 비활성화
 			this.resetState();
@@ -252,42 +265,48 @@ export class MentionInput {
 	 * 제안 선택 처리
 	 */
 	async selectSuggestion(suggestion: AutocompleteSuggestion): Promise<void> {
-		// 대용량 파일 경고
-		if (suggestion.type === 'file') {
-			const isLarge = await this.mentionService.isLargeFile(suggestion.path);
-			if (isLarge) {
-				const proceed = await this.callbacks.onLargeFileWarning(
-					suggestion.path,
-					MENTION_CONSTANTS.LARGE_FILE_THRESHOLD
-				);
-				if (!proceed) {
-					this.resetState();
-					return;
+		try {
+			// 대용량 파일 경고
+			if (suggestion.type === 'file') {
+				const isLarge = await this.mentionService.isLargeFile(suggestion.path);
+				if (isLarge) {
+					const proceed = await this.callbacks.onLargeFileWarning(
+						suggestion.path,
+						MENTION_CONSTANTS.LARGE_FILE_THRESHOLD
+					);
+					if (!proceed) {
+						this.resetState();
+						return;
+					}
 				}
 			}
+
+			// 멘션 생성
+			const mention = this.mentionService.createMention(suggestion);
+			this.mentions.push(mention);
+
+			// 입력창에서 @ 및 검색어 제거
+			const text = this.inputEl.value;
+			const before = text.substring(0, this.state.startIndex);
+			const after = text.substring(this.state.startIndex + this.state.query.length + 1);
+			this.inputEl.value = before + after;
+
+			// 칩 렌더링
+			this.renderMentionChip(mention);
+
+			// 콜백 호출
+			this.callbacks.onMentionAdd(mention);
+
+			// 상태 초기화
+			this.resetState();
+
+			// 포커스 복원
+			this.inputEl.focus();
+		} catch (error) {
+			console.error('[MentionInput] Failed to select suggestion:', error);
+			this.resetState();
+			this.inputEl.focus();
 		}
-
-		// 멘션 생성
-		const mention = this.mentionService.createMention(suggestion);
-		this.mentions.push(mention);
-
-		// 입력창에서 @ 및 검색어 제거
-		const text = this.inputEl.value;
-		const before = text.substring(0, this.state.startIndex);
-		const after = text.substring(this.state.startIndex + this.state.query.length + 1);
-		this.inputEl.value = before + after;
-
-		// 칩 렌더링
-		this.renderMentionChip(mention);
-
-		// 콜백 호출
-		this.callbacks.onMentionAdd(mention);
-
-		// 상태 초기화
-		this.resetState();
-
-		// 포커스 복원
-		this.inputEl.focus();
 	}
 
 	/**
@@ -442,9 +461,20 @@ export class MentionInput {
 	 * 컴포넌트 정리
 	 */
 	destroy(): void {
+		// 디바운스 타이머 정리
 		if (this.debounceTimer) {
 			clearTimeout(this.debounceTimer);
+			this.debounceTimer = null;
 		}
+
+		// 이벤트 리스너 제거 (메모리 누수 방지)
+		this.inputEl.removeEventListener('input', this.boundHandleInput);
+		this.inputEl.removeEventListener('keydown', this.boundHandleKeyDown);
+		this.inputEl.removeEventListener('compositionstart', this.boundHandleCompositionStart);
+		this.inputEl.removeEventListener('compositionend', this.boundHandleCompositionEnd);
+		this.inputEl.removeEventListener('blur', this.boundHandleBlur);
+
+		// 상태 초기화
 		this.resetState();
 		this.mentions = [];
 	}

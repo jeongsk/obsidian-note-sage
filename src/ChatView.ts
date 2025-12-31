@@ -52,8 +52,8 @@ export class NoteSageView extends ItemView {
 
 	// 멘션 관련
 	private mentionService: MentionService;
-	private mentionInput: MentionInput;
-	private autocompletePopup: AutocompletePopup;
+	private mentionInput?: MentionInput;
+	private autocompletePopup?: AutocompletePopup;
 	private mentionChipsContainer: HTMLElement;
 
 	// MCP 상태 구독 해제 함수
@@ -189,6 +189,17 @@ export class NoteSageView extends ItemView {
 		if (this.mcpToolsPanel) {
 			this.mcpToolsPanel.destroy();
 			this.mcpToolsPanel = undefined;
+		}
+
+		// 멘션 시스템 정리
+		if (this.mentionInput) {
+			this.mentionInput.destroy();
+			this.mentionInput = undefined;
+		}
+
+		if (this.autocompletePopup) {
+			this.autocompletePopup.destroy();
+			this.autocompletePopup = undefined;
 		}
 	}
 
@@ -513,7 +524,7 @@ export class NoteSageView extends ItemView {
 			parentEl: this.inputContainer,
 			callbacks: {
 				onSelect: (suggestion) => {
-					this.mentionInput.selectSuggestion(suggestion);
+					this.mentionInput?.selectSuggestion(suggestion);
 				},
 				onClose: () => {
 					// 팝업이 닫힐 때 추가 처리 필요시
@@ -661,12 +672,12 @@ export class NoteSageView extends ItemView {
 		if (!messageText || this.isProcessing) return;
 
 		// 멘션 목록 복사 (입력 초기화 전에)
-		const mentions = this.mentionInput.getMentions();
+		const mentions = this.mentionInput?.getMentions() ?? [];
 
 		// Race condition 방지: 즉시 처리 상태로 전환
 		this.setProcessingState(true);
 		this.inputField.value = '';
-		this.mentionInput.clearMentions();
+		this.mentionInput?.clearMentions();
 		this.autoResizeTextarea();
 
 		try {
@@ -1128,6 +1139,7 @@ class LargeFileWarningModal extends Modal {
 	private path: string;
 	private size: number;
 	private onResult: (result: boolean) => void;
+	private resolved = false; // Promise가 이미 resolve되었는지 추적
 
 	constructor(
 		app: import('obsidian').App,
@@ -1164,8 +1176,7 @@ class LargeFileWarningModal extends Modal {
 			text: t('cancel')
 		});
 		cancelButton.addEventListener('click', () => {
-			this.onResult(false);
-			this.close();
+			this.resolve(false);
 		});
 
 		const includeButton = buttonContainer.createEl('button', {
@@ -1173,13 +1184,28 @@ class LargeFileWarningModal extends Modal {
 			cls: 'mod-cta'
 		});
 		includeButton.addEventListener('click', () => {
-			this.onResult(true);
-			this.close();
+			this.resolve(true);
 		});
+	}
+
+	/**
+	 * 결과 resolve 헬퍼 (중복 호출 방지)
+	 */
+	private resolve(result: boolean): void {
+		if (this.resolved) return;
+		this.resolved = true;
+		this.onResult(result);
+		this.close();
 	}
 
 	onClose(): void {
 		const { contentEl } = this;
 		contentEl.empty();
+
+		// ESC나 외부 클릭으로 닫힌 경우 false로 resolve
+		if (!this.resolved) {
+			this.resolved = true;
+			this.onResult(false);
+		}
 	}
 }
