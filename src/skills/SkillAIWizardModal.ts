@@ -33,7 +33,7 @@ export class SkillAIWizardModal extends Modal {
 	// UI 요소
 	private promptInputEl: HTMLTextAreaElement | null = null;
 	private previewContainerEl: HTMLElement | null = null;
-	private previewContentEl: HTMLElement | null = null;
+	private previewContentEl: HTMLTextAreaElement | null = null;
 	private loadingEl: HTMLElement | null = null;
 	private errorEl: HTMLElement | null = null;
 	private generateBtnEl: HTMLButtonElement | null = null;
@@ -139,8 +139,21 @@ export class SkillAIWizardModal extends Modal {
 			cls: 'tw-mb-2',
 		});
 
-		this.previewContentEl = this.previewContainerEl.createDiv({
-			cls: 'sage-skill-ai-preview tw-p-4 tw-rounded tw-bg-obs-bg-secondary tw-overflow-auto tw-max-h-64 tw-font-mono tw-text-sm tw-whitespace-pre-wrap',
+		this.previewContentEl = this.previewContainerEl.createEl('textarea', {
+			cls: 'sage-skill-ai-preview tw-w-full tw-min-h-64 tw-p-4 tw-rounded tw-bg-obs-bg-secondary tw-font-mono tw-text-sm tw-resize-y tw-border tw-border-obs-border',
+			attr: {
+				disabled: 'true',
+				rows: '15',
+			},
+		});
+
+		// textarea 내용 변경 시 generatedContent 동기화
+		this.previewContentEl.addEventListener('input', () => {
+			if (this.previewContentEl) {
+				this.generatedContent = this.previewContentEl.value;
+				this.generatedName = this.extractNameFromContent(this.generatedContent);
+				this.updateSaveButton();
+			}
 		});
 
 		// 버튼들 (취소 / 저장)
@@ -200,6 +213,11 @@ export class SkillAIWizardModal extends Modal {
 		this.showLoading(true);
 		this.hideError();
 		this.hidePreview();
+
+		// textarea 비활성화 (생성 중에는 편집 불가)
+		if (this.previewContentEl) {
+			this.previewContentEl.disabled = true;
+		}
 
 		// 이전 생성 내용 초기화
 		this.generatedContent = '';
@@ -329,6 +347,11 @@ export class SkillAIWizardModal extends Modal {
 		this.showLoading(false);
 		this.updateGenerateButton();
 		this.updateSaveButton();
+
+		// textarea 활성화 (생성 완료 후 편집 가능)
+		if (this.previewContentEl) {
+			this.previewContentEl.disabled = false;
+		}
 	}
 
 	/**
@@ -482,7 +505,7 @@ User's request: ${this.promptValue}`;
 	 */
 	private updatePreviewContent(content: string): void {
 		if (!this.previewContentEl) return;
-		this.previewContentEl.textContent = content;
+		this.previewContentEl.value = content;
 		this.showPreview();
 	}
 
@@ -499,7 +522,7 @@ User's request: ${this.promptValue}`;
 	private hidePreview(): void {
 		this.previewContainerEl?.addClass('tw-hidden');
 		if (this.previewContentEl) {
-			this.previewContentEl.textContent = '';
+			this.previewContentEl.value = '';
 		}
 	}
 
@@ -535,6 +558,12 @@ User's request: ${this.promptValue}`;
 	 * 생성된 Skill 저장 (저장 전 최종 검증 포함)
 	 */
 	private async saveSkill(): Promise<void> {
+		// 저장 전에 textarea의 현재 내용을 동기화
+		if (this.previewContentEl) {
+			this.generatedContent = this.previewContentEl.value;
+			this.generatedName = this.extractNameFromContent(this.generatedContent);
+		}
+
 		if (!this.generatedContent || !this.generatedName) {
 			console.log('[SkillAIWizard] saveSkill - missing content or name');
 			console.log('[SkillAIWizard] generatedContent:', !!this.generatedContent);
