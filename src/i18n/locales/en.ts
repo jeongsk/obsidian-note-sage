@@ -93,6 +93,12 @@ interface SkillsSettingsTranslations {
 	descriptionLabel: string;
 	descriptionDesc: string;
 	descriptionPlaceholder: string;
+	instructionsLabel: string;
+	instructionsDesc: string;
+	instructionsPlaceholder: string;
+	examplesLabel: string;
+	examplesDesc: string;
+	examplesPlaceholder: string;
 	preview: string;
 	duplicateName: string;
 	parseError: string;
@@ -542,6 +548,12 @@ export const en: TranslationKeys = {
 			descriptionLabel: 'Description',
 			descriptionDesc: 'Describe when Claude should use this Skill',
 			descriptionPlaceholder: 'This Skill helps with...',
+			instructionsLabel: 'Instructions',
+			instructionsDesc: 'Instructions for Claude to follow when executing this Skill',
+			instructionsPlaceholder: 'Describe how this Skill should work and what tasks to perform...',
+			examplesLabel: 'Examples',
+			examplesDesc: 'Example usages demonstrating this Skill',
+			examplesPlaceholder: 'Write example inputs and expected outputs...',
 			preview: 'Preview',
 			duplicateName: 'A Skill with this name already exists',
 			parseError: 'Parse error',
