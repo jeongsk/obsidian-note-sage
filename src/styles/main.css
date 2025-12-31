@@ -1092,7 +1092,7 @@
 	}
 
 	.sage-rtl .sage-model-selector-container {
-		@apply tw-ml-0 tw-mr-auto tw-ml-2;
+		@apply tw-mr-auto tw-ml-2;
 	}
 
 	.sage-rtl .sage-model-selector {
