@@ -257,6 +257,7 @@ export const ja: TranslationKeys = {
 		fileNotFound: 'ファイルが見つかりません',
 		fileReadError: 'ファイル読み取りエラー',
 		contentTruncated: '... コンテンツが切り捨てられました ...',
+		invalidPath: '無効なパス',
 	},
 
 	// Large file warning

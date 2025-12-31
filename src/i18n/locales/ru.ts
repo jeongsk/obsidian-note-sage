@@ -257,6 +257,7 @@ export const ru: TranslationKeys = {
 		fileNotFound: 'Файл не найден',
 		fileReadError: 'Ошибка чтения файла',
 		contentTruncated: '... содержимое обрезано ...',
+		invalidPath: 'Недействительный путь',
 	},
 
 	// Large file warning

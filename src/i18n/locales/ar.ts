@@ -257,6 +257,7 @@ export const ar: TranslationKeys = {
 		fileNotFound: 'الملف غير موجود',
 		fileReadError: 'خطأ في قراءة الملف',
 		contentTruncated: '... تم اقتطاع المحتوى ...',
+		invalidPath: 'مسار غير صالح',
 	},
 
 	// Large file warning

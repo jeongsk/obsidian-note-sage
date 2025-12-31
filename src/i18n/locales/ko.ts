@@ -257,6 +257,7 @@ export const ko: TranslationKeys = {
 		fileNotFound: '파일을 찾을 수 없습니다',
 		fileReadError: '파일 읽기 오류',
 		contentTruncated: '... 내용이 잘렸습니다 ...',
+		invalidPath: '잘못된 경로',
 	},
 
 	// Large file warning

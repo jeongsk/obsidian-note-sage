@@ -257,6 +257,7 @@ export const es: TranslationKeys = {
 		fileNotFound: 'Archivo no encontrado',
 		fileReadError: 'Error de lectura de archivo',
 		contentTruncated: '... contenido truncado ...',
+		invalidPath: 'Ruta inválida',
 	},
 
 	// Large file warning

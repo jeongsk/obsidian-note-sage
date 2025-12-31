@@ -179,14 +179,14 @@ export class MentionService {
 		if (lowerPath.startsWith(normalizedQuery)) {
 			// 정확히 일치하는 폴더는 최고 점수
 			if (lowerPath === normalizedQuery || lowerPath === normalizedQuery + '/') {
-				return 150;
+				return MENTION_CONSTANTS.SCORE_EXACT_MATCH;
 			}
-			return 100;
+			return MENTION_CONSTANTS.SCORE_STARTS_WITH;
 		}
 
 		// 경로에 검색어 포함
 		if (lowerPath.includes(normalizedQuery)) {
-			return 50;
+			return MENTION_CONSTANTS.SCORE_CONTAINS;
 		}
 
 		return 0;
@@ -207,17 +207,17 @@ export class MentionService {
 
 		// 이름이 검색어로 시작
 		if (lowerName.startsWith(query)) {
-			return 100;
+			return MENTION_CONSTANTS.SCORE_STARTS_WITH;
 		}
 
 		// 이름에 검색어 포함
 		if (lowerName.includes(query)) {
-			return 50;
+			return MENTION_CONSTANTS.SCORE_CONTAINS;
 		}
 
 		// 경로에 검색어 포함
 		if (lowerPath.includes(query)) {
-			return 25;
+			return MENTION_CONSTANTS.SCORE_PATH_CONTAINS;
 		}
 
 		return 0;
@@ -245,7 +245,36 @@ export class MentionService {
 	 * @param mention - 변환할 멘션
 	 * @returns 컨텍스트 첨부 객체
 	 */
+
+	/**
+	 * 경로 검증 (path traversal 방지)
+	 * @param path - 검증할 경로
+	 * @returns 유효한 경로인지 여부
+	 */
+	private isValidPath(path: string): boolean {
+		// path traversal 시도 방지
+		if (path.includes('..')) return false;
+		// 절대 경로 방지
+		if (path.startsWith('/') || path.startsWith('\\')) return false;
+		// Windows 드라이브 경로 방지
+		if (/^[a-zA-Z]:/.test(path)) return false;
+		return true;
+	}
+
 	async createContext(mention: Mention): Promise<ContextAttachment> {
+		// 경로 검증
+		if (!this.isValidPath(mention.path)) {
+			console.warn(`[Mention] Invalid path rejected: ${mention.path}`);
+			return {
+				type: mention.type,
+				path: mention.path,
+				content: `[${t('mention.invalidPath')}]`,
+				size: 0,
+				truncated: false,
+				isBinary: false,
+			} as FileContextAttachment;
+		}
+
 		if (mention.type === 'file') {
 			return this.createFileContext(mention.path);
 		} else {

@@ -257,6 +257,7 @@ export const hi: TranslationKeys = {
 		fileNotFound: 'फ़ाइल नहीं मिली',
 		fileReadError: 'फ़ाइल पढ़ने में त्रुटि',
 		contentTruncated: '... सामग्री काटी गई ...',
+		invalidPath: 'अमान्य पथ',
 	},
 
 	// Large file warning

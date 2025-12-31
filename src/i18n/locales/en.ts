@@ -180,6 +180,7 @@ interface MentionTranslations {
 	fileNotFound: string;
 	fileReadError: string;
 	contentTruncated: string;
+	invalidPath: string;
 }
 
 export interface TranslationKeys {
@@ -488,6 +489,7 @@ export const en: TranslationKeys = {
 		fileNotFound: 'File not found',
 		fileReadError: 'File read error',
 		contentTruncated: '... content truncated ...',
+		invalidPath: 'Invalid path',
 	},
 
 	// Large file warning

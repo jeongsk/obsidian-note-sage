@@ -257,6 +257,7 @@ export const de: TranslationKeys = {
 		fileNotFound: 'Datei nicht gefunden',
 		fileReadError: 'Fehler beim Lesen der Datei',
 		contentTruncated: '... Inhalt gekürzt ...',
+		invalidPath: 'Ungültiger Pfad',
 	},
 
 	// Large file warning

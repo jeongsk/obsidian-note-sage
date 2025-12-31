@@ -257,6 +257,7 @@ export const zh: TranslationKeys = {
 		fileNotFound: '文件未找到',
 		fileReadError: '文件读取错误',
 		contentTruncated: '... 内容已截断 ...',
+		invalidPath: '无效路径',
 	},
 
 	// Large file warning
