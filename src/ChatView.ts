@@ -588,6 +588,11 @@ export class NoteSageView extends ItemView {
 		}) as HTMLTextAreaElement;
 
 		this.registerDomEvent(this.inputField, 'keydown', (e: KeyboardEvent) => {
+			// 자동완성 팝업이 표시 중이면 MentionInput에서 처리
+			if (this.autocompletePopup?.isVisible()) {
+				return;
+			}
+
 			if (e.key === 'Enter' && !e.shiftKey) {
 				e.preventDefault();
 				this.handleButtonClick();
