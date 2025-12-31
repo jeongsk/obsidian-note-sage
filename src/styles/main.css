@@ -1031,6 +1031,8 @@
 
 	.sage-skills-create-btn-icon svg {
 		@apply tw-w-4 tw-h-4;
+		fill: currentColor;
+		stroke: currentColor;
 	}
 
 	.sage-skills-create-btn--cta {
