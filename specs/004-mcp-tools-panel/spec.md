@@ -1,6 +1,6 @@
 # Feature Specification: MCP Tools Panel
 
-**Feature Branch**: `002-mcp-tools-panel`
+**Feature Branch**: `004-mcp-tools-panel`
 **Created**: 2025-12-27
 **Status**: Draft
 **Input**: User description: "상단 플러그인 아이콘을 마우스 오버하면 현재 툴팁만 출력됩니다. 클릭 가능하게 변경하고 클릭하면 어떤 도구가 연결되고 활성화 되어 있는지 볼 수 있어야 합니다. 그리고 활성/비활성화도 가능합니다."

@@ -1,6 +1,6 @@
 # Feature Specification: Built-in Tools Toggle
 
-**Feature Branch**: `001-builtin-tools-toggle`
+**Feature Branch**: `006-builtin-tools-toggle`
 **Created**: 2025-12-28
 **Status**: Draft
 **Input**: User description: "Claude Agent SDK에서 기본으로 제공되는 도구 WebFetch 와 WebSearch 를 사용자가 필요에 의해 on 또는 off 할 수 있어야 합니다. 그 이유는 사용자가 추가한 mcp server 도구 중에 비슷한 도구가 존재하면 Claude Agent SDK에서 기본으로 제공되는 도구가 우선적으로 사용되기 때문입니다."
