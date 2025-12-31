@@ -329,6 +329,21 @@ export class AgentService {
 			}
 		}
 
+		// Skills 기능 활성화
+		if (this.settings.enableSkills) {
+			// Skills 로드를 위한 settingSources 설정
+			options.settingSources = ['user', 'project'];
+
+			// allowedTools에 'Skill' 추가
+			const currentAllowedTools = (options.allowedTools as string[]) || [];
+			options.allowedTools = [...currentAllowedTools, 'Skill'];
+
+			if (this.settings.debugContext) {
+				console.log('[AgentService] Skills enabled with settingSources:', options.settingSources);
+				console.log('[AgentService] Allowed tools:', options.allowedTools);
+			}
+		}
+
 		if (this.settings.debugContext) {
 			console.log('[AgentService] Permission mode:', permissionMode);
 			console.log('[AgentService] System prompt configured:',

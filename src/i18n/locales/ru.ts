@@ -242,6 +242,30 @@ export const ru: TranslationKeys = {
 			saveError: 'Не удалось сохранить сервер',
 		},
 
+		// Skills
+		skills: {
+			title: 'Skills',
+			description: 'Управление Skills Claude Agent SDK из .claude/skills/',
+			enable: 'Включить Skills',
+			enableDesc: 'Разрешить Claude использовать Skills, определённые в каталоге .claude/skills/',
+			createTemplate: 'Создать из шаблона',
+			createWizard: 'Создать с помощью мастера',
+			noSkills: 'Skills не найдены',
+			noSkillsGuide: 'Создайте новый Skill с помощью кнопок ниже или добавьте файлы SKILL.md в .claude/skills/{skill-name}/',
+			nameLabel: 'Название Skill',
+			nameDesc: 'Используйте только строчные буквы, цифры и дефисы (например: my-skill)',
+			descriptionLabel: 'Описание',
+			descriptionDesc: 'Опишите, когда Claude должен использовать этот Skill',
+			descriptionPlaceholder: 'Этот Skill помогает с...',
+			preview: 'Предпросмотр',
+			duplicateName: 'Skill с таким именем уже существует',
+			parseError: 'Ошибка разбора',
+			fileNotFound: 'Файл не найден',
+			loadError: 'Не удалось загрузить файл',
+			delete: 'Удалить',
+			deleteConfirm: 'Вы уверены, что хотите удалить Skill "{name}"?',
+		},
+
 		// About
 		about: 'О плагине',
 		aboutText1: 'Этот плагин использует Claude Agent SDK для предоставления помощи на основе ИИ непосредственно в Obsidian.',
@@ -266,4 +290,13 @@ export const ru: TranslationKeys = {
 	largeFileWarningQuestion: 'Вы все равно хотите включить этот файл?',
 	includeAnyway: 'Включить все равно',
 	cancel: 'Отмена',
+
+	// Common translations
+	common: {
+		close: 'Закрыть',
+		cancel: 'Отмена',
+		create: 'Создать',
+		save: 'Сохранить',
+		delete: 'Удалить',
+	},
 };

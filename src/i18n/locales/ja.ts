@@ -242,6 +242,30 @@ export const ja: TranslationKeys = {
 			saveError: 'サーバーの保存に失敗しました',
 		},
 
+		// Skills
+		skills: {
+			title: 'Skills',
+			description: '.claude/skills/からClaude Agent SDK Skillsを管理',
+			enable: 'Skillsを有効化',
+			enableDesc: '.claude/skills/ディレクトリで定義されたSkillsをClaudeが使用できるようにする',
+			createTemplate: 'テンプレートから作成',
+			createWizard: 'ウィザードで作成',
+			noSkills: 'Skillsが見つかりません',
+			noSkillsGuide: '下のボタンで新しいSkillを作成するか、.claude/skills/{skill-name}/にSKILL.mdファイルを追加してください',
+			nameLabel: 'Skill名',
+			nameDesc: '英小文字、数字、ハイフンのみ使用可能（例：my-skill）',
+			descriptionLabel: '説明',
+			descriptionDesc: 'ClaudeがこのSkillを使用すべき状況を説明',
+			descriptionPlaceholder: 'このSkillは...に役立ちます',
+			preview: 'プレビュー',
+			duplicateName: 'この名前のSkillは既に存在します',
+			parseError: 'パースエラー',
+			fileNotFound: 'ファイルが見つかりません',
+			loadError: 'ファイルの読み込みに失敗しました',
+			delete: '削除',
+			deleteConfirm: 'Skill「{name}」を削除してもよろしいですか？',
+		},
+
 		// About
 		about: '概要',
 		aboutText1: 'このプラグインはClaude Agent SDKを使用して、Obsidian内で直接AIアシスタンスを提供します。',
@@ -266,4 +290,13 @@ export const ja: TranslationKeys = {
 	largeFileWarningQuestion: 'それでもこのファイルを含めますか？',
 	includeAnyway: 'それでも含める',
 	cancel: 'キャンセル',
+
+	// Common translations
+	common: {
+		close: '閉じる',
+		cancel: 'キャンセル',
+		create: '作成',
+		save: '保存',
+		delete: '削除',
+	},
 };

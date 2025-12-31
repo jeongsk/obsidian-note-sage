@@ -242,6 +242,30 @@ export const ar: TranslationKeys = {
 			saveError: 'فشل في حفظ الخادم',
 		},
 
+		// Skills
+		skills: {
+			title: 'Skills',
+			description: 'إدارة Skills الخاصة بـ Claude Agent SDK من .claude/skills/',
+			enable: 'تمكين Skills',
+			enableDesc: 'السماح لـ Claude باستخدام Skills المحددة في مجلد .claude/skills/',
+			createTemplate: 'إنشاء من قالب',
+			createWizard: 'إنشاء باستخدام المعالج',
+			noSkills: 'لم يتم العثور على Skills',
+			noSkillsGuide: 'أنشئ Skill جديدة باستخدام الأزرار أدناه أو أضف ملفات SKILL.md إلى .claude/skills/{skill-name}/',
+			nameLabel: 'اسم Skill',
+			nameDesc: 'استخدم الأحرف الصغيرة والأرقام والشرطات فقط (مثال: my-skill)',
+			descriptionLabel: 'الوصف',
+			descriptionDesc: 'صف متى يجب على Claude استخدام هذه Skill',
+			descriptionPlaceholder: 'تساعد هذه Skill في...',
+			preview: 'معاينة',
+			duplicateName: 'توجد Skill بهذا الاسم بالفعل',
+			parseError: 'خطأ في التحليل',
+			fileNotFound: 'الملف غير موجود',
+			loadError: 'فشل في تحميل الملف',
+			delete: 'حذف',
+			deleteConfirm: 'هل أنت متأكد من حذف Skill "{name}"؟',
+		},
+
 		// About
 		about: 'حول',
 		aboutText1: 'تستخدم هذه الإضافة Claude Agent SDK لتوفير مساعدة مدعومة بالذكاء الاصطناعي مباشرة داخل Obsidian.',
@@ -266,4 +290,13 @@ export const ar: TranslationKeys = {
 	largeFileWarningQuestion: 'هل تريد تضمين هذا الملف على أي حال؟',
 	includeAnyway: 'تضمين على أي حال',
 	cancel: 'إلغاء',
+
+	// Common translations
+	common: {
+		close: 'إغلاق',
+		cancel: 'إلغاء',
+		create: 'إنشاء',
+		save: 'حفظ',
+		delete: 'حذف',
+	},
 };

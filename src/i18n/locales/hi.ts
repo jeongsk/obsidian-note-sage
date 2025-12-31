@@ -242,6 +242,30 @@ export const hi: TranslationKeys = {
 			saveError: 'सर्वर सहेजने में विफल',
 		},
 
+		// Skills
+		skills: {
+			title: 'Skills',
+			description: '.claude/skills/ से Claude Agent SDK Skills प्रबंधित करें',
+			enable: 'Skills सक्षम करें',
+			enableDesc: 'Claude को .claude/skills/ निर्देशिका में परिभाषित Skills का उपयोग करने की अनुमति दें',
+			createTemplate: 'टेम्पलेट से बनाएं',
+			createWizard: 'विज़ार्ड से बनाएं',
+			noSkills: 'कोई Skills नहीं मिली',
+			noSkillsGuide: 'नीचे दिए गए बटनों का उपयोग करके नई Skill बनाएं या .claude/skills/{skill-name}/ में SKILL.md फ़ाइलें जोड़ें',
+			nameLabel: 'Skill का नाम',
+			nameDesc: 'केवल लोअरकेस अक्षर, संख्याएं और हाइफ़न का उपयोग करें (उदा.: my-skill)',
+			descriptionLabel: 'विवरण',
+			descriptionDesc: 'वर्णन करें कि Claude को इस Skill का उपयोग कब करना चाहिए',
+			descriptionPlaceholder: 'यह Skill ... में मदद करती है',
+			preview: 'पूर्वावलोकन',
+			duplicateName: 'इस नाम की Skill पहले से मौजूद है',
+			parseError: 'पार्सिंग त्रुटि',
+			fileNotFound: 'फ़ाइल नहीं मिली',
+			loadError: 'फ़ाइल लोड करने में विफल',
+			delete: 'हटाएं',
+			deleteConfirm: 'क्या आप वाकई Skill "{name}" को हटाना चाहते हैं?',
+		},
+
 		// About
 		about: 'के बारे में',
 		aboutText1: 'यह प्लगइन Obsidian के भीतर सीधे AI-संचालित सहायता प्रदान करने के लिए Claude Agent SDK का उपयोग करता है।',
@@ -266,4 +290,13 @@ export const hi: TranslationKeys = {
 	largeFileWarningQuestion: 'क्या आप फिर भी इस फ़ाइल को शामिल करना चाहते हैं?',
 	includeAnyway: 'फिर भी शामिल करें',
 	cancel: 'रद्द करें',
+
+	// Common translations
+	common: {
+		close: 'बंद करें',
+		cancel: 'रद्द करें',
+		create: 'बनाएं',
+		save: 'सहेजें',
+		delete: 'हटाएं',
+	},
 };

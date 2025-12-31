@@ -242,6 +242,30 @@ export const ko: TranslationKeys = {
 			saveError: '서버 저장에 실패했습니다',
 		},
 
+		// Skills
+		skills: {
+			title: 'Skills',
+			description: '.claude/skills/에서 Claude Agent SDK Skills 관리',
+			enable: 'Skills 활성화',
+			enableDesc: '.claude/skills/ 디렉토리에 정의된 Skills를 Claude가 사용할 수 있도록 허용',
+			createTemplate: '템플릿으로 생성',
+			createWizard: '마법사로 생성',
+			noSkills: 'Skills가 없습니다',
+			noSkillsGuide: '아래 버튼을 사용하여 새 Skill을 만들거나 .claude/skills/{skill-name}/에 SKILL.md 파일을 추가하세요',
+			nameLabel: 'Skill 이름',
+			nameDesc: '영문 소문자, 숫자, 하이픈만 사용 (예: my-skill)',
+			descriptionLabel: '설명',
+			descriptionDesc: 'Claude가 이 Skill을 언제 사용해야 하는지 설명',
+			descriptionPlaceholder: '이 Skill은 ...을 도와줍니다',
+			preview: '미리보기',
+			duplicateName: '이 이름의 Skill이 이미 존재합니다',
+			parseError: '파싱 오류',
+			fileNotFound: '파일을 찾을 수 없습니다',
+			loadError: '파일 로드에 실패했습니다',
+			delete: '삭제',
+			deleteConfirm: 'Skill "{name}"을(를) 삭제하시겠습니까?',
+		},
+
 		// About
 		about: '정보',
 		aboutText1: '이 플러그인은 Claude Agent SDK를 사용하여 Obsidian 내에서 AI 지원 기능을 제공합니다.',
@@ -266,4 +290,13 @@ export const ko: TranslationKeys = {
 	largeFileWarningQuestion: '그래도 이 파일을 포함하시겠습니까?',
 	includeAnyway: '그래도 포함',
 	cancel: '취소',
+
+	// Common translations
+	common: {
+		close: '닫기',
+		cancel: '취소',
+		create: '만들기',
+		save: '저장',
+		delete: '삭제',
+	},
 };

@@ -1389,6 +1389,104 @@
 		margin-left: 0;
 		margin-right: 2px;
 	}
+.tw-mb-2 {
+		margin-bottom: 0.5rem;
+}
+.tw-mb-4 {
+		margin-bottom: 1rem;
+}
+.tw-mt-2 {
+		margin-top: 0.5rem;
+}
+.tw-mt-4 {
+		margin-top: 1rem;
+}
+.tw-flex {
+		display: flex;
+}
+.tw-hidden {
+		display: none;
+}
+.tw-max-h-48 {
+		max-height: 12rem;
+}
+.tw-flex-1 {
+		flex: 1 1 0%;
+}
+.tw-cursor-pointer {
+		cursor: pointer;
+}
+.tw-items-center {
+		align-items: center;
+}
+.tw-justify-end {
+		justify-content: flex-end;
+}
+.tw-justify-between {
+		justify-content: space-between;
+}
+.tw-gap-2 {
+		gap: 0.5rem;
+}
+.tw-overflow-auto {
+		overflow: auto;
+}
+.tw-whitespace-pre-wrap {
+		white-space: pre-wrap;
+}
+.tw-rounded {
+		border-radius: 0.25rem;
+}
+.tw-bg-obs-bg-secondary {
+		background-color: var(--background-secondary);
+}
+.tw-bg-red-100 {
+		--tw-bg-opacity: 1;
+		background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
+}
+.tw-p-1 {
+		padding: 0.25rem;
+}
+.tw-p-2 {
+		padding: 0.5rem;
+}
+.tw-p-4 {
+		padding: 1rem;
+}
+.tw-py-4 {
+		padding-top: 1rem;
+		padding-bottom: 1rem;
+}
+.tw-text-center {
+		text-align: center;
+}
+.tw-font-mono {
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+.tw-text-sm {
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+}
+.tw-font-medium {
+		font-weight: 500;
+}
+.tw-text-obs-text-muted {
+		color: var(--text-muted);
+}
+.tw-text-red-500 {
+		--tw-text-opacity: 1;
+		color: rgb(239 68 68 / var(--tw-text-opacity, 1));
+}
+.tw-text-red-700 {
+		--tw-text-opacity: 1;
+		color: rgb(185 28 28 / var(--tw-text-opacity, 1));
+}
+.tw-opacity-50 {
+		opacity: 0.5;
+}
+.tw-opacity-70 {
+		opacity: 0.7;
+}
 
 /* ==================== 전역 스타일 ==================== */
 
@@ -1454,3 +1552,11 @@
 }
 
 /* ==================== 유틸리티 레이어 ==================== */
+
+.hover\:tw-bg-obs-bg-secondary:hover {
+		background-color: var(--background-secondary);
+}
+
+.hover\:tw-underline:hover {
+		text-decoration-line: underline;
+}

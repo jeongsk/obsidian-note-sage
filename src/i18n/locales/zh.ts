@@ -242,6 +242,30 @@ export const zh: TranslationKeys = {
 			saveError: '保存服务器失败',
 		},
 
+		// Skills
+		skills: {
+			title: 'Skills',
+			description: '从 .claude/skills/ 管理 Claude Agent SDK Skills',
+			enable: '启用 Skills',
+			enableDesc: '允许 Claude 使用 .claude/skills/ 目录中定义的 Skills',
+			createTemplate: '从模板创建',
+			createWizard: '使用向导创建',
+			noSkills: '未找到 Skills',
+			noSkillsGuide: '使用下方按钮创建新 Skill，或将 SKILL.md 文件添加到 .claude/skills/{skill-name}/',
+			nameLabel: 'Skill 名称',
+			nameDesc: '仅使用小写字母、数字和连字符（例如：my-skill）',
+			descriptionLabel: '描述',
+			descriptionDesc: '描述 Claude 何时应该使用此 Skill',
+			descriptionPlaceholder: '此 Skill 有助于...',
+			preview: '预览',
+			duplicateName: '已存在同名的 Skill',
+			parseError: '解析错误',
+			fileNotFound: '文件未找到',
+			loadError: '加载文件失败',
+			delete: '删除',
+			deleteConfirm: '确定要删除 Skill "{name}" 吗？',
+		},
+
 		// About
 		about: '关于',
 		aboutText1: '此插件使用Claude Agent SDK在Obsidian中直接提供AI驱动的帮助。',
@@ -266,4 +290,13 @@ export const zh: TranslationKeys = {
 	largeFileWarningQuestion: '是否仍要包含此文件？',
 	includeAnyway: '仍然包含',
 	cancel: '取消',
+
+	// Common translations
+	common: {
+		close: '关闭',
+		cancel: '取消',
+		create: '创建',
+		save: '保存',
+		delete: '删除',
+	},
 };

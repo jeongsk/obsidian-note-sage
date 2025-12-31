@@ -242,6 +242,30 @@ export const de: TranslationKeys = {
 			saveError: 'Server konnte nicht gespeichert werden',
 		},
 
+		// Skills
+		skills: {
+			title: 'Skills',
+			description: 'Claude Agent SDK Skills aus .claude/skills/ verwalten',
+			enable: 'Skills aktivieren',
+			enableDesc: 'Erlauben, dass Claude Skills aus dem Verzeichnis .claude/skills/ verwendet',
+			createTemplate: 'Aus Vorlage erstellen',
+			createWizard: 'Mit Assistent erstellen',
+			noSkills: 'Keine Skills gefunden',
+			noSkillsGuide: 'Erstellen Sie eine neue Skill mit den Schaltflächen unten oder fügen Sie SKILL.md-Dateien zu .claude/skills/{skill-name}/ hinzu',
+			nameLabel: 'Skill-Name',
+			nameDesc: 'Nur Kleinbuchstaben, Zahlen und Bindestriche verwenden (z.B. my-skill)',
+			descriptionLabel: 'Beschreibung',
+			descriptionDesc: 'Beschreiben Sie, wann Claude diese Skill verwenden soll',
+			descriptionPlaceholder: 'Diese Skill hilft bei...',
+			preview: 'Vorschau',
+			duplicateName: 'Eine Skill mit diesem Namen existiert bereits',
+			parseError: 'Analysefehler',
+			fileNotFound: 'Datei nicht gefunden',
+			loadError: 'Datei konnte nicht geladen werden',
+			delete: 'Löschen',
+			deleteConfirm: 'Sind Sie sicher, dass Sie die Skill "{name}" löschen möchten?',
+		},
+
 		// About
 		about: 'Über',
 		aboutText1: 'Dieses Plugin verwendet das Claude Agent SDK, um KI-gestützte Unterstützung direkt in Obsidian bereitzustellen.',
@@ -266,4 +290,13 @@ export const de: TranslationKeys = {
 	largeFileWarningQuestion: 'Möchten Sie diese Datei trotzdem einschließen?',
 	includeAnyway: 'Trotzdem einschließen',
 	cancel: 'Abbrechen',
+
+	// Common translations
+	common: {
+		close: 'Schließen',
+		cancel: 'Abbrechen',
+		create: 'Erstellen',
+		save: 'Speichern',
+		delete: 'Löschen',
+	},
 };
