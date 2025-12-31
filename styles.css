@@ -816,6 +816,11 @@
 .sage-input-error {
 		border-color: var(--color-red) !important;
 	}
+/* 스킬 이름 에러 메시지 - 입력 박스 아래에 표시 */
+.sage-skill-name-error {
+		flex-basis: 100%;
+		order: 99;
+	}
 .sage-mcp-dynamic-fields {
 		margin-top: 0.5rem;
 }
@@ -1747,6 +1752,9 @@
 .tw-mb-4 {
 		margin-bottom: 1rem;
 }
+.tw-mt-1 {
+		margin-top: 0.25rem;
+}
 .tw-mt-2 {
 		margin-top: 0.5rem;
 }
@@ -1822,6 +1830,10 @@
 .tw-text-sm {
 		font-size: 0.875rem;
 		line-height: 1.25rem;
+}
+.tw-text-xs {
+		font-size: 0.75rem;
+		line-height: 1rem;
 }
 .tw-text-obs-text-muted {
 		color: var(--text-muted);
