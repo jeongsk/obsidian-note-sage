@@ -291,6 +291,13 @@ export const de: TranslationKeys = {
 			validationErrors: 'Inhalt hat Validierungsfehler:\n{errors}',
 			retrying: 'Probleme werden behoben... (Versuch {attempt}/{max})',
 			noContentError: 'Kein Inhalt generiert. Bitte klicken Sie zuerst auf "Generieren".',
+			// Edit Modal
+			editTitle: 'Skill bearbeiten',
+			contentLabel: 'Inhalt',
+			contentDesc: 'Vollständiger Markdown-Text (freie Bearbeitung)',
+			contentPlaceholder: '# skill-name\n\n## Instructions\n\n...',
+			updateSuccess: 'Skill erfolgreich aktualisiert',
+			updateError: 'Fehler beim Aktualisieren des Skills',
 			skillsCount: '{count} Skills',
 			activeCount: '{active} aktiv',
 		},

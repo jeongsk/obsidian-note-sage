@@ -291,6 +291,13 @@ export const ru: TranslationKeys = {
 			validationErrors: 'Содержимое имеет ошибки валидации:\n{errors}',
 			retrying: 'Исправление проблем... (попытка {attempt}/{max})',
 			noContentError: 'Содержимое не сгенерировано. Сначала нажмите "Сгенерировать".',
+			// Edit Modal
+			editTitle: 'Редактировать навык',
+			contentLabel: 'Содержимое',
+			contentDesc: 'Полный текст в Markdown (свободное редактирование)',
+			contentPlaceholder: '# skill-name\n\n## Instructions\n\n...',
+			updateSuccess: 'Навык успешно обновлён',
+			updateError: 'Ошибка при обновлении навыка',
 			skillsCount: '{count} навыков',
 			activeCount: '{active} активно',
 		},

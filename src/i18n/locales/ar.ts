@@ -291,6 +291,13 @@ export const ar: TranslationKeys = {
 			validationErrors: 'يحتوي المحتوى على أخطاء التحقق:\n{errors}',
 			retrying: 'جاري إصلاح المشاكل... (المحاولة {attempt}/{max})',
 			noContentError: 'لا يوجد محتوى مُنشأ. يرجى النقر على "إنشاء" أولاً.',
+			// Edit Modal
+			editTitle: 'تحرير المهارة',
+			contentLabel: 'المحتوى',
+			contentDesc: 'نص Markdown كامل (تحرير حر)',
+			contentPlaceholder: '# skill-name\n\n## Instructions\n\n...',
+			updateSuccess: 'تم تحديث المهارة بنجاح',
+			updateError: 'خطأ في تحديث المهارة',
 			skillsCount: '{count} مهارة',
 			activeCount: '{active} نشط',
 		},

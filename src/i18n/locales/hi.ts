@@ -291,6 +291,13 @@ export const hi: TranslationKeys = {
 			validationErrors: 'सामग्री में सत्यापन त्रुटियां हैं:\n{errors}',
 			retrying: 'समस्याओं को ठीक कर रहे हैं... (प्रयास {attempt}/{max})',
 			noContentError: 'कोई सामग्री जनरेट नहीं हुई। कृपया पहले "जनरेट करें" पर क्लिक करें।',
+			// Edit Modal
+			editTitle: 'Skill संपादित करें',
+			contentLabel: 'सामग्री',
+			contentDesc: 'पूर्ण Markdown बॉडी (स्वतंत्र संपादन)',
+			contentPlaceholder: '# skill-name\n\n## Instructions\n\n...',
+			updateSuccess: 'Skill सफलतापूर्वक अपडेट किया गया',
+			updateError: 'Skill अपडेट करने में त्रुटि',
 			skillsCount: '{count} Skills',
 			activeCount: '{active} सक्रिय',
 		},

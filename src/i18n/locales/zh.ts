@@ -291,6 +291,13 @@ export const zh: TranslationKeys = {
 			validationErrors: '内容存在验证错误:\n{errors}',
 			retrying: '正在修复问题... (第 {attempt}/{max} 次尝试)',
 			noContentError: '没有生成内容。请先点击"生成"按钮。',
+			// Edit Modal
+			editTitle: '编辑技能',
+			contentLabel: '内容',
+			contentDesc: '完整的Markdown正文（自由编辑）',
+			contentPlaceholder: '# skill-name\n\n## Instructions\n\n...',
+			updateSuccess: '技能更新成功',
+			updateError: '更新技能时出错',
 			skillsCount: '{count} 个技能',
 			activeCount: '{active} 个已启用',
 		},

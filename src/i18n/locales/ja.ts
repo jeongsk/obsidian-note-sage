@@ -291,6 +291,13 @@ export const ja: TranslationKeys = {
 			validationErrors: 'コンテンツに検証エラーがあります:\n{errors}',
 			retrying: '問題を修正中... ({attempt}/{max}回目)',
 			noContentError: '生成されたコンテンツがありません。まず「生成」ボタンをクリックしてください。',
+			// Edit Modal
+			editTitle: 'Skillを編集',
+			contentLabel: 'コンテンツ',
+			contentDesc: 'マークダウン本文全体（自由編集）',
+			contentPlaceholder: '# skill-name\n\n## Instructions\n\n...',
+			updateSuccess: 'Skillが更新されました',
+			updateError: 'Skillの更新中にエラーが発生しました',
 			skillsCount: '{count}個のSkill',
 			activeCount: '{active}個が有効',
 		},

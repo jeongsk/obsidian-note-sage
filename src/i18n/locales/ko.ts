@@ -294,6 +294,13 @@ export const ko: TranslationKeys = {
 			validationErrors: '콘텐츠에 검증 오류가 있습니다:\n{errors}',
 			retrying: '문제 수정 중... ({attempt}/{max}번째 시도)',
 			noContentError: '생성된 내용이 없습니다. 먼저 "생성하기" 버튼을 클릭하세요.',
+			// Edit Modal
+			editTitle: 'Skill 편집',
+			contentLabel: '내용',
+			contentDesc: '마크다운 본문 전체 (자유 편집)',
+			contentPlaceholder: '# skill-name\n\n## Instructions\n\n...',
+			updateSuccess: 'Skill이 업데이트되었습니다',
+			updateError: 'Skill 업데이트 중 오류 발생',
 		},
 
 		// About

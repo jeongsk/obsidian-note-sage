@@ -291,6 +291,13 @@ export const es: TranslationKeys = {
 			validationErrors: 'El contenido tiene errores de validación:\n{errors}',
 			retrying: 'Corrigiendo problemas... (intento {attempt}/{max})',
 			noContentError: 'No hay contenido generado. Por favor, haga clic en "Generar" primero.',
+			// Edit Modal
+			editTitle: 'Editar Skill',
+			contentLabel: 'Contenido',
+			contentDesc: 'Cuerpo completo en markdown (edición libre)',
+			contentPlaceholder: '# skill-name\n\n## Instructions\n\n...',
+			updateSuccess: 'Skill actualizado correctamente',
+			updateError: 'Error al actualizar skill',
 			skillsCount: '{count} Skills',
 			activeCount: '{active} activo',
 		},
