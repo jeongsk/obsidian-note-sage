@@ -291,6 +291,8 @@ export const hi: TranslationKeys = {
 			validationErrors: 'सामग्री में सत्यापन त्रुटियां हैं:\n{errors}',
 			retrying: 'समस्याओं को ठीक कर रहे हैं... (प्रयास {attempt}/{max})',
 			noContentError: 'कोई सामग्री जनरेट नहीं हुई। कृपया पहले "जनरेट करें" पर क्लिक करें।',
+			skillsCount: '{count} Skills',
+			activeCount: '{active} सक्रिय',
 		},
 
 		// About

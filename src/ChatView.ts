@@ -201,6 +201,11 @@ export class NoteSageView extends ItemView {
 			this.autocompletePopup.destroy();
 			this.autocompletePopup = undefined;
 		}
+
+		// MentionService 정리 (Vault 이벤트 리스너 해제)
+		if (this.mentionService) {
+			this.mentionService.destroy();
+		}
 	}
 
 	// ==================== UI 생성 ====================
