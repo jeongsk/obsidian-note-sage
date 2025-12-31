@@ -332,7 +332,7 @@ export class AgentService {
 		// Skills 기능 활성화
 		if (this.settings.enableSkills) {
 			// Skills 로드를 위한 settingSources 설정
-			options.settingSources = ['user', 'project'];
+			options.settingSources = ['project', 'local'];
 
 			// allowedTools에 'Skill' 추가
 			const currentAllowedTools = (options.allowedTools as string[]) || [];
