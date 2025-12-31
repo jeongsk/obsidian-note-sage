@@ -402,6 +402,8 @@ Generate a SKILL.md file based on the user's description.
 IMPORTANT: Output ONLY the SKILL.md content. Do not include any explanations, markdown code blocks, or additional text.
 
 The file must follow this EXACT format:
+
+<format>
 ---
 name: skill-name-in-kebab-case
 description: One sentence describing when Claude should use this skill
@@ -416,8 +418,9 @@ description: One sentence describing when Claude should use this skill
 ## Examples
 
 [Usage examples]
+</format>
 
-Requirements:
+## Requirements:
 1. Use kebab-case for the name field (e.g., "code-reviewer", "table-formatter")
 2. Description should be concise but informative (used by Claude to decide when to invoke this skill)
 3. Instructions should be clear, actionable, and detailed
