@@ -960,6 +960,34 @@
 		@apply tw-flex tw-gap-2 tw-mt-4;
 	}
 
+	/* Skill 삭제 확인 모달 */
+	.sage-skill-delete-modal .sage-modal-title {
+		@apply tw-text-lg tw-font-semibold tw-text-obs-text tw-mb-4;
+	}
+
+	.sage-skill-delete-modal .sage-modal-message {
+		@apply tw-text-obs-text tw-mb-2;
+	}
+
+	.sage-skill-delete-modal .sage-modal-hint {
+		@apply tw-text-obs-text-muted tw-text-sm tw-mb-4;
+	}
+
+	/* Skill 삭제 Undo Notice */
+	.sage-skill-undo-notice {
+		@apply tw-flex tw-items-center tw-gap-2;
+	}
+
+	.sage-notice-undo-btn {
+		@apply tw-ml-2 tw-px-2 tw-py-1 tw-text-xs tw-rounded tw-cursor-pointer;
+		@apply tw-bg-obs-accent tw-text-obs-text-on-accent;
+		@apply tw-border-none;
+	}
+
+	.sage-notice-undo-btn:hover {
+		@apply tw-opacity-80;
+	}
+
 	/* ==================== RTL Support ==================== */
 	.sage-rtl {
 		direction: rtl;

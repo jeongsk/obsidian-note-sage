@@ -107,6 +107,14 @@ interface SkillsSettingsTranslations {
 	edit: string;
 	delete: string;
 	deleteConfirm: string;
+	deleteTitle: string;
+	deleteConfirmMessage: string;
+	deleteUndoHint: string;
+	deleteSuccess: string;
+	deleteError: string;
+	undo: string;
+	restoreSuccess: string;
+	restoreError: string;
 	// AI Validation
 	validationFailed: string;
 	validationErrors: string;
@@ -562,6 +570,14 @@ export const en: TranslationKeys = {
 			edit: 'Edit',
 			delete: 'Delete',
 			deleteConfirm: 'Are you sure you want to delete the Skill "{name}"?',
+			deleteTitle: 'Delete Skill',
+			deleteConfirmMessage: 'Are you sure you want to delete {name}?',
+			deleteUndoHint: 'You can undo this action within 10 seconds.',
+			deleteSuccess: 'Skill "{name}" has been deleted.',
+			deleteError: 'Failed to delete Skill: {error}',
+			undo: 'Undo',
+			restoreSuccess: 'Skill has been restored.',
+			restoreError: 'Failed to restore Skill.',
 			// AI Validation
 			validationFailed: 'Validation failed after {max} attempts. Please check and edit the content manually.',
 			validationErrors: 'Content has validation errors:\n{errors}',

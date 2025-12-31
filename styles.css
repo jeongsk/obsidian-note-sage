@@ -1252,6 +1252,47 @@
 		display: flex;
 		gap: 0.5rem;
 }
+/* Skill 삭제 확인 모달 */
+.sage-skill-delete-modal .sage-modal-title {
+		margin-bottom: 1rem;
+		font-size: 1.125rem;
+		line-height: 1.75rem;
+		font-weight: 600;
+		color: var(--text-normal);
+}
+.sage-skill-delete-modal .sage-modal-message {
+		margin-bottom: 0.5rem;
+		color: var(--text-normal);
+}
+.sage-skill-delete-modal .sage-modal-hint {
+		margin-bottom: 1rem;
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+		color: var(--text-muted);
+}
+/* Skill 삭제 Undo Notice */
+.sage-skill-undo-notice {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+}
+.sage-notice-undo-btn {
+		margin-left: 0.5rem;
+		cursor: pointer;
+		border-radius: 0.25rem;
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
+		padding-top: 0.25rem;
+		padding-bottom: 0.25rem;
+		font-size: 0.75rem;
+		line-height: 1rem;
+		background-color: var(--interactive-accent);
+		color: var(--text-on-accent);
+		border-style: none;
+}
+.sage-notice-undo-btn:hover {
+		opacity: 0.8;
+}
 /* ==================== RTL Support ==================== */
 .sage-rtl {
 		direction: rtl;

@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting, setIcon } from 'obsidian';
+import { App, Notice, PluginSettingTab, Setting, setIcon } from 'obsidian';
 import type NoteSagePlugin from './main';
 import {
 	AVAILABLE_MODELS,
@@ -17,6 +17,7 @@ import { SkillsManager } from './skills/SkillsManager';
 import { SkillDetailModal } from './skills/SkillDetailModal';
 import { SkillTemplateModal } from './skills/SkillCreatorModal';
 import { SkillAIWizardModal } from './skills/SkillAIWizardModal';
+import { SkillDeleteModal } from './skills/SkillDeleteModal';
 import type { SkillEntry } from './types';
 import { CONTENT_LIMITS } from './constants';
 
@@ -541,15 +542,25 @@ export class NoteSageSettingTab extends PluginSettingTab {
 		const deleteBtn = controlsEl.createEl('button', { cls: 'sage-skill-btn sage-skill-btn-delete' });
 		setIcon(deleteBtn, 'trash');
 		deleteBtn.setAttribute('aria-label', t('settings.skills.delete'));
-		deleteBtn.addEventListener('click', async () => {
-			const confirmed = confirm(
-				t('settings.skills.deleteConfirm', { name: skill.metadata.name || skill.id })
-			);
-			if (confirmed) {
-				await this.skillsManager.deleteSkill(skill.id);
-				// 목록 갱신
-				await this.renderSkillsList(container);
-			}
+		deleteBtn.addEventListener('click', () => {
+			const modal = new SkillDeleteModal(this.app, skill, async () => {
+				const skillName = skill.metadata.name || skill.id;
+				const result = await this.skillsManager.deleteSkillWithUndo(skill.id);
+
+				if (result.success) {
+					// Undo 가능한 Notice 표시
+					if (result.canUndo) {
+						this.showUndoNotice(skill.id, skillName, container);
+					} else {
+						new Notice(t('settings.skills.deleteSuccess', { name: skillName }));
+					}
+					// 목록 갱신
+					await this.renderSkillsList(container);
+				} else {
+					new Notice(t('settings.skills.deleteError', { error: result.error || '' }), 5000);
+				}
+			});
+			modal.open();
 		});
 
 		// 에러 메시지 표시
@@ -557,6 +568,41 @@ export class NoteSageSettingTab extends PluginSettingTab {
 			const errorEl = itemEl.createDiv({ cls: 'sage-skill-error-message' });
 			errorEl.setText(skill.errorMessage || t('settings.skills.parseError'));
 		}
+	}
+
+	/**
+	 * Undo 버튼이 있는 Notice 표시
+	 *
+	 * @param skillId 삭제된 Skill ID
+	 * @param skillName 삭제된 Skill 이름
+	 * @param container Skills 목록 컨테이너 (갱신용)
+	 */
+	private showUndoNotice(skillId: string, skillName: string, container: HTMLElement): void {
+		const notice = new Notice('', 10000);
+		const noticeEl = notice.noticeEl;
+		noticeEl.empty();
+		noticeEl.addClass('sage-skill-undo-notice');
+
+		// 삭제 메시지
+		noticeEl.createSpan({
+			text: t('settings.skills.deleteSuccess', { name: skillName }),
+		});
+
+		// Undo 버튼
+		const undoBtn = noticeEl.createEl('button', {
+			text: t('settings.skills.undo'),
+			cls: 'sage-notice-undo-btn',
+		});
+		undoBtn.addEventListener('click', async () => {
+			const result = await this.skillsManager.undoDelete(skillId);
+			if (result.success) {
+				new Notice(t('settings.skills.restoreSuccess'));
+				await this.renderSkillsList(container);
+			} else {
+				new Notice(t('settings.skills.restoreError'), 5000);
+			}
+			notice.hide();
+		});
 	}
 
 	// 내장 도구 설정 UI 렌더링

@@ -11,6 +11,26 @@ export interface FrontmatterValidationResult {
 }
 
 /**
+ * Skill 삭제 결과
+ */
+export interface DeleteSkillResult {
+	success: boolean;
+	error?: string;
+	canUndo?: boolean;
+}
+
+/**
+ * 삭제된 Skill 백업 정보
+ */
+interface DeletedSkillBackup {
+	id: string;
+	content: string;
+	metadata: SkillMetadata;
+	deletedAt: number;
+	timerId: ReturnType<typeof setTimeout>;
+}
+
+/**
  * Skills 관리자
  *
  * @description
@@ -20,6 +40,8 @@ export interface FrontmatterValidationResult {
 export class SkillsManager {
 	private app: App;
 	private readonly skillsPath = '.claude/skills';
+	private readonly UNDO_TIMEOUT = 10000; // 10초
+	private deletedSkillsBackup: Map<string, DeletedSkillBackup> = new Map();
 
 	constructor(app: App) {
 		this.app = app;
@@ -319,16 +341,184 @@ export class SkillsManager {
 	}
 
 	/**
-	 * Skill 삭제
+	 * Skill 삭제 (기본)
 	 *
 	 * @param id Skill 디렉토리명
+	 * @returns 삭제 결과
 	 */
-	async deleteSkill(id: string): Promise<void> {
+	async deleteSkill(id: string): Promise<DeleteSkillResult> {
 		const skillPath = `${this.skillsPath}/${id}`;
-		const folder = this.app.vault.getAbstractFileByPath(skillPath);
-		if (folder instanceof TFolder) {
-			await this.app.vault.delete(folder, true);
+
+		// 파일 시스템에서 존재 확인
+		const exists = await this.app.vault.adapter.exists(skillPath);
+		if (!exists) {
+			return { success: false, error: 'Skill folder not found' };
 		}
+
+		try {
+			// .claude/skills/는 숨김 폴더이므로 vault.adapter를 직접 사용하여 삭제
+			await this.deleteSkillFolder(skillPath);
+			return { success: true };
+		} catch (error) {
+			return {
+				success: false,
+				error: error instanceof Error ? error.message : String(error),
+			};
+		}
+	}
+
+	/**
+	 * Skill 삭제 (Undo 지원)
+	 *
+	 * @description
+	 * Skill을 삭제하고 백업을 저장합니다.
+	 * UNDO_TIMEOUT(10초) 내에 undoDelete()를 호출하면 복원할 수 있습니다.
+	 *
+	 * @param id Skill 디렉토리명
+	 * @returns 삭제 결과 (canUndo: true면 Undo 가능)
+	 */
+	async deleteSkillWithUndo(id: string): Promise<DeleteSkillResult> {
+		const skillPath = `${this.skillsPath}/${id}`;
+		const skillFilePath = `${skillPath}/SKILL.md`;
+
+		// 파일 시스템에서 존재 확인
+		const exists = await this.app.vault.adapter.exists(skillFilePath);
+		if (!exists) {
+			return { success: false, error: 'Skill file not found' };
+		}
+
+		try {
+			// 파일 내용 백업
+			const content = await this.app.vault.adapter.read(skillFilePath);
+
+			// 메타데이터 파싱 시도 (에러가 있는 스킬도 삭제 가능하도록)
+			let metadata: SkillMetadata;
+			try {
+				metadata = this.parseMetadata(content);
+			} catch {
+				// 파싱 실패 시 기본 메타데이터 사용
+				metadata = { name: id, description: '' };
+			}
+
+			// .claude/skills/는 숨김 폴더이므로 vault.adapter를 직접 사용하여 삭제
+			await this.deleteSkillFolder(skillPath);
+
+			// 기존 백업이 있으면 타이머 취소
+			const existingBackup = this.deletedSkillsBackup.get(id);
+			if (existingBackup) {
+				clearTimeout(existingBackup.timerId);
+			}
+
+			// 백업 저장
+			const backup: DeletedSkillBackup = {
+				id,
+				content,
+				metadata,
+				deletedAt: Date.now(),
+				timerId: setTimeout(() => {
+					this.deletedSkillsBackup.delete(id);
+				}, this.UNDO_TIMEOUT),
+			};
+			this.deletedSkillsBackup.set(id, backup);
+
+			return { success: true, canUndo: true };
+		} catch (error) {
+			return {
+				success: false,
+				error: error instanceof Error ? error.message : String(error),
+			};
+		}
+	}
+
+	/**
+	 * Skill 폴더 삭제 (재귀적)
+	 *
+	 * @description
+	 * .claude/skills/ 폴더는 숨김 폴더이므로 vault.getAbstractFileByPath()가 인식하지 못합니다.
+	 * 따라서 vault.adapter를 직접 사용하여 파일 시스템에서 삭제합니다.
+	 *
+	 * @param folderPath 삭제할 폴더 경로
+	 */
+	private async deleteSkillFolder(folderPath: string): Promise<void> {
+		const adapter = this.app.vault.adapter;
+
+		// 폴더 내용 확인
+		const folderExists = await adapter.exists(folderPath);
+		if (!folderExists) {
+			return;
+		}
+
+		// 폴더 내 파일/폴더 목록 가져오기
+		const listed = await adapter.list(folderPath);
+
+		// 파일 먼저 삭제
+		for (const file of listed.files) {
+			await adapter.remove(file);
+		}
+
+		// 하위 폴더 재귀 삭제
+		for (const subfolder of listed.folders) {
+			await this.deleteSkillFolder(subfolder);
+		}
+
+		// 빈 폴더 삭제
+		await adapter.rmdir(folderPath, false);
+	}
+
+	/**
+	 * 삭제된 Skill 복원
+	 *
+	 * @description
+	 * deleteSkillWithUndo()로 삭제된 Skill을 복원합니다.
+	 * UNDO_TIMEOUT(10초) 내에 호출해야 합니다.
+	 *
+	 * @param id Skill 디렉토리명
+	 * @returns 복원 성공 여부
+	 */
+	async undoDelete(id: string): Promise<DeleteSkillResult> {
+		const backup = this.deletedSkillsBackup.get(id);
+		if (!backup) {
+			return { success: false, error: 'No backup found or undo timeout expired' };
+		}
+
+		try {
+			// 타이머 취소
+			clearTimeout(backup.timerId);
+
+			// 폴더 및 파일 복원
+			await this.ensureSkillsDirectory();
+			const skillPath = `${this.skillsPath}/${id}`;
+
+			// 폴더가 이미 존재하는지 확인
+			const folderExists = await this.app.vault.adapter.exists(skillPath);
+			if (!folderExists) {
+				await this.app.vault.createFolder(skillPath);
+			}
+
+			// 파일 생성
+			const filePath = `${skillPath}/SKILL.md`;
+			await this.app.vault.create(filePath, backup.content);
+
+			// 백업 제거
+			this.deletedSkillsBackup.delete(id);
+
+			return { success: true };
+		} catch (error) {
+			return {
+				success: false,
+				error: error instanceof Error ? error.message : String(error),
+			};
+		}
+	}
+
+	/**
+	 * Undo 가능 여부 확인
+	 *
+	 * @param id Skill 디렉토리명
+	 * @returns Undo 가능 여부
+	 */
+	canUndoDelete(id: string): boolean {
+		return this.deletedSkillsBackup.has(id);
 	}
 
 	/**
