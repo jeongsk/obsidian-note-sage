@@ -224,7 +224,7 @@ export const ru: TranslationKeys = {
 			invalidJson: 'Неверный формат JSON',
 			statusConnected: 'Подключено',
 			statusFailed: 'Ошибка подключения',
-			statusPending: 'Подключение...',
+			statusPending: 'Подключается при начале чата',
 			statusNeedsAuth: 'Требуется аутентификация',
 			noServers: 'MCP серверы не настроены. Нажмите "Добавить сервер" для начала.',
 			commandNotFound: 'Команда не найдена',

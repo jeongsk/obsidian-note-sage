@@ -224,7 +224,7 @@ export const zh: TranslationKeys = {
 			invalidJson: 'JSON格式无效',
 			statusConnected: '已连接',
 			statusFailed: '连接失败',
-			statusPending: '连接中...',
+			statusPending: '聊天开始时连接',
 			statusNeedsAuth: '需要认证',
 			noServers: '未配置MCP服务器。点击"添加服务器"开始。',
 			commandNotFound: '命令未找到',

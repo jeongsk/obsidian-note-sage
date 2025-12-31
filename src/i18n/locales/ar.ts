@@ -224,7 +224,7 @@ export const ar: TranslationKeys = {
 			invalidJson: 'صيغة JSON غير صالحة',
 			statusConnected: 'متصل',
 			statusFailed: 'فشل الاتصال',
-			statusPending: 'جاري الاتصال...',
+			statusPending: 'يتصل عند بدء المحادثة',
 			statusNeedsAuth: 'التوثيق مطلوب',
 			noServers: 'لم يتم تكوين خوادم MCP. انقر على "إضافة خادم" للبدء.',
 			commandNotFound: 'الأمر غير موجود',

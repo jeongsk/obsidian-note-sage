@@ -526,7 +526,7 @@ export const en: TranslationKeys = {
 			invalidJson: 'Invalid JSON format',
 			statusConnected: 'Connected',
 			statusFailed: 'Connection failed',
-			statusPending: 'Connecting...',
+			statusPending: 'Connects when chat starts',
 			statusNeedsAuth: 'Authentication required',
 			noServers: 'No MCP servers configured. Click "Add server" to get started.',
 			commandNotFound: 'Command not found',

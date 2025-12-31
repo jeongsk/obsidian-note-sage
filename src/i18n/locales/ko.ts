@@ -224,7 +224,7 @@ export const ko: TranslationKeys = {
 			invalidJson: '잘못된 JSON 형식입니다',
 			statusConnected: '연결됨',
 			statusFailed: '연결 실패',
-			statusPending: '연결 중...',
+			statusPending: '채팅 시작 시 연결됩니다',
 			statusNeedsAuth: '인증 필요',
 			noServers: 'MCP 서버가 설정되지 않았습니다. "서버 추가"를 클릭하여 시작하세요.',
 			commandNotFound: '명령어를 찾을 수 없음',

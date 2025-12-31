@@ -224,7 +224,7 @@ export const es: TranslationKeys = {
 			invalidJson: 'Formato JSON inválido',
 			statusConnected: 'Conectado',
 			statusFailed: 'Conexión fallida',
-			statusPending: 'Conectando...',
+			statusPending: 'Se conecta al iniciar el chat',
 			statusNeedsAuth: 'Autenticación requerida',
 			noServers: 'No hay servidores MCP configurados. Haz clic en "Agregar servidor" para comenzar.',
 			commandNotFound: 'Comando no encontrado',

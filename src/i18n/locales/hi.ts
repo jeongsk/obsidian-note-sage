@@ -224,7 +224,7 @@ export const hi: TranslationKeys = {
 			invalidJson: 'अमान्य JSON प्रारूप',
 			statusConnected: 'कनेक्टेड',
 			statusFailed: 'कनेक्शन विफल',
-			statusPending: 'कनेक्ट हो रहा है...',
+			statusPending: 'चैट शुरू होने पर कनेक्ट होता है',
 			statusNeedsAuth: 'प्रमाणीकरण आवश्यक',
 			noServers: 'कोई MCP सर्वर कॉन्फ़िगर नहीं किया गया। शुरू करने के लिए "सर्वर जोड़ें" पर क्लिक करें।',
 			commandNotFound: 'कमांड नहीं मिला',

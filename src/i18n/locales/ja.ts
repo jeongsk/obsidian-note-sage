@@ -224,7 +224,7 @@ export const ja: TranslationKeys = {
 			invalidJson: 'JSON形式が無効です',
 			statusConnected: '接続済み',
 			statusFailed: '接続失敗',
-			statusPending: '接続中...',
+			statusPending: 'チャット開始時に接続します',
 			statusNeedsAuth: '認証が必要',
 			noServers: 'MCPサーバーが設定されていません。「サーバーを追加」をクリックして開始してください。',
 			commandNotFound: 'コマンドが見つかりません',
