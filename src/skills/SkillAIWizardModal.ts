@@ -102,8 +102,17 @@ export class SkillAIWizardModal extends Modal {
 				setTimeout(() => text.inputEl.focus(), 50);
 			});
 
-		// 생성 버튼
+		// 생성 버튼 + 로딩 인디케이터
 		const generateSetting = new Setting(contentEl);
+
+		// 로딩 인디케이터를 Setting의 왼쪽 영역에 추가
+		this.loadingEl = generateSetting.nameEl.createDiv({
+			cls: 'sage-skill-ai-loading tw-hidden tw-flex tw-items-center tw-gap-2',
+		});
+		const spinnerEl = this.loadingEl.createSpan({ cls: 'tw-animate-spin' });
+		setIcon(spinnerEl, 'loader-2');
+		this.loadingEl.createSpan({ text: t('settings.skills.generating') });
+
 		generateSetting.addButton((btn) => {
 			btn.setButtonText(t('settings.skills.generateBtn'))
 				.setCta()
@@ -114,14 +123,6 @@ export class SkillAIWizardModal extends Modal {
 				});
 			this.generateBtnEl = btn.buttonEl;
 		});
-
-		// 로딩 인디케이터
-		this.loadingEl = contentEl.createDiv({
-			cls: 'sage-skill-ai-loading tw-hidden tw-flex tw-items-center tw-gap-2 tw-py-4',
-		});
-		const spinnerEl = this.loadingEl.createSpan({ cls: 'tw-animate-spin' });
-		setIcon(spinnerEl, 'loader-2');
-		this.loadingEl.createSpan({ text: t('settings.skills.generating') });
 
 		// 에러 메시지 영역
 		this.errorEl = contentEl.createDiv({
