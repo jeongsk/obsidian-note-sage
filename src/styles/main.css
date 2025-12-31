@@ -193,11 +193,10 @@
 
 	/* 채팅 입력 */
 	.sage-chat-input {
-		@apply tw-w-full tw-border-l tw-border-r tw-border-obs-border tw-rounded-none tw-bg-obs-bg tw-resize-none tw-overflow-y-auto;
+		@apply tw-w-full tw-border-l tw-border-r tw-border-t tw-border-obs-border tw-rounded-t-obs tw-bg-obs-bg tw-resize-none tw-overflow-y-auto;
 		min-height: 2.5rem;
 		max-height: 180px;
 		padding: 3px 6px;
-		border-top: 0;
 		border-bottom: 0;
 		line-height: 1.5;
 		font-family: inherit;
@@ -1052,14 +1051,18 @@
 		font-size: var(--font-small);
 	}
 
-	/* 멘션 칩 컨테이너 */
+	/* 멘션 칩 컨테이너 - 입력창과 하나의 영역으로 표시 */
 	.sage-mention-chips {
-		@apply tw-flex tw-flex-wrap tw-gap-1.5 tw-p-2;
-		border-bottom: 1px solid var(--background-modifier-border);
+		@apply tw-flex tw-flex-wrap tw-gap-1.5 tw-p-2 tw-bg-obs-bg tw-border-l tw-border-r tw-border-t tw-border-obs-border tw-rounded-t-obs;
 	}
 
 	.sage-mention-chips:empty {
 		@apply tw-hidden;
+	}
+
+	/* 멘션이 있을 때 입력창 상단 모서리 제거 */
+	.sage-mention-chips:not(:empty) + .sage-chat-input {
+		@apply tw-rounded-t-none tw-border-t-0;
 	}
 
 	/* 개별 멘션 칩 */
