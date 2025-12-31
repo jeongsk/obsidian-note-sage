@@ -259,6 +259,9 @@ export const ko: TranslationKeys = {
 			invalidName: '유효하지 않은 Skill 이름입니다',
 			noSkills: 'Skills가 없습니다',
 			noSkillsGuide: '아래 버튼을 사용하여 새 Skill을 만들거나 .claude/skills/{skill-name}/에 SKILL.md 파일을 추가하세요',
+			// Header stats
+			skillsCount: '{count}개의 Skill',
+			activeCount: '{active}개 활성',
 			nameLabel: 'Skill 이름',
 			nameDesc: '영문 소문자, 숫자, 하이픈만 사용 (예: my-skill)',
 			descriptionLabel: '설명',

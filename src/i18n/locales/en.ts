@@ -88,6 +88,9 @@ interface SkillsSettingsTranslations {
 	invalidName: string;
 	noSkills: string;
 	noSkillsGuide: string;
+	// Header stats
+	skillsCount: string;
+	activeCount: string;
 	nameLabel: string;
 	nameDesc: string;
 	descriptionLabel: string;
@@ -551,6 +554,9 @@ export const en: TranslationKeys = {
 			invalidName: 'Invalid Skill name',
 			noSkills: 'No Skills found',
 			noSkillsGuide: 'Create a new Skill using the buttons below or add SKILL.md files to .claude/skills/{skill-name}/',
+			// Header stats
+			skillsCount: '{count} Skills',
+			activeCount: '{active} active',
 			nameLabel: 'Skill Name',
 			nameDesc: 'Use lowercase letters, numbers, and hyphens only (e.g., my-skill)',
 			descriptionLabel: 'Description',
