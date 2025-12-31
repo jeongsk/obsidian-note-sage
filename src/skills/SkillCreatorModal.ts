@@ -16,6 +16,8 @@ export class SkillTemplateModal extends Modal {
 	private onSubmit: (filePath: string) => void;
 	private nameValue = '';
 	private descriptionValue = '';
+	private instructionsValue = '';
+	private examplesValue = '';
 	private previewEl: HTMLElement | null = null;
 	private errorEl: HTMLElement | null = null;
 
@@ -64,6 +66,36 @@ export class SkillTemplateModal extends Modal {
 					}
 				);
 				text.inputEl.rows = 3;
+				text.inputEl.style.width = '100%';
+			});
+
+		// Instructions 입력 필드
+		new Setting(contentEl)
+			.setName(t('settings.skills.instructionsLabel'))
+			.setDesc(t('settings.skills.instructionsDesc'))
+			.addTextArea((text) => {
+				text.setPlaceholder(t('settings.skills.instructionsPlaceholder')).onChange(
+					(value) => {
+						this.instructionsValue = value;
+						this.updatePreview();
+					}
+				);
+				text.inputEl.rows = 4;
+				text.inputEl.style.width = '100%';
+			});
+
+		// Examples 입력 필드
+		new Setting(contentEl)
+			.setName(t('settings.skills.examplesLabel'))
+			.setDesc(t('settings.skills.examplesDesc'))
+			.addTextArea((text) => {
+				text.setPlaceholder(t('settings.skills.examplesPlaceholder')).onChange(
+					(value) => {
+						this.examplesValue = value;
+						this.updatePreview();
+					}
+				);
+				text.inputEl.rows = 4;
 				text.inputEl.style.width = '100%';
 			});
 
@@ -142,6 +174,8 @@ export class SkillTemplateModal extends Modal {
 
 		const name = this.nameValue || 'skill-name';
 		const description = this.descriptionValue || 'Add your Skill description here';
+		const instructions = this.instructionsValue || '<!-- Add your instructions here -->';
+		const examples = this.examplesValue || '<!-- Add examples here -->';
 
 		const preview = `---
 name: ${name}
@@ -152,11 +186,11 @@ description: ${description}
 
 ## Instructions
 
-<!-- Add your instructions here -->
+${instructions}
 
 ## Examples
 
-<!-- Add examples here -->`;
+${examples}`;
 
 		this.previewEl.textContent = preview;
 	}
@@ -169,7 +203,9 @@ description: ${description}
 		try {
 			const filePath = await this.skillsManager.createSkillFromTemplate(
 				this.nameValue,
-				this.descriptionValue
+				this.descriptionValue,
+				this.instructionsValue,
+				this.examplesValue
 			);
 			this.close();
 			this.onSubmit(filePath);
