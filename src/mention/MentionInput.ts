@@ -61,6 +61,7 @@ export class MentionInput {
 	private state: MentionInputState = { ...DEFAULT_MENTION_INPUT_STATE };
 	private isComposing = false;
 	private debounceTimer: ReturnType<typeof setTimeout> | null = null;
+	private blurTimer: ReturnType<typeof setTimeout> | null = null;
 
 	// 바인딩된 이벤트 핸들러 참조 (cleanup을 위해 저장)
 	private boundHandleInput: () => void;
@@ -355,8 +356,14 @@ export class MentionInput {
 	 * 포커스 해제 핸들러
 	 */
 	private handleBlur(): void {
+		// 이전 타이머 정리
+		if (this.blurTimer) {
+			clearTimeout(this.blurTimer);
+		}
+
 		// 약간의 딜레이 후 팝업 숨기기 (클릭 이벤트 처리를 위해)
-		setTimeout(() => {
+		this.blurTimer = setTimeout(() => {
+			this.blurTimer = null;
 			if (!this.autocompletePopup.isVisible()) return;
 			this.resetState();
 		}, 150);
@@ -461,10 +468,14 @@ export class MentionInput {
 	 * 컴포넌트 정리
 	 */
 	destroy(): void {
-		// 디바운스 타이머 정리
+		// 타이머 정리
 		if (this.debounceTimer) {
 			clearTimeout(this.debounceTimer);
 			this.debounceTimer = null;
+		}
+		if (this.blurTimer) {
+			clearTimeout(this.blurTimer);
+			this.blurTimer = null;
 		}
 
 		// 이벤트 리스너 제거 (메모리 누수 방지)

@@ -92,17 +92,27 @@ export class AutocompletePopup {
 		this.suggestions = suggestions.slice(0, this.maxItems);
 		this.selectedIndex = 0;
 
-		// 위치 설정 (CSS에서 bottom: 100% 사용, left/right: 0 사용)
-		// top은 설정하지 않음 - CSS의 bottom 속성 사용
+		// 위치 설정
 		if (position.maxWidth) {
 			this.containerEl.style.maxWidth = `${position.maxWidth}px`;
 		}
+
+		// 기본: 입력창 위에 표시
+		this.containerEl.style.bottom = '100%';
+		this.containerEl.style.top = 'auto';
 
 		// 렌더링
 		this.render();
 
 		// 표시
 		this.containerEl.style.display = 'block';
+
+		// 화면 경계 체크: 팝업이 화면 상단을 벗어나면 아래에 표시
+		const popupRect = this.containerEl.getBoundingClientRect();
+		if (popupRect.top < 0) {
+			this.containerEl.style.bottom = 'auto';
+			this.containerEl.style.top = '100%';
+		}
 
 		// 외부 클릭 이벤트 등록
 		document.addEventListener('click', this.handleOutsideClick, true);
