@@ -214,6 +214,10 @@
 		margin-top: -4px;
 	}
 
+	.sage-button-right-group {
+		@apply tw-flex tw-items-center tw-gap-1.5;
+	}
+
 	.sage-chat-send-button {
 		@apply tw-rounded-full tw-p-0 tw-cursor-pointer tw-transition-all tw-duration-200;
 		font-size: var(--font-smaller);
@@ -679,6 +683,33 @@
 		@apply tw-px-4 tw-py-2;
 	}
 
+	/* ==================== Extended Thinking Button (Input Area) ==================== */
+	.sage-extended-thinking-btn {
+		@apply tw-flex tw-items-center tw-justify-center tw-w-7 tw-h-7 tw-rounded-md tw-cursor-pointer tw-transition-all tw-duration-200;
+		@apply tw-text-obs-text-muted tw-bg-transparent;
+	}
+
+	.sage-extended-thinking-btn:hover {
+		@apply tw-bg-obs-bg-hover tw-text-obs-text;
+	}
+
+	.sage-extended-thinking-btn.active {
+		@apply tw-text-obs-accent;
+		background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+	}
+
+	.sage-extended-thinking-btn.active:hover {
+		background-color: color-mix(in srgb, var(--color-accent) 20%, transparent);
+	}
+
+	.sage-extended-thinking-btn-icon {
+		@apply tw-flex tw-items-center tw-justify-center;
+	}
+
+	.sage-extended-thinking-btn-icon svg {
+		@apply tw-w-4 tw-h-4;
+	}
+
 	/* ==================== MCP Header Status ==================== */
 	.sage-mcp-header-status {
 		@apply tw-relative tw-flex tw-items-center tw-mr-2;
@@ -1083,6 +1114,7 @@
 		padding: 2px 6px 2px 20px;
 		background-position: left 4px center;
 	}
+
 
 	.sage-rtl .sage-mcp-header-status {
 		@apply tw-mr-0 tw-ml-2;
