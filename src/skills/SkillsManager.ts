@@ -2,6 +2,15 @@ import { App, TFolder } from 'obsidian';
 import type { SkillEntry, SkillMetadata } from '../types';
 
 /**
+ * YAML frontmatter 검증 결과
+ */
+export interface FrontmatterValidationResult {
+	valid: boolean;
+	metadata?: SkillMetadata;
+	errors: string[];
+}
+
+/**
  * Skills 관리자
  *
  * @description
@@ -112,6 +121,69 @@ export class SkillsManager {
 	}
 
 	/**
+	 * SKILL.md 콘텐츠의 YAML frontmatter 유효성 검사
+	 *
+	 * @description
+	 * name과 description 필드의 존재 및 형식을 검증합니다.
+	 * AI 생성 콘텐츠의 품질을 보장하기 위해 사용됩니다.
+	 *
+	 * @param content SKILL.md 파일 내용
+	 * @returns 검증 결과 (유효 여부, 메타데이터, 에러 목록)
+	 */
+	validateFrontmatter(content: string): FrontmatterValidationResult {
+		const errors: string[] = [];
+
+		// 1. YAML frontmatter 존재 확인
+		const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+		if (!frontmatterMatch) {
+			errors.push('YAML frontmatter not found (must start with --- and end with ---)');
+			return { valid: false, errors };
+		}
+
+		const frontmatter = frontmatterMatch[1];
+
+		// 2. name 필드 검증
+		const nameMatch = frontmatter.match(/^name:\s*(.+)$/m);
+		if (!nameMatch) {
+			errors.push('Required field "name" is missing in frontmatter');
+		} else {
+			const name = nameMatch[1].trim().replace(/['"]/g, '');
+			if (!name) {
+				errors.push('Field "name" cannot be empty');
+			} else {
+				// kebab-case 검증
+				const nameValidation = this.validateSkillName(name);
+				if (!nameValidation.valid) {
+					errors.push(`Invalid name format: ${nameValidation.error}`);
+				}
+			}
+		}
+
+		// 3. description 필드 검증
+		const descMatch = frontmatter.match(/^description:\s*(.+)$/m);
+		if (!descMatch) {
+			errors.push('Required field "description" is missing in frontmatter');
+		} else {
+			const description = descMatch[1].trim().replace(/['"]/g, '');
+			if (!description || description.length < 20) {
+				errors.push('Field "description" must be at least 20 characters');
+			}
+		}
+
+		// 결과 반환
+		if (errors.length > 0) {
+			return { valid: false, errors };
+		}
+
+		try {
+			const metadata = this.parseMetadata(content);
+			return { valid: true, metadata, errors: [] };
+		} catch (e) {
+			return { valid: false, errors: [e instanceof Error ? e.message : String(e)] };
+		}
+	}
+
+	/**
 	 * Skills 디렉토리 존재 확인 및 생성
 	 *
 	 * @description
@@ -184,6 +256,50 @@ export class SkillsManager {
 		}
 
 		const content = this.generateTemplate(name, description);
+
+		try {
+			await this.app.vault.create(filePath, content);
+		} catch (error) {
+			// 파일이 이미 존재하는 경우 명확한 에러 메시지
+			if (error instanceof Error && error.message.includes('already exists')) {
+				throw new Error(`Skill "${name}" already exists`);
+			}
+			throw error;
+		}
+
+		return filePath;
+	}
+
+	/**
+	 * AI가 생성한 내용으로 Skill 파일 생성
+	 *
+	 * @param name Skill 이름 (kebab-case)
+	 * @param content 전체 SKILL.md 내용 (frontmatter 포함)
+	 */
+	async createSkillFromContent(name: string, content: string): Promise<string> {
+		await this.ensureSkillsDirectory();
+
+		const skillPath = `${this.skillsPath}/${name}`;
+		const filePath = `${skillPath}/SKILL.md`;
+
+		// 파일 시스템에서 직접 SKILL.md 파일 존재 여부 확인
+		const fileExists = await this.app.vault.adapter.exists(filePath);
+		if (fileExists) {
+			throw new Error(`Skill "${name}" already exists`);
+		}
+
+		// 폴더 생성 (이미 존재하면 무시)
+		const folderExists = await this.app.vault.adapter.exists(skillPath);
+		if (!folderExists) {
+			try {
+				await this.app.vault.createFolder(skillPath);
+			} catch (error) {
+				// 폴더가 이미 존재하는 경우 무시 (race condition 방지)
+				if (!(error instanceof Error && error.message.includes('already exists'))) {
+					throw error;
+				}
+			}
+		}
 
 		try {
 			await this.app.vault.create(filePath, content);
