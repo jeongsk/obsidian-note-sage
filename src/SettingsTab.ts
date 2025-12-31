@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting } from 'obsidian';
+import { App, Notice, PluginSettingTab, Setting, setIcon } from 'obsidian';
 import type NoteSagePlugin from './main';
 import {
 	AVAILABLE_MODELS,
@@ -13,15 +13,24 @@ import {
 } from './types';
 import { t, setLanguage, AVAILABLE_LANGUAGES, SupportedLanguage } from './i18n';
 import { McpSettingsUI } from './mcp/McpSettingsUI';
+import { SkillsManager } from './skills/SkillsManager';
+import { SkillDetailModal } from './skills/SkillDetailModal';
+import { SkillTemplateModal } from './skills/SkillCreatorModal';
+import { SkillAIWizardModal } from './skills/SkillAIWizardModal';
+import { SkillDeleteModal } from './skills/SkillDeleteModal';
+import type { SkillEntry } from './types';
 import { CONTENT_LIMITS } from './constants';
 
 export class NoteSageSettingTab extends PluginSettingTab {
 	plugin: NoteSagePlugin;
 	private mcpSettingsUI?: McpSettingsUI;
+	private skillsManager: SkillsManager;
+	private skills: SkillEntry[] = [];
 
 	constructor(app: App, plugin: NoteSagePlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
+		this.skillsManager = new SkillsManager(app);
 	}
 
 	display(): void {
@@ -166,6 +175,10 @@ export class NoteSageSettingTab extends PluginSettingTab {
 		// ==================== MCP 서버 설정 ====================
 		const mcpContainer = containerEl.createDiv({ cls: 'sage-mcp-settings' });
 		this.renderMcpSettings(mcpContainer);
+
+		// ==================== Skills 설정 ====================
+		const skillsContainer = containerEl.createDiv({ cls: 'sage-skills-settings' });
+		this.renderSkillsSettings(skillsContainer);
 
 		// ==================== Claude CLI 고급 설정 ====================
 		new Setting(containerEl)
@@ -324,6 +337,272 @@ export class NoteSageSettingTab extends PluginSettingTab {
 		);
 
 		this.mcpSettingsUI.render();
+	}
+
+
+	/**
+	 * Skills 설정 섹션 렌더링
+	 */
+	private renderSkillsSettings(containerEl: HTMLElement): void {
+		containerEl.empty();
+
+		new Setting(containerEl)
+			.setName(t('settings.skills.title'))
+			.setDesc(t('settings.skills.description'))
+			.setHeading();
+
+		// Skills 활성화 토글
+		new Setting(containerEl)
+			.setName(t('settings.skills.enable'))
+			.setDesc(t('settings.skills.enableDesc'))
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.enableSkills ?? false)
+					.onChange(async (value) => {
+						this.plugin.settings.enableSkills = value;
+						await this.plugin.saveSettings();
+						this.updateViews();
+						// Skills 활성화 시 디렉토리 자동 생성
+						if (value) {
+							await this.skillsManager.ensureSkillsDirectory();
+						}
+						// UI 갱신
+						this.renderSkillsSettings(containerEl);
+					})
+			);
+
+		// Skills가 비활성화되어 있으면 목록과 버튼을 표시하지 않음
+		if (!this.plugin.settings.enableSkills) {
+			return;
+		}
+
+		// Skills 목록 렌더링
+		const listContainer = containerEl.createDiv({ cls: 'sage-skills-list' });
+		this.renderSkillsList(listContainer);
+
+		// 생성 버튼들
+		const buttonContainer = containerEl.createDiv({
+			cls: 'sage-skills-buttons tw-flex tw-gap-2 tw-mt-4',
+		});
+
+		new Setting(buttonContainer)
+			.addButton((btn) =>
+				btn.setButtonText(t('settings.skills.createTemplate')).onClick(() => {
+					new SkillTemplateModal(
+						this.plugin.app,
+						this.skillsManager,
+						this.skills,
+						async (filePath) => {
+							// 생성된 파일을 편집기에서 열기
+							const file = this.plugin.app.vault.getAbstractFileByPath(filePath);
+							if (file) {
+								await this.plugin.app.workspace.openLinkText(filePath, '', false);
+							}
+							// 목록 갱신
+							this.renderSkillsSettings(containerEl);
+						}
+					).open();
+				})
+			)
+			.addButton((btn) =>
+				btn
+					.setButtonText(t('settings.skills.createAIWizard'))
+					.setCta()
+					.onClick(() => {
+						new SkillAIWizardModal(
+							this.plugin.app,
+							this.plugin,
+							this.skillsManager,
+							this.skills,
+							async (filePath) => {
+								// 생성된 파일을 편집기에서 열기
+								const file = this.plugin.app.vault.getAbstractFileByPath(filePath);
+								if (file) {
+									await this.plugin.app.workspace.openLinkText(filePath, '', false);
+								}
+								// 목록 갱신
+								this.renderSkillsSettings(containerEl);
+							}
+						).open();
+					})
+			);
+	}
+
+	/**
+	 * Skills 목록 렌더링
+	 */
+	private async renderSkillsList(containerEl: HTMLElement): Promise<void> {
+		containerEl.empty();
+
+		// Skills 스캔
+		this.skills = await this.skillsManager.scanSkills();
+
+		// 비활성화된 Skills 적용
+		const disabledSkills = this.plugin.settings.disabledSkills || [];
+		this.skills = this.skills.map((skill) => ({
+			...skill,
+			enabled: skill.hasError ? false : !disabledSkills.includes(skill.id),
+		}));
+
+		if (this.skills.length === 0) {
+			// Skills 없음 메시지
+			const emptyEl = containerEl.createDiv({ cls: 'sage-skills-empty' });
+			emptyEl.createEl('p', { text: t('settings.skills.noSkills') });
+			emptyEl.createEl('p', {
+				text: t('settings.skills.noSkillsGuide'),
+				cls: 'tw-text-sm tw-opacity-70',
+			});
+			return;
+		}
+
+		// Skills 목록 렌더링
+		for (const skill of this.skills) {
+			this.renderSkillItem(containerEl, skill);
+		}
+	}
+
+	/**
+	 * 개별 Skill 아이템 렌더링
+	 */
+	private renderSkillItem(container: HTMLElement, skill: SkillEntry): void {
+		const itemEl = container.createDiv({
+			cls: `sage-skill-item ${!skill.enabled ? 'sage-skill-item--disabled' : ''} ${skill.hasError ? 'sage-skill-item--error' : ''}`,
+		});
+
+		// 스킬 아이콘
+		const iconEl = itemEl.createSpan({ cls: 'sage-skill-icon' });
+		setIcon(iconEl, 'wand');
+
+		// 스킬 정보
+		const infoEl = itemEl.createDiv({ cls: 'sage-skill-info' });
+		const nameEl = infoEl.createDiv({
+			cls: 'sage-skill-name',
+			text: skill.metadata.name || skill.id,
+		});
+		
+		// 이름 클릭 시 상세 보기 모달
+		nameEl.addEventListener('click', () => {
+			new SkillDetailModal(this.plugin.app, skill).open();
+		});
+
+		if (skill.metadata.description) {
+			infoEl.createDiv({
+				cls: 'sage-skill-desc',
+				text: skill.metadata.description,
+			});
+		}
+
+		// 컨트롤 버튼들
+		const controlsEl = itemEl.createDiv({ cls: 'sage-skill-controls' });
+
+		// 활성화/비활성화 토글 (에러가 없는 경우에만)
+		if (!skill.hasError) {
+			const toggleLabel = controlsEl.createEl('label', { cls: 'sage-skill-toggle' });
+			const toggleInput = toggleLabel.createEl('input', {
+				type: 'checkbox',
+				cls: 'sage-skill-toggle-checkbox',
+			});
+			toggleInput.checked = skill.enabled;
+			toggleLabel.createSpan({ cls: 'sage-skill-toggle-slider' });
+			toggleInput.addEventListener('change', async () => {
+				const disabledSkills = this.plugin.settings.disabledSkills || [];
+				if (toggleInput.checked) {
+					// 활성화: 목록에서 제거
+					this.plugin.settings.disabledSkills = disabledSkills.filter(
+						(id) => id !== skill.id
+					);
+				} else {
+					// 비활성화: 목록에 추가
+					if (!disabledSkills.includes(skill.id)) {
+						this.plugin.settings.disabledSkills = [...disabledSkills, skill.id];
+					}
+				}
+				await this.plugin.saveSettings();
+				this.updateViews();
+				// 부모 컨테이너 찾아서 UI 업데이트
+				const listContainer = container;
+				await this.renderSkillsList(listContainer);
+			});
+		}
+
+		// 편집 버튼
+		const editBtn = controlsEl.createEl('button', { cls: 'sage-skill-btn' });
+		setIcon(editBtn, 'pencil');
+		editBtn.setAttribute('aria-label', t('settings.skills.edit'));
+		editBtn.addEventListener('click', async () => {
+			// 스킬 파일을 Obsidian에서 열기
+			const skillPath = `.claude/skills/${skill.id}.md`;
+			const file = this.app.vault.getAbstractFileByPath(skillPath);
+			if (file) {
+				await this.app.workspace.openLinkText(skillPath, '', false);
+			}
+		});
+
+		// 삭제 버튼
+		const deleteBtn = controlsEl.createEl('button', { cls: 'sage-skill-btn sage-skill-btn-delete' });
+		setIcon(deleteBtn, 'trash');
+		deleteBtn.setAttribute('aria-label', t('settings.skills.delete'));
+		deleteBtn.addEventListener('click', () => {
+			const modal = new SkillDeleteModal(this.app, skill, async () => {
+				const skillName = skill.metadata.name || skill.id;
+				const result = await this.skillsManager.deleteSkillWithUndo(skill.id);
+
+				if (result.success) {
+					// Undo 가능한 Notice 표시
+					if (result.canUndo) {
+						this.showUndoNotice(skill.id, skillName, container);
+					} else {
+						new Notice(t('settings.skills.deleteSuccess', { name: skillName }));
+					}
+					// 목록 갱신
+					await this.renderSkillsList(container);
+				} else {
+					new Notice(t('settings.skills.deleteError', { error: result.error || '' }), 5000);
+				}
+			});
+			modal.open();
+		});
+
+		// 에러 메시지 표시
+		if (skill.hasError && skill.errorMessage) {
+			const errorEl = itemEl.createDiv({ cls: 'sage-skill-error-message' });
+			errorEl.setText(skill.errorMessage || t('settings.skills.parseError'));
+		}
+	}
+
+	/**
+	 * Undo 버튼이 있는 Notice 표시
+	 *
+	 * @param skillId 삭제된 Skill ID
+	 * @param skillName 삭제된 Skill 이름
+	 * @param container Skills 목록 컨테이너 (갱신용)
+	 */
+	private showUndoNotice(skillId: string, skillName: string, container: HTMLElement): void {
+		const notice = new Notice('', 10000);
+		const noticeEl = notice.noticeEl;
+		noticeEl.empty();
+		noticeEl.addClass('sage-skill-undo-notice');
+
+		// 삭제 메시지
+		noticeEl.createSpan({
+			text: t('settings.skills.deleteSuccess', { name: skillName }),
+		});
+
+		// Undo 버튼
+		const undoBtn = noticeEl.createEl('button', {
+			text: t('settings.skills.undo'),
+			cls: 'sage-notice-undo-btn',
+		});
+		undoBtn.addEventListener('click', async () => {
+			const result = await this.skillsManager.undoDelete(skillId);
+			if (result.success) {
+				new Notice(t('settings.skills.restoreSuccess'));
+				await this.renderSkillsList(container);
+			} else {
+				new Notice(t('settings.skills.restoreError'), 5000);
+			}
+			notice.hide();
+		});
 	}
 
 	// 내장 도구 설정 UI 렌더링

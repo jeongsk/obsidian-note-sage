@@ -841,6 +841,153 @@
 		font-size: var(--font-smaller);
 	}
 
+	/* ==================== Skills Settings ==================== */
+	.sage-skills-settings {
+		@apply tw-mt-4;
+	}
+
+	.sage-skills-list {
+		@apply tw-mt-2;
+	}
+
+	.sage-skill-item {
+		@apply tw-flex tw-items-center tw-flex-wrap tw-gap-2 tw-p-2 tw-bg-obs-bg-secondary tw-border tw-border-obs-border tw-rounded-obs tw-mb-2;
+	}
+
+	.sage-skill-item:hover {
+		@apply tw-border-obs-border-hover;
+	}
+
+	.sage-skill-item--disabled {
+		@apply tw-opacity-50;
+	}
+
+	.sage-skill-item--error {
+		@apply tw-border-obs-red;
+	}
+
+	.sage-skill-icon {
+		@apply tw-flex tw-items-center tw-justify-center tw-w-5 tw-h-5 tw-flex-shrink-0 tw-text-obs-text-muted;
+	}
+
+	.sage-skill-icon svg {
+		@apply tw-w-4 tw-h-4;
+	}
+
+	.sage-skill-info {
+		@apply tw-flex-1 tw-min-w-0;
+	}
+
+	.sage-skill-name {
+		@apply tw-font-medium tw-text-obs-text tw-truncate tw-cursor-pointer;
+		font-size: var(--font-small);
+	}
+
+	.sage-skill-name:hover {
+		@apply tw-underline;
+	}
+
+	.sage-skill-desc {
+		@apply tw-text-obs-text-muted tw-truncate;
+		font-size: var(--font-smaller);
+	}
+
+	.sage-skill-error-message {
+		@apply tw-w-full tw-p-1 tw-mt-1 tw-rounded-obs;
+		font-size: var(--font-smaller);
+		color: var(--text-error);
+		background: var(--background-modifier-error);
+	}
+
+	.sage-skill-controls {
+		@apply tw-flex tw-items-center tw-gap-1 tw-flex-shrink-0;
+	}
+
+	/* Skills 토글 - MCP와 동일 */
+	.sage-skill-toggle {
+		@apply tw-relative tw-inline-block tw-flex-shrink-0;
+		width: 32px;
+		height: 18px;
+	}
+
+	.sage-skill-toggle-checkbox {
+		@apply tw-opacity-0 tw-w-0 tw-h-0 tw-absolute;
+	}
+
+	.sage-skill-toggle-slider {
+		@apply tw-absolute tw-cursor-pointer tw-inset-0 tw-bg-obs-border tw-rounded-full tw-transition-all tw-duration-200;
+	}
+
+	.sage-skill-toggle-slider::before {
+		@apply tw-absolute tw-rounded-full tw-bg-white tw-transition-all tw-duration-200;
+		content: "";
+		height: 14px;
+		width: 14px;
+		left: 2px;
+		bottom: 2px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	}
+
+	.sage-skill-toggle-checkbox:checked + .sage-skill-toggle-slider {
+		@apply tw-bg-obs-accent;
+	}
+
+	.sage-skill-toggle-checkbox:checked + .sage-skill-toggle-slider::before {
+		transform: translateX(14px);
+	}
+
+	.sage-skill-btn {
+		@apply tw-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-p-0 tw-bg-transparent tw-border-none tw-rounded-obs tw-text-obs-text-muted tw-cursor-pointer tw-transition-all tw-duration-150;
+	}
+
+	.sage-skill-btn:hover {
+		@apply tw-bg-obs-bg-hover tw-text-obs-text;
+	}
+
+	.sage-skill-btn svg {
+		@apply tw-w-3.5 tw-h-3.5;
+	}
+
+	.sage-skill-btn-delete:hover {
+		@apply tw-text-obs-red;
+	}
+
+	.sage-skills-empty {
+		@apply tw-p-4 tw-text-center tw-text-obs-text-muted tw-italic tw-bg-obs-bg-secondary tw-rounded-obs tw-mb-2;
+	}
+
+	.sage-skills-buttons {
+		@apply tw-flex tw-gap-2 tw-mt-4;
+	}
+
+	/* Skill 삭제 확인 모달 */
+	.sage-skill-delete-modal .sage-modal-title {
+		@apply tw-text-lg tw-font-semibold tw-text-obs-text tw-mb-4;
+	}
+
+	.sage-skill-delete-modal .sage-modal-message {
+		@apply tw-text-obs-text tw-mb-2;
+	}
+
+	.sage-skill-delete-modal .sage-modal-hint {
+		@apply tw-text-obs-text-muted tw-text-sm tw-mb-4;
+	}
+
+	/* Skill 삭제 Undo Notice */
+	.sage-skill-undo-notice {
+		@apply tw-flex tw-items-center tw-gap-2;
+	}
+
+	.sage-notice-undo-btn {
+		@apply tw-ml-2 tw-px-2 tw-py-1 tw-text-xs tw-rounded tw-cursor-pointer;
+		@apply tw-bg-obs-accent tw-text-obs-text-on-accent;
+		@apply tw-border-none;
+	}
+
+	.sage-notice-undo-btn:hover {
+		@apply tw-opacity-80;
+	}
+
 	/* ==================== RTL Support ==================== */
 	.sage-rtl {
 		direction: rtl;
@@ -946,6 +1093,19 @@
 	}
 
 	.sage-rtl .sage-mcp-server-controls {
+		@apply tw-flex-row-reverse;
+	}
+
+	/* Skills RTL 지원 */
+	.sage-rtl .sage-skill-item {
+		@apply tw-flex-row-reverse;
+	}
+
+	.sage-rtl .sage-skill-info {
+		@apply tw-text-right;
+	}
+
+	.sage-rtl .sage-skill-controls {
 		@apply tw-flex-row-reverse;
 	}
 

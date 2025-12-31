@@ -72,6 +72,56 @@ interface AgentOptionsTranslations {
 	turnLimitReached: string;
 }
 
+interface SkillsSettingsTranslations {
+	title: string;
+	description: string;
+	enable: string;
+	enableDesc: string;
+	createTemplate: string;
+	createAIWizard: string;
+	aiWizardDesc: string;
+	aiPromptLabel: string;
+	aiPromptDesc: string;
+	aiPromptPlaceholder: string;
+	generateBtn: string;
+	generating: string;
+	invalidName: string;
+	noSkills: string;
+	noSkillsGuide: string;
+	nameLabel: string;
+	nameDesc: string;
+	descriptionLabel: string;
+	descriptionDesc: string;
+	descriptionPlaceholder: string;
+	instructionsLabel: string;
+	instructionsDesc: string;
+	instructionsPlaceholder: string;
+	examplesLabel: string;
+	examplesDesc: string;
+	examplesPlaceholder: string;
+	preview: string;
+	duplicateName: string;
+	parseError: string;
+	fileNotFound: string;
+	loadError: string;
+	edit: string;
+	delete: string;
+	deleteConfirm: string;
+	deleteTitle: string;
+	deleteConfirmMessage: string;
+	deleteUndoHint: string;
+	deleteSuccess: string;
+	deleteError: string;
+	undo: string;
+	restoreSuccess: string;
+	restoreError: string;
+	// AI Validation
+	validationFailed: string;
+	validationErrors: string;
+	retrying: string;
+	noContentError: string;
+}
+
 interface McpSettingsTranslations {
 	title: string;
 	description: string;
@@ -167,6 +217,8 @@ interface SettingsTranslations {
 	agentOptions: AgentOptionsTranslations;
 	// MCP Servers
 	mcp: McpSettingsTranslations;
+	// Skills
+	skills: SkillsSettingsTranslations;
 	about: string;
 	aboutText1: string;
 	aboutText2: string;
@@ -231,6 +283,14 @@ export interface TranslationKeys {
 	largeFileWarningQuestion: string;
 	includeAnyway: string;
 	cancel: string;
+	// Common translations
+	common: {
+		close: string;
+		cancel: string;
+		create: string;
+		save: string;
+		delete: string;
+	};
 }
 
 export const en: TranslationKeys = {
@@ -474,6 +534,57 @@ export const en: TranslationKeys = {
 			saveError: 'Failed to save server',
 		},
 
+		// Skills
+		skills: {
+			title: 'Skills',
+			description: 'Manage Claude Agent SDK Skills from .claude/skills/',
+			enable: 'Enable Skills',
+			enableDesc: 'Allow Claude to use Skills defined in .claude/skills/ directory',
+			createTemplate: 'Create from Template',
+			createAIWizard: 'Create with AI',
+			aiWizardDesc: 'Describe what you want your Skill to do and AI will generate it for you.',
+			aiPromptLabel: 'Describe your Skill',
+			aiPromptDesc: 'Explain what this Skill should do in natural language',
+			aiPromptPlaceholder: 'e.g., A skill that helps format markdown tables with proper alignment...',
+			generateBtn: 'Generate',
+			generating: 'Generating Skill...',
+			invalidName: 'Invalid Skill name',
+			noSkills: 'No Skills found',
+			noSkillsGuide: 'Create a new Skill using the buttons below or add SKILL.md files to .claude/skills/{skill-name}/',
+			nameLabel: 'Skill Name',
+			nameDesc: 'Use lowercase letters, numbers, and hyphens only (e.g., my-skill)',
+			descriptionLabel: 'Description',
+			descriptionDesc: 'Describe when Claude should use this Skill',
+			descriptionPlaceholder: 'This Skill helps with...',
+			instructionsLabel: 'Instructions',
+			instructionsDesc: 'Instructions for Claude to follow when executing this Skill',
+			instructionsPlaceholder: 'Describe how this Skill should work and what tasks to perform...',
+			examplesLabel: 'Examples',
+			examplesDesc: 'Example usages demonstrating this Skill',
+			examplesPlaceholder: 'Write example inputs and expected outputs...',
+			preview: 'Preview',
+			duplicateName: 'A Skill with this name already exists',
+			parseError: 'Parse error',
+			fileNotFound: 'File not found',
+			loadError: 'Failed to load file',
+			edit: 'Edit',
+			delete: 'Delete',
+			deleteConfirm: 'Are you sure you want to delete the Skill "{name}"?',
+			deleteTitle: 'Delete Skill',
+			deleteConfirmMessage: 'Are you sure you want to delete {name}?',
+			deleteUndoHint: 'You can undo this action within 10 seconds.',
+			deleteSuccess: 'Skill "{name}" has been deleted.',
+			deleteError: 'Failed to delete Skill: {error}',
+			undo: 'Undo',
+			restoreSuccess: 'Skill has been restored.',
+			restoreError: 'Failed to restore Skill.',
+			// AI Validation
+			validationFailed: 'Validation failed after {max} attempts. Please check and edit the content manually.',
+			validationErrors: 'Content has validation errors:\n{errors}',
+			retrying: 'Fixing issues... (attempt {attempt}/{max})',
+			noContentError: 'No content generated. Please click "Generate" first.',
+		},
+
 		// About
 		about: 'About',
 		aboutText1: 'This plugin uses the Claude Agent SDK to provide AI-powered assistance directly within Obsidian.',
@@ -498,4 +609,13 @@ export const en: TranslationKeys = {
 	largeFileWarningQuestion: 'Do you want to include this file anyway?',
 	includeAnyway: 'Include Anyway',
 	cancel: 'Cancel',
+
+	// Common translations
+	common: {
+		close: 'Close',
+		cancel: 'Cancel',
+		create: 'Create',
+		save: 'Save',
+		delete: 'Delete',
+	},
 };

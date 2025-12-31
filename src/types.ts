@@ -182,6 +182,43 @@ export const DEFAULT_QUICK_ACTIONS: QuickActionConfig[] = QUICK_ACTION_DEFINITIO
 	customPrompt: undefined,
 }));
 
+
+// ==================== Skills Types ====================
+
+/**
+ * SKILL.md 파일의 YAML frontmatter에서 추출한 메타데이터
+ */
+export interface SkillMetadata {
+	/** Skill 식별자 (kebab-case, 예: "processing-pdfs") */
+	name: string;
+
+	/** Skill 설명 - Claude가 자동 호출 판단에 사용 */
+	description: string;
+}
+
+/**
+ * Vault 내 탐지된 Skill
+ */
+export interface SkillEntry {
+	/** Skill 디렉토리명 (예: "my-skill") */
+	id: string;
+
+	/** SKILL.md 파일의 경로 */
+	path: string;
+
+	/** SKILL.md에서 추출한 메타데이터 */
+	metadata: SkillMetadata;
+
+	/** 활성화 상태 (기본값: true) */
+	enabled: boolean;
+
+	/** 파싱 오류 여부 */
+	hasError: boolean;
+
+	/** 오류 메시지 (hasError가 true일 때) */
+	errorMessage?: string;
+}
+
 export interface NoteSageSettings {
 	apiKey?: string;
 	model?: string;
@@ -213,6 +250,9 @@ export interface NoteSageSettings {
 	enableExtendedThinking?: boolean;
 	maxThinkingTokens?: number;
 	permissionMode?: PermissionMode;
+	// Skills 설정
+	enableSkills?: boolean;
+	disabledSkills?: string[];
 }
 
 export const DEFAULT_SETTINGS: NoteSageSettings = {
@@ -246,6 +286,9 @@ export const DEFAULT_SETTINGS: NoteSageSettings = {
 	enableExtendedThinking: AGENT_OPTIONS_DEFAULTS.enableExtendedThinking,
 	maxThinkingTokens: AGENT_OPTIONS_DEFAULTS.maxThinkingTokens,
 	permissionMode: AGENT_OPTIONS_DEFAULTS.permissionMode,
+	// Skills 기본값
+	enableSkills: false,
+	disabledSkills: [],
 };
 
 // 사용 가능한 모델 목록 (4.5 시리즈만)

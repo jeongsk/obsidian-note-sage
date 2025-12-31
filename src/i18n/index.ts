@@ -95,8 +95,9 @@ export function getTranslations(): TranslationKeys {
  *   t('appTitle') -> 'Note Sage'
  *   t('settings.apiKey') -> 'Anthropic API Key'
  *   t('quickAction.summarize') -> 'Summarize'
+ *   t('settings.skills.deleteConfirm', { name: 'my-skill' }) -> 'Are you sure you want to delete the Skill "my-skill"?'
  */
-export function t(keyPath: string): string {
+export function t(keyPath: string, params?: Record<string, string | number>): string {
 	const trans = getTranslations();
 	const keys = keyPath.split('.');
 
@@ -112,6 +113,12 @@ export function t(keyPath: string): string {
 	}
 
 	if (typeof result === 'string') {
+		// 문자열 보간 처리: {key} 패턴을 params의 값으로 대체
+		if (params) {
+			return result.replace(/\{(\w+)\}/g, (_, key) => {
+				return key in params ? String(params[key]) : `{${key}}`;
+			});
+		}
 		return result;
 	}
 
