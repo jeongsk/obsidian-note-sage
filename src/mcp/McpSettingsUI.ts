@@ -219,7 +219,7 @@ export class McpSettingsUI {
 					break;
 				case 'pending':
 				default:
-					iconName = 'loader';
+					iconName = 'clock';
 					statusClass = 'sage-mcp-status-pending';
 					tooltip = t('settings.mcp.statusPending');
 					break;
