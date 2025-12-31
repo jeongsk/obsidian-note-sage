@@ -1,4 +1,4 @@
-import { App, Modal, MarkdownRenderer, Component } from 'obsidian';
+import { App, Modal } from 'obsidian';
 import type { SkillEntry } from '../types';
 import { t } from '../i18n';
 
@@ -10,12 +10,10 @@ import { t } from '../i18n';
  */
 export class SkillDetailModal extends Modal {
 	private skill: SkillEntry;
-	private component: Component;
 
 	constructor(app: App, skill: SkillEntry) {
 		super(app);
 		this.skill = skill;
-		this.component = new Component();
 	}
 
 	async onOpen(): Promise<void> {
@@ -48,17 +46,19 @@ export class SkillDetailModal extends Modal {
 		});
 
 		try {
-			const file = this.app.vault.getAbstractFileByPath(this.skill.path);
-			if (file && 'extension' in file) {
-				const content = await this.app.vault.read(file as any);
-				// 마크다운 렌더링
-				await MarkdownRenderer.render(
-					this.app,
-					content,
-					contentContainer,
-					this.skill.path,
-					this.component
-				);
+			// .claude 폴더는 숨김 폴더라서 vault가 인덱싱하지 않으므로
+			// adapter를 직접 사용하여 파일을 읽습니다
+			const exists = await this.app.vault.adapter.exists(this.skill.path);
+			if (exists) {
+				const content = await this.app.vault.adapter.read(this.skill.path);
+				// 원문 그대로 표시 (코드 블록 스타일)
+				const preEl = contentContainer.createEl('pre', {
+					cls: 'sage-skill-detail-pre tw-bg-obs-bg-secondary tw-p-4 tw-rounded tw-overflow-auto tw-text-sm',
+				});
+				preEl.createEl('code', {
+					text: content,
+					cls: 'tw-whitespace-pre-wrap tw-break-words',
+				});
 			} else {
 				contentContainer.createEl('p', {
 					text: t('settings.skills.fileNotFound'),
@@ -87,6 +87,5 @@ export class SkillDetailModal extends Modal {
 	onClose(): void {
 		const { contentEl } = this;
 		contentEl.empty();
-		this.component.unload();
 	}
 }

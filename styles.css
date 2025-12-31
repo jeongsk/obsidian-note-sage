@@ -1788,6 +1788,9 @@
 .tw-whitespace-pre-wrap {
 		white-space: pre-wrap;
 }
+.tw-break-words {
+		overflow-wrap: break-word;
+}
 .tw-rounded {
 		border-radius: 0.25rem;
 }
