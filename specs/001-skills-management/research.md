@@ -122,7 +122,7 @@ class SkillNamePrompt extends Modal {
 
   onOpen() {
     const { contentEl } = this;
-    contentEl.createEl('h2', { text: t('skills.createTemplate') });
+	this.setTitle(t('skills.createTemplate'));
 
     new Setting(contentEl)
       .setName(t('skills.name'))
