@@ -249,7 +249,14 @@ export const ko: TranslationKeys = {
 			enable: 'Skills 활성화',
 			enableDesc: '.claude/skills/ 디렉토리에 정의된 Skills를 Claude가 사용할 수 있도록 허용',
 			createTemplate: '템플릿으로 생성',
-			createWizard: '마법사로 생성',
+			createAIWizard: 'AI로 생성',
+			aiWizardDesc: 'Skill이 수행할 작업을 설명하면 AI가 자동으로 생성합니다.',
+			aiPromptLabel: 'Skill 설명',
+			aiPromptDesc: '이 Skill이 무엇을 해야 하는지 자연어로 설명하세요',
+			aiPromptPlaceholder: '예: 마크다운 테이블을 정렬하여 포맷팅하는 스킬...',
+			generateBtn: '생성하기',
+			generating: 'Skill 생성 중...',
+			invalidName: '유효하지 않은 Skill 이름입니다',
 			noSkills: 'Skills가 없습니다',
 			noSkillsGuide: '아래 버튼을 사용하여 새 Skill을 만들거나 .claude/skills/{skill-name}/에 SKILL.md 파일을 추가하세요',
 			nameLabel: 'Skill 이름',
@@ -265,6 +272,11 @@ export const ko: TranslationKeys = {
 			edit: '편집',
 			delete: '삭제',
 			deleteConfirm: 'Skill "{name}"을(를) 삭제하시겠습니까?',
+			// AI Validation
+			validationFailed: '{max}번의 시도 후 검증에 실패했습니다. 내용을 직접 확인하고 수정해 주세요.',
+			validationErrors: '콘텐츠에 검증 오류가 있습니다:\n{errors}',
+			retrying: '문제 수정 중... ({attempt}/{max}번째 시도)',
+			noContentError: '생성된 내용이 없습니다. 먼저 "생성하기" 버튼을 클릭하세요.',
 		},
 
 		// About

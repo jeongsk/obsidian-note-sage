@@ -78,7 +78,14 @@ interface SkillsSettingsTranslations {
 	enable: string;
 	enableDesc: string;
 	createTemplate: string;
-	createWizard: string;
+	createAIWizard: string;
+	aiWizardDesc: string;
+	aiPromptLabel: string;
+	aiPromptDesc: string;
+	aiPromptPlaceholder: string;
+	generateBtn: string;
+	generating: string;
+	invalidName: string;
 	noSkills: string;
 	noSkillsGuide: string;
 	nameLabel: string;
@@ -94,6 +101,11 @@ interface SkillsSettingsTranslations {
 	edit: string;
 	delete: string;
 	deleteConfirm: string;
+	// AI Validation
+	validationFailed: string;
+	validationErrors: string;
+	retrying: string;
+	noContentError: string;
 }
 
 interface McpSettingsTranslations {
@@ -515,7 +527,14 @@ export const en: TranslationKeys = {
 			enable: 'Enable Skills',
 			enableDesc: 'Allow Claude to use Skills defined in .claude/skills/ directory',
 			createTemplate: 'Create from Template',
-			createWizard: 'Create with Wizard',
+			createAIWizard: 'Create with AI',
+			aiWizardDesc: 'Describe what you want your Skill to do and AI will generate it for you.',
+			aiPromptLabel: 'Describe your Skill',
+			aiPromptDesc: 'Explain what this Skill should do in natural language',
+			aiPromptPlaceholder: 'e.g., A skill that helps format markdown tables with proper alignment...',
+			generateBtn: 'Generate',
+			generating: 'Generating Skill...',
+			invalidName: 'Invalid Skill name',
 			noSkills: 'No Skills found',
 			noSkillsGuide: 'Create a new Skill using the buttons below or add SKILL.md files to .claude/skills/{skill-name}/',
 			nameLabel: 'Skill Name',
@@ -531,6 +550,11 @@ export const en: TranslationKeys = {
 			edit: 'Edit',
 			delete: 'Delete',
 			deleteConfirm: 'Are you sure you want to delete the Skill "{name}"?',
+			// AI Validation
+			validationFailed: 'Validation failed after {max} attempts. Please check and edit the content manually.',
+			validationErrors: 'Content has validation errors:\n{errors}',
+			retrying: 'Fixing issues... (attempt {attempt}/{max})',
+			noContentError: 'No content generated. Please click "Generate" first.',
 		},
 
 		// About

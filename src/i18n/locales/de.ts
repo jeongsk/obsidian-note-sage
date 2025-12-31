@@ -249,7 +249,14 @@ export const de: TranslationKeys = {
 			enable: 'Skills aktivieren',
 			enableDesc: 'Erlauben, dass Claude Skills aus dem Verzeichnis .claude/skills/ verwendet',
 			createTemplate: 'Aus Vorlage erstellen',
-			createWizard: 'Mit Assistent erstellen',
+			createAIWizard: 'Mit KI erstellen',
+			aiWizardDesc: 'Beschreiben Sie, was Ihr Skill tun soll, und die KI wird ihn für Sie generieren.',
+			aiPromptLabel: 'Beschreiben Sie Ihren Skill',
+			aiPromptDesc: 'Erklären Sie in natürlicher Sprache, was dieser Skill tun soll',
+			aiPromptPlaceholder: 'Z.B.: Ein Skill, der hilft, Markdown-Tabellen korrekt auszurichten...',
+			generateBtn: 'Generieren',
+			generating: 'Skill wird generiert...',
+			invalidName: 'Ungültiger Skill-Name',
 			noSkills: 'Keine Skills gefunden',
 			noSkillsGuide: 'Erstellen Sie eine neue Skill mit den Schaltflächen unten oder fügen Sie SKILL.md-Dateien zu .claude/skills/{skill-name}/ hinzu',
 			nameLabel: 'Skill-Name',
@@ -265,6 +272,11 @@ export const de: TranslationKeys = {
 			edit: 'Bearbeiten',
 			delete: 'Löschen',
 			deleteConfirm: 'Sind Sie sicher, dass Sie die Skill "{name}" löschen möchten?',
+			// AI Validation
+			validationFailed: 'Validierung nach {max} Versuchen fehlgeschlagen. Bitte überprüfen und bearbeiten Sie den Inhalt manuell.',
+			validationErrors: 'Inhalt hat Validierungsfehler:\n{errors}',
+			retrying: 'Probleme werden behoben... (Versuch {attempt}/{max})',
+			noContentError: 'Kein Inhalt generiert. Bitte klicken Sie zuerst auf "Generieren".',
 		},
 
 		// About

@@ -249,7 +249,14 @@ export const ja: TranslationKeys = {
 			enable: 'Skillsを有効化',
 			enableDesc: '.claude/skills/ディレクトリで定義されたSkillsをClaudeが使用できるようにする',
 			createTemplate: 'テンプレートから作成',
-			createWizard: 'ウィザードで作成',
+			createAIWizard: 'AIで作成',
+			aiWizardDesc: 'Skillの動作を説明すると、AIが自動的に生成します。',
+			aiPromptLabel: 'Skillの説明',
+			aiPromptDesc: 'このSkillが何をすべきかを自然言語で説明してください',
+			aiPromptPlaceholder: '例：マークダウンテーブルを適切に整列してフォーマットするスキル...',
+			generateBtn: '生成',
+			generating: 'Skillを生成中...',
+			invalidName: '無効なSkill名です',
 			noSkills: 'Skillsが見つかりません',
 			noSkillsGuide: '下のボタンで新しいSkillを作成するか、.claude/skills/{skill-name}/にSKILL.mdファイルを追加してください',
 			nameLabel: 'Skill名',
@@ -265,6 +272,11 @@ export const ja: TranslationKeys = {
 			edit: '編集',
 			delete: '削除',
 			deleteConfirm: 'Skill「{name}」を削除してもよろしいですか？',
+			// AI Validation
+			validationFailed: '{max}回の試行後、検証に失敗しました。内容を手動で確認して修正してください。',
+			validationErrors: 'コンテンツに検証エラーがあります:\n{errors}',
+			retrying: '問題を修正中... ({attempt}/{max}回目)',
+			noContentError: '生成されたコンテンツがありません。まず「生成」ボタンをクリックしてください。',
 		},
 
 		// About

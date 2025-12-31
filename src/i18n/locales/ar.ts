@@ -249,7 +249,14 @@ export const ar: TranslationKeys = {
 			enable: 'تمكين Skills',
 			enableDesc: 'السماح لـ Claude باستخدام Skills المحددة في مجلد .claude/skills/',
 			createTemplate: 'إنشاء من قالب',
-			createWizard: 'إنشاء باستخدام المعالج',
+			createAIWizard: 'إنشاء باستخدام الذكاء الاصطناعي',
+			aiWizardDesc: 'صف ما تريد أن تفعله مهارتك وسيقوم الذكاء الاصطناعي بإنشائها لك.',
+			aiPromptLabel: 'صف مهارتك',
+			aiPromptDesc: 'اشرح ما يجب أن تفعله هذه المهارة بلغة طبيعية',
+			aiPromptPlaceholder: 'مثال: مهارة تساعد في تنسيق جداول markdown بمحاذاة صحيحة...',
+			generateBtn: 'إنشاء',
+			generating: 'جاري إنشاء المهارة...',
+			invalidName: 'اسم مهارة غير صالح',
 			noSkills: 'لم يتم العثور على Skills',
 			noSkillsGuide: 'أنشئ Skill جديدة باستخدام الأزرار أدناه أو أضف ملفات SKILL.md إلى .claude/skills/{skill-name}/',
 			nameLabel: 'اسم Skill',
@@ -265,6 +272,11 @@ export const ar: TranslationKeys = {
 			edit: 'تحرير',
 			delete: 'حذف',
 			deleteConfirm: 'هل أنت متأكد من حذف Skill "{name}"؟',
+			// AI Validation
+			validationFailed: 'فشل التحقق بعد {max} محاولات. يرجى التحقق من المحتوى وتحريره يدوياً.',
+			validationErrors: 'يحتوي المحتوى على أخطاء التحقق:\n{errors}',
+			retrying: 'جاري إصلاح المشاكل... (المحاولة {attempt}/{max})',
+			noContentError: 'لا يوجد محتوى مُنشأ. يرجى النقر على "إنشاء" أولاً.',
 		},
 
 		// About

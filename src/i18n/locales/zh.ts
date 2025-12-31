@@ -249,7 +249,14 @@ export const zh: TranslationKeys = {
 			enable: '启用 Skills',
 			enableDesc: '允许 Claude 使用 .claude/skills/ 目录中定义的 Skills',
 			createTemplate: '从模板创建',
-			createWizard: '使用向导创建',
+			createAIWizard: '使用AI创建',
+			aiWizardDesc: '描述您希望Skill执行的操作，AI将为您生成。',
+			aiPromptLabel: '描述您的Skill',
+			aiPromptDesc: '用自然语言解释这个Skill应该做什么',
+			aiPromptPlaceholder: '例如：一个帮助格式化markdown表格并正确对齐的技能...',
+			generateBtn: '生成',
+			generating: '正在生成Skill...',
+			invalidName: '无效的Skill名称',
 			noSkills: '未找到 Skills',
 			noSkillsGuide: '使用下方按钮创建新 Skill，或将 SKILL.md 文件添加到 .claude/skills/{skill-name}/',
 			nameLabel: 'Skill 名称',
@@ -265,6 +272,11 @@ export const zh: TranslationKeys = {
 			edit: '编辑',
 			delete: '删除',
 			deleteConfirm: '确定要删除 Skill "{name}" 吗？',
+			// AI Validation
+			validationFailed: '经过 {max} 次尝试后验证失败。请手动检查并编辑内容。',
+			validationErrors: '内容存在验证错误:\n{errors}',
+			retrying: '正在修复问题... (第 {attempt}/{max} 次尝试)',
+			noContentError: '没有生成内容。请先点击"生成"按钮。',
 		},
 
 		// About

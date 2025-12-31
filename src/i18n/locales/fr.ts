@@ -249,7 +249,14 @@ export const fr: TranslationKeys = {
 			enable: 'Activer les Skills',
 			enableDesc: 'Permettre à Claude d\'utiliser les Skills définies dans le répertoire .claude/skills/',
 			createTemplate: 'Créer à partir d\'un modèle',
-			createWizard: 'Créer avec l\'assistant',
+			createAIWizard: 'Créer avec l\'IA',
+			aiWizardDesc: 'Décrivez ce que vous voulez que votre Skill fasse et l\'IA le générera pour vous.',
+			aiPromptLabel: 'Décrivez votre Skill',
+			aiPromptDesc: 'Expliquez ce que ce Skill doit faire en langage naturel',
+			aiPromptPlaceholder: 'Ex: Un skill qui aide à formater les tableaux markdown avec un alignement correct...',
+			generateBtn: 'Générer',
+			generating: 'Génération du Skill...',
+			invalidName: 'Nom de Skill invalide',
 			noSkills: 'Aucune Skill trouvée',
 			noSkillsGuide: 'Créez une nouvelle Skill en utilisant les boutons ci-dessous ou ajoutez des fichiers SKILL.md à .claude/skills/{skill-name}/',
 			nameLabel: 'Nom de la Skill',
@@ -265,6 +272,11 @@ export const fr: TranslationKeys = {
 			edit: 'Modifier',
 			delete: 'Supprimer',
 			deleteConfirm: 'Êtes-vous sûr de vouloir supprimer la Skill "{name}" ?',
+			// AI Validation
+			validationFailed: 'La validation a échoué après {max} tentatives. Veuillez vérifier et modifier le contenu manuellement.',
+			validationErrors: 'Le contenu contient des erreurs de validation:\n{errors}',
+			retrying: 'Correction des problèmes... (tentative {attempt}/{max})',
+			noContentError: 'Aucun contenu généré. Veuillez d\'abord cliquer sur "Générer".',
 		},
 
 		// About

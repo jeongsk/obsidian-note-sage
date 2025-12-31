@@ -249,7 +249,14 @@ export const hi: TranslationKeys = {
 			enable: 'Skills सक्षम करें',
 			enableDesc: 'Claude को .claude/skills/ निर्देशिका में परिभाषित Skills का उपयोग करने की अनुमति दें',
 			createTemplate: 'टेम्पलेट से बनाएं',
-			createWizard: 'विज़ार्ड से बनाएं',
+			createAIWizard: 'AI से बनाएं',
+			aiWizardDesc: 'वर्णन करें कि आप अपने Skill से क्या करवाना चाहते हैं और AI इसे आपके लिए जनरेट करेगा।',
+			aiPromptLabel: 'अपने Skill का वर्णन करें',
+			aiPromptDesc: 'प्राकृतिक भाषा में बताएं कि यह Skill क्या करना चाहिए',
+			aiPromptPlaceholder: 'उदा: एक स्किल जो मार्कडाउन टेबल को सही संरेखण के साथ फॉर्मेट करने में मदद करता है...',
+			generateBtn: 'जनरेट करें',
+			generating: 'Skill जनरेट हो रहा है...',
+			invalidName: 'अमान्य Skill नाम',
 			noSkills: 'कोई Skills नहीं मिली',
 			noSkillsGuide: 'नीचे दिए गए बटनों का उपयोग करके नई Skill बनाएं या .claude/skills/{skill-name}/ में SKILL.md फ़ाइलें जोड़ें',
 			nameLabel: 'Skill का नाम',
@@ -265,6 +272,11 @@ export const hi: TranslationKeys = {
 			edit: 'संपादित करें',
 			delete: 'हटाएं',
 			deleteConfirm: 'क्या आप वाकई Skill "{name}" को हटाना चाहते हैं?',
+			// AI Validation
+			validationFailed: '{max} प्रयासों के बाद सत्यापन विफल रहा। कृपया सामग्री को मैन्युअल रूप से जांचें और संपादित करें।',
+			validationErrors: 'सामग्री में सत्यापन त्रुटियां हैं:\n{errors}',
+			retrying: 'समस्याओं को ठीक कर रहे हैं... (प्रयास {attempt}/{max})',
+			noContentError: 'कोई सामग्री जनरेट नहीं हुई। कृपया पहले "जनरेट करें" पर क्लिक करें।',
 		},
 
 		// About

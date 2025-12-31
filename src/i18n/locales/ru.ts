@@ -249,7 +249,14 @@ export const ru: TranslationKeys = {
 			enable: 'Включить Skills',
 			enableDesc: 'Разрешить Claude использовать Skills, определённые в каталоге .claude/skills/',
 			createTemplate: 'Создать из шаблона',
-			createWizard: 'Создать с помощью мастера',
+			createAIWizard: 'Создать с помощью ИИ',
+			aiWizardDesc: 'Опишите, что должен делать ваш Skill, и ИИ сгенерирует его за вас.',
+			aiPromptLabel: 'Опишите ваш Skill',
+			aiPromptDesc: 'Объясните на естественном языке, что должен делать этот Skill',
+			aiPromptPlaceholder: 'Например: Навык, который помогает форматировать markdown-таблицы с правильным выравниванием...',
+			generateBtn: 'Сгенерировать',
+			generating: 'Генерация Skill...',
+			invalidName: 'Недопустимое имя Skill',
 			noSkills: 'Skills не найдены',
 			noSkillsGuide: 'Создайте новый Skill с помощью кнопок ниже или добавьте файлы SKILL.md в .claude/skills/{skill-name}/',
 			nameLabel: 'Название Skill',
@@ -265,6 +272,11 @@ export const ru: TranslationKeys = {
 			edit: 'Редактировать',
 			delete: 'Удалить',
 			deleteConfirm: 'Вы уверены, что хотите удалить Skill "{name}"?',
+			// AI Validation
+			validationFailed: 'Проверка не удалась после {max} попыток. Пожалуйста, проверьте и отредактируйте содержимое вручную.',
+			validationErrors: 'Содержимое имеет ошибки валидации:\n{errors}',
+			retrying: 'Исправление проблем... (попытка {attempt}/{max})',
+			noContentError: 'Содержимое не сгенерировано. Сначала нажмите "Сгенерировать".',
 		},
 
 		// About
