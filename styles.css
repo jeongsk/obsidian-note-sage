@@ -1091,9 +1091,66 @@
 .sage-skills-settings {
 		margin-top: 1rem;
 }
+/* 스킬 카운트 배지 */
+.sage-skills-stats-badge {
+		margin-left: 0.5rem;
+		border-radius: 9999px;
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
+		padding-top: 0.125rem;
+		padding-bottom: 0.125rem;
+		font-weight: 400;
+		color: var(--text-on-accent);
+		font-size: var(--font-smaller);
+		background: var(--interactive-accent);
+}
 .sage-skills-list {
 		margin-top: 0.5rem;
 }
+/* 빈 상태 개선 */
+.sage-skills-empty {
+		margin-bottom: 0.5rem;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--radius-s);
+		border-width: 1px;
+		border-style: dashed;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-secondary);
+		padding: 2rem;
+		text-align: center;
+}
+.sage-skills-empty-icon {
+		margin-bottom: 0.75rem;
+		display: flex;
+		height: 3rem;
+		width: 3rem;
+		align-items: center;
+		justify-content: center;
+		border-radius: 9999px;
+		background-color: var(--background-primary);
+		color: var(--text-muted);
+}
+.sage-skills-empty-icon svg {
+		height: 1.5rem;
+		width: 1.5rem;
+}
+.sage-skills-empty-title {
+		margin: 0px;
+		margin-bottom: 0.25rem;
+		font-weight: 500;
+		color: var(--text-normal);
+		font-size: var(--font-small);
+}
+.sage-skills-empty-desc {
+		margin: 0px;
+		color: var(--text-muted);
+		font-size: var(--font-smaller);
+		max-width: 280px;
+}
+/* 스킬 아이템 */
 .sage-skill-item {
 		margin-bottom: 0.5rem;
 		display: flex;
@@ -1104,33 +1161,59 @@
 		border-width: 1px;
 		border-color: var(--background-modifier-border);
 		background-color: var(--background-secondary);
-		padding: 0.5rem;
+		padding: 0.75rem;
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms;
 }
 .sage-skill-item:hover {
 		border-color: var(--background-modifier-border-hover);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
+.sage-skill-item--active {
+		border-left: 3px solid var(--interactive-accent);
+	}
 .sage-skill-item--disabled {
-		opacity: 0.5;
+		opacity: 0.6;
+		border-left: 3px solid var(--background-modifier-border);
 }
 .sage-skill-item--error {
 		border-color: var(--color-red);
+		border-left: 3px solid var(--color-red);
+		background: color-mix(in srgb, var(--color-red) 5%, var(--background-secondary));
 }
+/* 스킬 아이콘 */
 .sage-skill-icon {
 		display: flex;
-		height: 1.25rem;
-		width: 1.25rem;
+		height: 2rem;
+		width: 2rem;
 		flex-shrink: 0;
 		align-items: center;
 		justify-content: center;
-		color: var(--text-muted);
+		border-radius: var(--radius-s);
+		background: var(--background-primary);
 }
 .sage-skill-icon svg {
 		height: 1rem;
 		width: 1rem;
 }
+.sage-skill-icon--active {
+		color: var(--interactive-accent);
+}
+.sage-skill-icon--disabled {
+		color: var(--text-faint);
+}
+.sage-skill-icon--error {
+		color: var(--color-red);
+}
 .sage-skill-info {
 		min-width: 0px;
 		flex: 1 1 0%;
+}
+.sage-skill-name-row {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
 }
 .sage-skill-name {
 		cursor: pointer;
@@ -1139,12 +1222,16 @@
 		white-space: nowrap;
 		font-weight: 500;
 		color: var(--text-normal);
+		transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms;
 		font-size: var(--font-small);
 }
 .sage-skill-name:hover {
-		text-decoration-line: underline;
+		color: var(--interactive-accent);
 }
 .sage-skill-desc {
+		margin-top: 0.125rem;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
@@ -1152,10 +1239,13 @@
 		font-size: var(--font-smaller);
 }
 .sage-skill-error-message {
-		margin-top: 0.25rem;
+		margin-top: 0.5rem;
+		display: flex;
 		width: 100%;
+		align-items: center;
+		gap: 0.5rem;
 		border-radius: var(--radius-s);
-		padding: 0.25rem;
+		padding: 0.5rem;
 		font-size: var(--font-smaller);
 		color: var(--text-error);
 		background: var(--background-modifier-error);
@@ -1164,15 +1254,15 @@
 		display: flex;
 		flex-shrink: 0;
 		align-items: center;
-		gap: 0.25rem;
+		gap: 0.375rem;
 }
 /* Skills 토글 - MCP와 동일 */
 .sage-skill-toggle {
 		position: relative;
 		display: inline-block;
 		flex-shrink: 0;
-		width: 32px;
-		height: 18px;
+		width: 36px;
+		height: 20px;
 }
 .sage-skill-toggle-checkbox {
 		position: absolute;
@@ -1199,22 +1289,22 @@
 		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 		transition-duration: 200ms;
 		content: "";
-		height: 14px;
-		width: 14px;
+		height: 16px;
+		width: 16px;
 		left: 2px;
 		bottom: 2px;
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 .sage-skill-toggle-checkbox:checked + .sage-skill-toggle-slider {
 		background-color: var(--interactive-accent);
 }
 .sage-skill-toggle-checkbox:checked + .sage-skill-toggle-slider::before {
-		transform: translateX(14px);
+		transform: translateX(16px);
 	}
 .sage-skill-btn {
 		display: flex;
-		height: 1.5rem;
-		width: 1.5rem;
+		height: 1.75rem;
+		width: 1.75rem;
 		cursor: pointer;
 		align-items: center;
 		justify-content: center;
@@ -1232,25 +1322,64 @@
 		color: var(--text-normal);
 }
 .sage-skill-btn svg {
-		height: 0.875rem;
-		width: 0.875rem;
+		height: 1rem;
+		width: 1rem;
 }
 .sage-skill-btn-delete:hover {
 		color: var(--color-red);
+		background: color-mix(in srgb, var(--color-red) 10%, transparent);
 }
-.sage-skills-empty {
-		margin-bottom: 0.5rem;
-		border-radius: var(--radius-s);
-		background-color: var(--background-secondary);
-		padding: 1rem;
-		text-align: center;
-		font-style: italic;
-		color: var(--text-muted);
-}
+/* 생성 버튼들 */
 .sage-skills-buttons {
 		margin-top: 1rem;
 		display: flex;
+		flex-wrap: wrap;
 		gap: 0.5rem;
+}
+.sage-skills-create-btn {
+		display: inline-flex;
+		cursor: pointer;
+		align-items: center;
+		gap: 0.5rem;
+		border-radius: var(--radius-s);
+		border-width: 1px;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-primary);
+		padding-left: 1rem;
+		padding-right: 1rem;
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
+		font-weight: 500;
+		color: var(--text-normal);
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms;
+		font-size: var(--font-small);
+}
+.sage-skills-create-btn:hover {
+		border-color: var(--background-modifier-border-hover);
+		background-color: var(--background-modifier-hover);
+}
+.sage-skills-create-btn-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+}
+.sage-skills-create-btn-icon svg {
+		height: 1rem;
+		width: 1rem;
+}
+.sage-skills-create-btn--cta {
+		border-color: var(--interactive-accent);
+		background-color: var(--interactive-accent);
+		color: var(--text-on-accent);
+}
+.sage-skills-create-btn--cta:hover {
+		border-color: var(--interactive-accent-hover);
+		background-color: var(--interactive-accent-hover);
+}
+.sage-skills-create-btn--cta .sage-skills-create-btn-icon {
+		color: var(--text-on-accent);
 }
 /* Skill 삭제 확인 모달 */
 .sage-skill-delete-modal .sage-modal-title {
@@ -1274,24 +1403,27 @@
 .sage-skill-undo-notice {
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
+		gap: 0.75rem;
 }
 .sage-notice-undo-btn {
-		margin-left: 0.5rem;
 		cursor: pointer;
 		border-radius: 0.25rem;
-		padding-left: 0.5rem;
-		padding-right: 0.5rem;
+		padding-left: 0.75rem;
+		padding-right: 0.75rem;
 		padding-top: 0.25rem;
 		padding-bottom: 0.25rem;
 		font-size: 0.75rem;
 		line-height: 1rem;
+		font-weight: 500;
 		background-color: var(--interactive-accent);
 		color: var(--text-on-accent);
 		border-style: none;
+		transition-property: opacity;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms;
 }
 .sage-notice-undo-btn:hover {
-		opacity: 0.8;
+		opacity: 0.9;
 }
 /* ==================== RTL Support ==================== */
 .sage-rtl {
@@ -1309,7 +1441,6 @@
 		flex-direction: row-reverse;
 }
 .sage-rtl .sage-model-selector-container {
-		margin-left: 0px;
 		margin-right: auto;
 		margin-left: 0.5rem;
 }
@@ -1686,9 +1817,6 @@
 .tw-text-red-700 {
 		--tw-text-opacity: 1;
 		color: rgb(185 28 28 / var(--tw-text-opacity, 1));
-}
-.tw-opacity-70 {
-		opacity: 0.7;
 }
 
 /* ==================== 전역 스타일 ==================== */

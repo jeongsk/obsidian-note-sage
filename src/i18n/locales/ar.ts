@@ -291,6 +291,8 @@ export const ar: TranslationKeys = {
 			validationErrors: 'يحتوي المحتوى على أخطاء التحقق:\n{errors}',
 			retrying: 'جاري إصلاح المشاكل... (المحاولة {attempt}/{max})',
 			noContentError: 'لا يوجد محتوى مُنشأ. يرجى النقر على "إنشاء" أولاً.',
+			skillsCount: '{count} مهارة',
+			activeCount: '{active} نشط',
 		},
 
 		// About

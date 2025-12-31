@@ -291,6 +291,8 @@ export const ru: TranslationKeys = {
 			validationErrors: 'Содержимое имеет ошибки валидации:\n{errors}',
 			retrying: 'Исправление проблем... (попытка {attempt}/{max})',
 			noContentError: 'Содержимое не сгенерировано. Сначала нажмите "Сгенерировать".',
+			skillsCount: '{count} навыков',
+			activeCount: '{active} активно',
 		},
 
 		// About

@@ -251,11 +251,6 @@ export class McpServerManager {
 	// ==================== 로컬 검증 ====================
 
 	/**
-	 * 검증 결과 타입
-	 */
-	static ValidationResult: { valid: boolean; errorMessage?: string };
-
-	/**
 	 * 단일 MCP 서버 설정을 로컬에서 검증
 	 * - stdio: 명령어 존재 여부 확인
 	 * - sse/http: URL 형식 유효성 검사

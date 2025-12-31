@@ -291,6 +291,8 @@ export const es: TranslationKeys = {
 			validationErrors: 'El contenido tiene errores de validación:\n{errors}',
 			retrying: 'Corrigiendo problemas... (intento {attempt}/{max})',
 			noContentError: 'No hay contenido generado. Por favor, haga clic en "Generar" primero.',
+			skillsCount: '{count} Skills',
+			activeCount: '{active} activo',
 		},
 
 		// About

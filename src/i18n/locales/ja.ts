@@ -291,6 +291,8 @@ export const ja: TranslationKeys = {
 			validationErrors: 'コンテンツに検証エラーがあります:\n{errors}',
 			retrying: '問題を修正中... ({attempt}/{max}回目)',
 			noContentError: '生成されたコンテンツがありません。まず「生成」ボタンをクリックしてください。',
+			skillsCount: '{count}個のSkill',
+			activeCount: '{active}個が有効',
 		},
 
 		// About

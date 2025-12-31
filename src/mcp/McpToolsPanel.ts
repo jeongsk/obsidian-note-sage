@@ -423,7 +423,7 @@ export class McpToolsPanel {
 		// Obsidian 설정 페이지 열기
 		app.setting?.open();
 		// 플러그인 설정 탭으로 이동
-		app.setting?.openTabById?.('note-sage');
+		app.setting?.openTabById?.('obsidian-note-sage');
 	}
 
 	/**
