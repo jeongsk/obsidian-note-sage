@@ -1368,21 +1368,24 @@
 .sage-skills-create-btn-icon svg {
 		height: 1rem;
 		width: 1rem;
-		fill: currentColor;
-		stroke: currentColor;
 }
 .sage-skills-create-btn--cta {
-		border-color: var(--interactive-accent);
-		background-color: var(--interactive-accent);
-		color: var(--text-on-accent);
-}
+		background-color: var(--interactive-accent) !important;
+		border-color: var(--interactive-accent) !important;
+		color: var(--text-on-accent) !important;
+	}
 .sage-skills-create-btn--cta:hover {
-		border-color: var(--interactive-accent-hover);
-		background-color: var(--interactive-accent-hover);
-}
-.sage-skills-create-btn--cta .sage-skills-create-btn-icon {
-		color: var(--text-on-accent);
-}
+		background-color: var(--interactive-accent-hover) !important;
+		border-color: var(--interactive-accent-hover) !important;
+	}
+.sage-skills-create-btn--cta .sage-skills-create-btn-icon,
+	.sage-skills-create-btn--cta .sage-skills-create-btn-icon svg,
+	.sage-skills-create-btn--cta span {
+		color: var(--text-on-accent) !important;
+	}
+.sage-skills-create-btn--cta .sage-skills-create-btn-icon svg {
+		stroke: var(--text-on-accent) !important;
+	}
 /* Skill 삭제 확인 모달 */
 .sage-skill-delete-modal .sage-modal-title {
 		margin-bottom: 1rem;
