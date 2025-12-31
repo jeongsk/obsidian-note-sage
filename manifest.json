@@ -3,7 +3,7 @@
 	"name": "Note Sage",
 	"version": "0.8.1",
 	"minAppVersion": "0.15.0",
-	"description": "An intelligent AI assistant plugin that helps you work with your notes.",
+	"description": "An AI assistant plugin powered by Claude Code that helps you work with your notes.",
 	"author": "Jeongsk",
 	"authorUrl": "https://github.com/jeongsk",
 	"isDesktopOnly": true

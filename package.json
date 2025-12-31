@@ -1,7 +1,7 @@
 {
 	"name": "note-sage",
 	"version": "0.8.1",
-	"description": "An intelligent AI assistant plugin using Claude Agent SDK.",
+	"description": "An AI assistant plugin powered by Claude Code that helps you work with your notes.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
