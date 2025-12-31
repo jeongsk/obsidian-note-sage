@@ -446,6 +446,43 @@
 		overflow-wrap: break-word;
 		font-size: var(--font-smaller);
 }
+/* Extended Thinking 블록 */
+.sage-thinking-block {
+		margin-top: 0.25rem;
+}
+.sage-thinking-block-header {
+		display: flex;
+		cursor: pointer;
+		align-items: center;
+		gap: 0.375rem;
+		padding-top: 0.25rem;
+		padding-bottom: 0.25rem;
+		color: var(--text-muted);
+		opacity: 0.8;
+}
+.sage-thinking-block-header:hover {
+		opacity: 1;
+}
+.sage-thinking-block-icon {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+}
+.sage-thinking-block-icon svg {
+		height: 0.875rem;
+		width: 0.875rem;
+}
+.sage-thinking-block-label {
+		font-size: var(--font-smaller);
+	}
+.sage-thinking-block-content {
+		margin-left: 0.25rem;
+		margin-top: 0.125rem;
+		border-left-width: 1px;
+		border-color: var(--background-modifier-border);
+		padding-left: 0.5rem;
+}
 /* 최종 응답 */
 .sage-chat-message-final-response {
 		width: 100%;

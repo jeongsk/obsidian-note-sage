@@ -369,6 +369,35 @@
 		font-size: var(--font-smaller);
 	}
 
+	/* Extended Thinking 블록 */
+	.sage-thinking-block {
+		@apply tw-mt-1;
+	}
+
+	.sage-thinking-block-header {
+		@apply tw-flex tw-items-center tw-gap-1.5 tw-py-1 tw-text-obs-text-muted tw-cursor-pointer tw-opacity-80;
+	}
+
+	.sage-thinking-block-header:hover {
+		@apply tw-opacity-100;
+	}
+
+	.sage-thinking-block-icon {
+		@apply tw-flex tw-items-center tw-justify-center tw-flex-shrink-0;
+	}
+
+	.sage-thinking-block-icon svg {
+		@apply tw-w-3.5 tw-h-3.5;
+	}
+
+	.sage-thinking-block-label {
+		font-size: var(--font-smaller);
+	}
+
+	.sage-thinking-block-content {
+		@apply tw-border-l tw-border-obs-border tw-ml-1 tw-pl-2 tw-mt-0.5;
+	}
+
 	/* 최종 응답 */
 	.sage-chat-message-final-response {
 		@apply tw-self-start tw-w-full;
