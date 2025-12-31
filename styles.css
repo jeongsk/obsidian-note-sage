@@ -1762,8 +1762,11 @@
 .tw-max-h-48 {
 		max-height: 12rem;
 }
-.tw-max-h-64 {
-		max-height: 16rem;
+.tw-min-h-64 {
+		min-height: 16rem;
+}
+.tw-w-full {
+		width: 100%;
 }
 @keyframes tw-spin {
 		to {
@@ -1772,6 +1775,9 @@
 }
 .tw-animate-spin {
 		animation: tw-spin 1s linear infinite;
+}
+.tw-resize-y {
+		resize: vertical;
 }
 .tw-items-center {
 		align-items: center;
@@ -1793,6 +1799,12 @@
 }
 .tw-rounded {
 		border-radius: 0.25rem;
+}
+.tw-border {
+		border-width: 1px;
+}
+.tw-border-obs-border {
+		border-color: var(--background-modifier-border);
 }
 .tw-bg-obs-bg-secondary {
 		background-color: var(--background-secondary);
