@@ -165,34 +165,41 @@ export const MENTION_CONSTANTS = {
 	/** 자동완성 드롭다운 최대 높이 (px) */
 	MAX_DROPDOWN_HEIGHT: 300,
 
+	/** 검색 점수: 정확히 일치 */
+	SCORE_EXACT_MATCH: 150,
+
+	/** 검색 점수: 경로/이름 시작 일치 */
+	SCORE_STARTS_WITH: 100,
+
+	/** 검색 점수: 경로/이름 포함 */
+	SCORE_CONTAINS: 50,
+
+	/** 검색 점수: 경로에만 포함 */
+	SCORE_PATH_CONTAINS: 25,
+
 	/** 숨김 파일 접두사 */
 	HIDDEN_PREFIX: '.',
 
 	/** 바이너리 파일 확장자 */
 	BINARY_EXTENSIONS: [
-		'.png',
-		'.jpg',
-		'.jpeg',
-		'.gif',
-		'.webp',
-		'.svg',
-		'.pdf',
-		'.doc',
-		'.docx',
-		'.xls',
-		'.xlsx',
-		'.zip',
-		'.tar',
-		'.gz',
-		'.rar',
-		'.mp3',
-		'.wav',
-		'.mp4',
-		'.mov',
-		'.exe',
-		'.dll',
-		'.so',
-		'.dylib',
+		// 이미지
+		'.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.ico', '.bmp', '.tiff', '.psd',
+		// 문서
+		'.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx',
+		// 압축
+		'.zip', '.tar', '.gz', '.rar', '.7z', '.bz2',
+		// 오디오
+		'.mp3', '.wav', '.ogg', '.flac', '.aac', '.m4a',
+		// 비디오
+		'.mp4', '.mov', '.avi', '.mkv', '.webm', '.wmv',
+		// 실행 파일
+		'.exe', '.dll', '.so', '.dylib', '.app',
+		// 기타 바이너리
+		'.wasm', '.bin', '.dat', '.db', '.sqlite', '.sqlite3',
+		// 폰트
+		'.ttf', '.otf', '.woff', '.woff2', '.eot',
+		// 디자인 파일
+		'.ai', '.sketch', '.fig', '.xd',
 	],
 } as const;
 
