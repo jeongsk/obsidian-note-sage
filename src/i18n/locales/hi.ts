@@ -262,6 +262,7 @@ export const hi: TranslationKeys = {
 			parseError: 'पार्सिंग त्रुटि',
 			fileNotFound: 'फ़ाइल नहीं मिली',
 			loadError: 'फ़ाइल लोड करने में विफल',
+			edit: 'संपादित करें',
 			delete: 'हटाएं',
 			deleteConfirm: 'क्या आप वाकई Skill "{name}" को हटाना चाहते हैं?',
 		},

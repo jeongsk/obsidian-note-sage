@@ -262,6 +262,7 @@ export const ar: TranslationKeys = {
 			parseError: 'خطأ في التحليل',
 			fileNotFound: 'الملف غير موجود',
 			loadError: 'فشل في تحميل الملف',
+			edit: 'تحرير',
 			delete: 'حذف',
 			deleteConfirm: 'هل أنت متأكد من حذف Skill "{name}"؟',
 		},

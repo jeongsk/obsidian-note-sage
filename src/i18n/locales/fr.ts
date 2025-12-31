@@ -262,6 +262,7 @@ export const fr: TranslationKeys = {
 			parseError: 'Erreur d\'analyse',
 			fileNotFound: 'Fichier non trouvé',
 			loadError: 'Échec du chargement du fichier',
+			edit: 'Modifier',
 			delete: 'Supprimer',
 			deleteConfirm: 'Êtes-vous sûr de vouloir supprimer la Skill "{name}" ?',
 		},

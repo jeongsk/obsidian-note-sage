@@ -262,6 +262,7 @@ export const ru: TranslationKeys = {
 			parseError: 'Ошибка разбора',
 			fileNotFound: 'Файл не найден',
 			loadError: 'Не удалось загрузить файл',
+			edit: 'Редактировать',
 			delete: 'Удалить',
 			deleteConfirm: 'Вы уверены, что хотите удалить Skill "{name}"?',
 		},

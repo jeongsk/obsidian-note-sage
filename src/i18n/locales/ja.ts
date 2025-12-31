@@ -262,6 +262,7 @@ export const ja: TranslationKeys = {
 			parseError: 'パースエラー',
 			fileNotFound: 'ファイルが見つかりません',
 			loadError: 'ファイルの読み込みに失敗しました',
+			edit: '編集',
 			delete: '削除',
 			deleteConfirm: 'Skill「{name}」を削除してもよろしいですか？',
 		},

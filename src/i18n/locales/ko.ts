@@ -262,6 +262,7 @@ export const ko: TranslationKeys = {
 			parseError: '파싱 오류',
 			fileNotFound: '파일을 찾을 수 없습니다',
 			loadError: '파일 로드에 실패했습니다',
+			edit: '편집',
 			delete: '삭제',
 			deleteConfirm: 'Skill "{name}"을(를) 삭제하시겠습니까?',
 		},

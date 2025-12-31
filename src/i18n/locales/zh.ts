@@ -262,6 +262,7 @@ export const zh: TranslationKeys = {
 			parseError: '解析错误',
 			fileNotFound: '文件未找到',
 			loadError: '加载文件失败',
+			edit: '编辑',
 			delete: '删除',
 			deleteConfirm: '确定要删除 Skill "{name}" 吗？',
 		},

@@ -91,6 +91,7 @@ interface SkillsSettingsTranslations {
 	parseError: string;
 	fileNotFound: string;
 	loadError: string;
+	edit: string;
 	delete: string;
 	deleteConfirm: string;
 }
@@ -527,6 +528,7 @@ export const en: TranslationKeys = {
 			parseError: 'Parse error',
 			fileNotFound: 'File not found',
 			loadError: 'Failed to load file',
+			edit: 'Edit',
 			delete: 'Delete',
 			deleteConfirm: 'Are you sure you want to delete the Skill "{name}"?',
 		},
