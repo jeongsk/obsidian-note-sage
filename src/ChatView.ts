@@ -65,6 +65,9 @@ export class NoteSageView extends ItemView {
 	// MCP 도구 패널
 	private mcpToolsPanel?: McpToolsPanel;
 
+	// Extended Thinking 토글
+	private extendedThinkingToggleEl?: HTMLElement;
+
 	constructor(leaf: WorkspaceLeaf, plugin: NoteSagePlugin) {
 		super(leaf);
 		this.plugin = plugin;
@@ -418,6 +421,41 @@ export class NoteSageView extends ItemView {
 		});
 	}
 
+	/**
+	 * Extended Thinking 토글 버튼 생성 (버튼 컨테이너 왼쪽)
+	 */
+	private createExtendedThinkingToggle(buttonContainer: HTMLElement): void {
+		const isEnabled = this.settings.enableExtendedThinking ?? false;
+
+		// 아이콘 버튼 생성
+		this.extendedThinkingToggleEl = buttonContainer.createEl('div', {
+			cls: `sage-extended-thinking-btn${isEnabled ? ' active' : ''}`,
+			attr: { 'aria-label': `${t('extendedThinking')} ⇧⌘E` }
+		});
+
+		const iconEl = this.extendedThinkingToggleEl.createEl('span', { cls: 'sage-extended-thinking-btn-icon' });
+		setIcon(iconEl, 'brain');
+
+		// 클릭 이벤트
+		this.registerDomEvent(this.extendedThinkingToggleEl, 'click', async () => {
+			const newValue = !(this.settings.enableExtendedThinking ?? false);
+			this.settings.enableExtendedThinking = newValue;
+
+			// 버튼 활성화 상태 클래스 업데이트
+			this.extendedThinkingToggleEl?.toggleClass('active', newValue);
+
+			// 설정 저장
+			await this.plugin.saveSettings();
+
+			// AgentService 설정 업데이트
+			this.agentService.updateSettings(this.settings);
+
+			if (this.settings.debugContext) {
+				console.log('[NoteSageView] Extended Thinking toggled:', newValue);
+			}
+		});
+	}
+
 	private createChatBody(container: HTMLElement): void {
 		this.chatContainer = container.createEl('div', { cls: 'sage-chat-body' });
 		this.messagesContainer = this.chatContainer.createEl('div', { cls: 'sage-chat-messages' });
@@ -611,10 +649,16 @@ export class NoteSageView extends ItemView {
 	private createButtonContainer(): void {
 		const buttonContainer = this.inputContainer.createEl('div', { cls: 'sage-chat-button-container' });
 
-		this.loadingIndicator = buttonContainer.createEl('div', { cls: 'sage-loading-indicator hidden' });
+		// Extended Thinking 토글 버튼 (왼쪽)
+		this.createExtendedThinkingToggle(buttonContainer);
+
+		// 오른쪽 버튼 그룹
+		const rightGroup = buttonContainer.createEl('div', { cls: 'sage-button-right-group' });
+
+		this.loadingIndicator = rightGroup.createEl('div', { cls: 'sage-loading-indicator hidden' });
 		this.loadingIndicator.createEl('div', { cls: 'sage-loading-spinner' });
 
-		this.sendButton = buttonContainer.createEl('button', {
+		this.sendButton = rightGroup.createEl('button', {
 			cls: 'sage-chat-send-button',
 			attr: { 'aria-label': t('sendMessage') }
 		}) as HTMLButtonElement;
@@ -1045,6 +1089,12 @@ export class NoteSageView extends ItemView {
 		// Quick Actions 다시 렌더링 (설정 변경 반영)
 		if (this.quickActionsContainer) {
 			this.renderQuickActions();
+		}
+
+		// Extended Thinking 토글 동기화
+		if (this.extendedThinkingToggleEl) {
+			const isEnabled = settings.enableExtendedThinking ?? false;
+			this.extendedThinkingToggleEl.toggleClass('active', isEnabled);
 		}
 
 		// MCP 서버 설정 업데이트
