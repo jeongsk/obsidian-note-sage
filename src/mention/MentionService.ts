@@ -144,10 +144,15 @@ export class MentionService {
 			return this.cache.slice(0, MENTION_CONSTANTS.MAX_SUGGESTIONS);
 		}
 
+		// 경로 기반 검색 여부 확인 (/, \, 또는 폴더명/ 형태)
+		const isPathSearch = lowerQuery.includes('/') || lowerQuery.includes('\\');
+
 		// 검색어로 필터링 및 점수 계산
 		const results = this.cache
 			.map((item) => {
-				const score = this.calculateScore(item, lowerQuery);
+				const score = isPathSearch
+					? this.calculatePathScore(item, lowerQuery)
+					: this.calculateScore(item, lowerQuery);
 				return { ...item, score };
 			})
 			.filter((item) => item.score > 0)
@@ -158,7 +163,37 @@ export class MentionService {
 	}
 
 	/**
-	 * 검색 점수 계산
+	 * 경로 기반 검색 점수 계산
+	 * - 경로가 검색어로 시작: 100점
+	 * - 경로에 검색어 포함: 50점
+	 */
+	private calculatePathScore(
+		item: AutocompleteSuggestion,
+		query: string
+	): number {
+		// 검색어 정규화 (앞의 / 제거, 백슬래시를 슬래시로 변환)
+		const normalizedQuery = query.replace(/^\//, '').replace(/\\/g, '/').toLowerCase();
+		const lowerPath = item.path.toLowerCase();
+
+		// 경로가 검색어로 시작 (폴더 내 항목 필터링)
+		if (lowerPath.startsWith(normalizedQuery)) {
+			// 정확히 일치하는 폴더는 최고 점수
+			if (lowerPath === normalizedQuery || lowerPath === normalizedQuery + '/') {
+				return 150;
+			}
+			return 100;
+		}
+
+		// 경로에 검색어 포함
+		if (lowerPath.includes(normalizedQuery)) {
+			return 50;
+		}
+
+		return 0;
+	}
+
+	/**
+	 * 이름 기반 검색 점수 계산
 	 * - 이름 시작 일치: 100점
 	 * - 이름 포함: 50점
 	 * - 경로 포함: 25점
