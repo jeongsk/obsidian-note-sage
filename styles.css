@@ -1087,6 +1087,171 @@
 		color: var(--text-muted);
 		font-size: var(--font-smaller);
 }
+/* ==================== Skills Settings ==================== */
+.sage-skills-settings {
+		margin-top: 1rem;
+}
+.sage-skills-list {
+		margin-top: 0.5rem;
+}
+.sage-skill-item {
+		margin-bottom: 0.5rem;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		border-radius: var(--radius-s);
+		border-width: 1px;
+		border-color: var(--background-modifier-border);
+		background-color: var(--background-secondary);
+		padding: 0.5rem;
+}
+.sage-skill-item:hover {
+		border-color: var(--background-modifier-border-hover);
+}
+.sage-skill-item--disabled {
+		opacity: 0.5;
+}
+.sage-skill-item--error {
+		border-color: var(--color-red);
+}
+.sage-skill-icon {
+		display: flex;
+		height: 1.25rem;
+		width: 1.25rem;
+		flex-shrink: 0;
+		align-items: center;
+		justify-content: center;
+		color: var(--text-muted);
+}
+.sage-skill-icon svg {
+		height: 1rem;
+		width: 1rem;
+}
+.sage-skill-info {
+		min-width: 0px;
+		flex: 1 1 0%;
+}
+.sage-skill-name {
+		cursor: pointer;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		font-weight: 500;
+		color: var(--text-normal);
+		font-size: var(--font-small);
+}
+.sage-skill-name:hover {
+		text-decoration-line: underline;
+}
+.sage-skill-desc {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		color: var(--text-muted);
+		font-size: var(--font-smaller);
+}
+.sage-skill-error-message {
+		margin-top: 0.25rem;
+		width: 100%;
+		border-radius: var(--radius-s);
+		padding: 0.25rem;
+		font-size: var(--font-smaller);
+		color: var(--text-error);
+		background: var(--background-modifier-error);
+}
+.sage-skill-controls {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		gap: 0.25rem;
+}
+/* Skills 토글 - MCP와 동일 */
+.sage-skill-toggle {
+		position: relative;
+		display: inline-block;
+		flex-shrink: 0;
+		width: 32px;
+		height: 18px;
+}
+.sage-skill-toggle-checkbox {
+		position: absolute;
+		height: 0px;
+		width: 0px;
+		opacity: 0;
+}
+.sage-skill-toggle-slider {
+		position: absolute;
+		inset: 0px;
+		cursor: pointer;
+		border-radius: 9999px;
+		background-color: var(--background-modifier-border);
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 200ms;
+}
+.sage-skill-toggle-slider::before {
+		position: absolute;
+		border-radius: 9999px;
+		--tw-bg-opacity: 1;
+		background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 200ms;
+		content: "";
+		height: 14px;
+		width: 14px;
+		left: 2px;
+		bottom: 2px;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.sage-skill-toggle-checkbox:checked + .sage-skill-toggle-slider {
+		background-color: var(--interactive-accent);
+}
+.sage-skill-toggle-checkbox:checked + .sage-skill-toggle-slider::before {
+		transform: translateX(14px);
+	}
+.sage-skill-btn {
+		display: flex;
+		height: 1.5rem;
+		width: 1.5rem;
+		cursor: pointer;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--radius-s);
+		border-style: none;
+		background-color: transparent;
+		padding: 0px;
+		color: var(--text-muted);
+		transition-property: all;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms;
+}
+.sage-skill-btn:hover {
+		background-color: var(--background-modifier-hover);
+		color: var(--text-normal);
+}
+.sage-skill-btn svg {
+		height: 0.875rem;
+		width: 0.875rem;
+}
+.sage-skill-btn-delete:hover {
+		color: var(--color-red);
+}
+.sage-skills-empty {
+		margin-bottom: 0.5rem;
+		border-radius: var(--radius-s);
+		background-color: var(--background-secondary);
+		padding: 1rem;
+		text-align: center;
+		font-style: italic;
+		color: var(--text-muted);
+}
+.sage-skills-buttons {
+		margin-top: 1rem;
+		display: flex;
+		gap: 0.5rem;
+}
 /* ==================== RTL Support ==================== */
 .sage-rtl {
 		direction: rtl;
@@ -1179,6 +1344,16 @@
 		text-align: right;
 }
 .sage-rtl .sage-mcp-server-controls {
+		flex-direction: row-reverse;
+}
+/* Skills RTL 지원 */
+.sage-rtl .sage-skill-item {
+		flex-direction: row-reverse;
+}
+.sage-rtl .sage-skill-info {
+		text-align: right;
+}
+.sage-rtl .sage-skill-controls {
 		flex-direction: row-reverse;
 }
 /* 코드 블록은 LTR 유지 */
@@ -1389,9 +1564,6 @@
 		margin-left: 0;
 		margin-right: 2px;
 	}
-.tw-mb-2 {
-		margin-bottom: 0.5rem;
-}
 .tw-mb-4 {
 		margin-bottom: 1rem;
 }
@@ -1410,20 +1582,8 @@
 .tw-max-h-48 {
 		max-height: 12rem;
 }
-.tw-flex-1 {
-		flex: 1 1 0%;
-}
-.tw-cursor-pointer {
-		cursor: pointer;
-}
-.tw-items-center {
-		align-items: center;
-}
 .tw-justify-end {
 		justify-content: flex-end;
-}
-.tw-justify-between {
-		justify-content: space-between;
 }
 .tw-gap-2 {
 		gap: 0.5rem;
@@ -1444,21 +1604,8 @@
 		--tw-bg-opacity: 1;
 		background-color: rgb(254 226 226 / var(--tw-bg-opacity, 1));
 }
-.tw-p-1 {
-		padding: 0.25rem;
-}
-.tw-p-2 {
-		padding: 0.5rem;
-}
 .tw-p-4 {
 		padding: 1rem;
-}
-.tw-py-4 {
-		padding-top: 1rem;
-		padding-bottom: 1rem;
-}
-.tw-text-center {
-		text-align: center;
 }
 .tw-font-mono {
 		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -1466,9 +1613,6 @@
 .tw-text-sm {
 		font-size: 0.875rem;
 		line-height: 1.25rem;
-}
-.tw-font-medium {
-		font-weight: 500;
 }
 .tw-text-obs-text-muted {
 		color: var(--text-muted);
@@ -1480,9 +1624,6 @@
 .tw-text-red-700 {
 		--tw-text-opacity: 1;
 		color: rgb(185 28 28 / var(--tw-text-opacity, 1));
-}
-.tw-opacity-50 {
-		opacity: 0.5;
 }
 .tw-opacity-70 {
 		opacity: 0.7;
@@ -1552,11 +1693,3 @@
 }
 
 /* ==================== 유틸리티 레이어 ==================== */
-
-.hover\:tw-bg-obs-bg-secondary:hover {
-		background-color: var(--background-secondary);
-}
-
-.hover\:tw-underline:hover {
-		text-decoration-line: underline;
-}
