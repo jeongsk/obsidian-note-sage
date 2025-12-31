@@ -174,6 +174,8 @@ npm run test         # 테스트 실행
 ## Active Technologies
 - TypeScript 5.9+ + Obsidian API, @anthropic-ai/claude-agent-sdk ^0.1.76, TailwindCSS 3.4.19 (001-skills-management)
 - Obsidian Vault 파일 시스템 (`.claude/skills/` 디렉토리), 플러그인 데이터 (settings) (001-skills-management)
+- TypeScript 5.9+ + Obsidian API, @anthropic-ai/claude-agent-sdk ^0.1.76, TailwindCSS 3.4.19 (`tw-` prefix) (009-extended-thinking-toggle)
+- Obsidian Plugin Data (NoteSageSettings.enableExtendedThinking) (009-extended-thinking-toggle)
 
 ## Recent Changes
 - 001-skills-management: Added TypeScript 5.9+ + Obsidian API, @anthropic-ai/claude-agent-sdk ^0.1.76, TailwindCSS 3.4.19
