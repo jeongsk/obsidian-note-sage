@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting } from 'obsidian';
+import { App, PluginSettingTab, Setting, setIcon } from 'obsidian';
 import type NoteSagePlugin from './main';
 import {
 	AVAILABLE_MODELS,
@@ -444,9 +444,7 @@ export class NoteSageSettingTab extends PluginSettingTab {
 
 		if (this.skills.length === 0) {
 			// Skills 없음 메시지
-			const emptyEl = containerEl.createDiv({
-				cls: 'sage-skills-empty tw-text-center tw-py-4 tw-text-obs-text-muted',
-			});
+			const emptyEl = containerEl.createDiv({ cls: 'sage-skills-empty' });
 			emptyEl.createEl('p', { text: t('settings.skills.noSkills') });
 			emptyEl.createEl('p', {
 				text: t('settings.skills.noSkillsGuide'),
@@ -457,88 +455,106 @@ export class NoteSageSettingTab extends PluginSettingTab {
 
 		// Skills 목록 렌더링
 		for (const skill of this.skills) {
-			const itemEl = containerEl.createDiv({
-				cls: `sage-skill-item tw-flex tw-items-center tw-justify-between tw-p-2 tw-rounded tw-mb-2 ${
-					skill.enabled ? '' : 'sage-skill-item--disabled tw-opacity-50'
-				} ${skill.hasError ? 'sage-skill-item--error' : ''}`,
+			this.renderSkillItem(containerEl, skill);
+		}
+	}
+
+	/**
+	 * 개별 Skill 아이템 렌더링
+	 */
+	private renderSkillItem(container: HTMLElement, skill: SkillEntry): void {
+		const itemEl = container.createDiv({
+			cls: `sage-skill-item ${!skill.enabled ? 'sage-skill-item--disabled' : ''} ${skill.hasError ? 'sage-skill-item--error' : ''}`,
+		});
+
+		// 스킬 아이콘
+		const iconEl = itemEl.createSpan({ cls: 'sage-skill-icon' });
+		setIcon(iconEl, 'wand');
+
+		// 스킬 정보
+		const infoEl = itemEl.createDiv({ cls: 'sage-skill-info' });
+		const nameEl = infoEl.createDiv({
+			cls: 'sage-skill-name',
+			text: skill.metadata.name || skill.id,
+		});
+		
+		// 이름 클릭 시 상세 보기 모달
+		nameEl.addEventListener('click', () => {
+			new SkillDetailModal(this.plugin.app, skill).open();
+		});
+
+		if (skill.metadata.description) {
+			infoEl.createDiv({
+				cls: 'sage-skill-desc',
+				text: skill.metadata.description,
 			});
+		}
 
-			// 왼쪽: 이름과 설명
-			const infoEl = itemEl.createDiv({ cls: 'sage-skill-info tw-flex-1' });
+		// 컨트롤 버튼들
+		const controlsEl = itemEl.createDiv({ cls: 'sage-skill-controls' });
 
-			const nameEl = infoEl.createEl('span', {
-				text: skill.metadata.name || skill.id,
-				cls: 'sage-skill-name tw-font-medium tw-cursor-pointer hover:tw-underline',
+		// 활성화/비활성화 토글 (에러가 없는 경우에만)
+		if (!skill.hasError) {
+			const toggleLabel = controlsEl.createEl('label', { cls: 'sage-skill-toggle' });
+			const toggleInput = toggleLabel.createEl('input', {
+				type: 'checkbox',
+				cls: 'sage-skill-toggle-checkbox',
 			});
-
-			// 이름 클릭 시 상세 보기 모달
-			nameEl.addEventListener('click', () => {
-				new SkillDetailModal(this.plugin.app, skill).open();
-			});
-
-			if (skill.metadata.description) {
-				infoEl.createEl('span', {
-					text: ` - ${skill.metadata.description}`,
-					cls: 'sage-skill-desc tw-text-sm tw-text-obs-text-muted',
-				});
-			}
-
-			// 에러 표시
-			if (skill.hasError) {
-				const errorEl = infoEl.createEl('span', {
-					text: ` ⚠️ ${skill.errorMessage || t('settings.skills.parseError')}`,
-					cls: 'sage-skill-error tw-text-sm tw-text-red-500',
-				});
-				errorEl.setAttribute('title', skill.errorMessage || '');
-			}
-
-			// 오른쪽: 토글과 삭제 버튼
-			const actionsEl = itemEl.createDiv({
-				cls: 'sage-skill-actions tw-flex tw-items-center tw-gap-2',
-			});
-
-			// 활성화 토글 (에러가 없는 경우에만)
-			if (!skill.hasError) {
-				const toggleEl = actionsEl.createEl('div', { cls: 'checkbox-container' });
-				const toggle = toggleEl.createEl('input', { type: 'checkbox' });
-				toggle.checked = skill.enabled;
-				toggle.addEventListener('change', async () => {
-					const disabledSkills = this.plugin.settings.disabledSkills || [];
-					if (toggle.checked) {
-						// 활성화: 목록에서 제거
-						this.plugin.settings.disabledSkills = disabledSkills.filter(
-							(id) => id !== skill.id
-						);
-					} else {
-						// 비활성화: 목록에 추가
-						if (!disabledSkills.includes(skill.id)) {
-							this.plugin.settings.disabledSkills = [...disabledSkills, skill.id];
-						}
+			toggleInput.checked = skill.enabled;
+			toggleLabel.createSpan({ cls: 'sage-skill-toggle-slider' });
+			toggleInput.addEventListener('change', async () => {
+				const disabledSkills = this.plugin.settings.disabledSkills || [];
+				if (toggleInput.checked) {
+					// 활성화: 목록에서 제거
+					this.plugin.settings.disabledSkills = disabledSkills.filter(
+						(id) => id !== skill.id
+					);
+				} else {
+					// 비활성화: 목록에 추가
+					if (!disabledSkills.includes(skill.id)) {
+						this.plugin.settings.disabledSkills = [...disabledSkills, skill.id];
 					}
-					await this.plugin.saveSettings();
-					this.updateViews();
-					// UI 업데이트
-					await this.renderSkillsList(containerEl);
-				});
-			}
-
-			// 삭제 버튼
-			const deleteBtn = actionsEl.createEl('button', {
-				cls: 'sage-skill-delete tw-p-1 tw-rounded hover:tw-bg-obs-bg-secondary',
-				attr: { 'aria-label': t('settings.skills.delete') },
-			});
-			deleteBtn.innerHTML = '🗑️';
-			deleteBtn.addEventListener('click', async () => {
-				// 확인 다이얼로그
-				const confirmed = confirm(
-					t('settings.skills.deleteConfirm', { name: skill.metadata.name || skill.id })
-				);
-				if (confirmed) {
-					await this.skillsManager.deleteSkill(skill.id);
-					// 목록 갱신
-					await this.renderSkillsList(containerEl);
 				}
+				await this.plugin.saveSettings();
+				this.updateViews();
+				// 부모 컨테이너 찾아서 UI 업데이트
+				const listContainer = container;
+				await this.renderSkillsList(listContainer);
 			});
+		}
+
+		// 편집 버튼
+		const editBtn = controlsEl.createEl('button', { cls: 'sage-skill-btn' });
+		setIcon(editBtn, 'pencil');
+		editBtn.setAttribute('aria-label', t('settings.skills.edit'));
+		editBtn.addEventListener('click', async () => {
+			// 스킬 파일을 Obsidian에서 열기
+			const skillPath = `.claude/skills/${skill.id}.md`;
+			const file = this.app.vault.getAbstractFileByPath(skillPath);
+			if (file) {
+				await this.app.workspace.openLinkText(skillPath, '', false);
+			}
+		});
+
+		// 삭제 버튼
+		const deleteBtn = controlsEl.createEl('button', { cls: 'sage-skill-btn sage-skill-btn-delete' });
+		setIcon(deleteBtn, 'trash');
+		deleteBtn.setAttribute('aria-label', t('settings.skills.delete'));
+		deleteBtn.addEventListener('click', async () => {
+			const confirmed = confirm(
+				t('settings.skills.deleteConfirm', { name: skill.metadata.name || skill.id })
+			);
+			if (confirmed) {
+				await this.skillsManager.deleteSkill(skill.id);
+				// 목록 갱신
+				await this.renderSkillsList(container);
+			}
+		});
+
+		// 에러 메시지 표시
+		if (skill.hasError && skill.errorMessage) {
+			const errorEl = itemEl.createDiv({ cls: 'sage-skill-error-message' });
+			errorEl.setText(skill.errorMessage || t('settings.skills.parseError'));
 		}
 	}
 
