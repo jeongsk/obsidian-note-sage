@@ -18,6 +18,7 @@ import { SkillDetailModal } from './skills/SkillDetailModal';
 import { SkillTemplateModal } from './skills/SkillCreatorModal';
 import { SkillAIWizardModal } from './skills/SkillAIWizardModal';
 import { SkillDeleteModal } from './skills/SkillDeleteModal';
+import { SkillEditModal } from './skills/SkillEditModal';
 import type { SkillEntry } from './types';
 import { CONTENT_LIMITS } from './constants';
 
@@ -582,12 +583,20 @@ export class NoteSageSettingTab extends PluginSettingTab {
 		// 편집 버튼
 		const editBtn = controlsEl.createEl('button', { cls: 'sage-skill-btn', attr: { 'aria-label': t('settings.skills.edit') } });
 		setIcon(editBtn, 'pencil');
-		editBtn.addEventListener('click', async () => {
-			const skillPath = skill.path;
-			const exists = await this.app.vault.adapter.exists(skillPath);
-			if (exists) {
-				await this.app.workspace.openLinkText(skillPath, '', false);
-			}
+		editBtn.addEventListener('click', () => {
+			new SkillEditModal(
+				this.app,
+				this.skillsManager,
+				skill,
+				async () => {
+					const settingsContainer = container.closest('.sage-skills-settings');
+					if (settingsContainer instanceof HTMLElement) {
+						this.renderSkillsSettings(settingsContainer);
+					} else {
+						await this.renderSkillsList(container);
+					}
+				}
+			).open();
 		});
 
 		// 삭제 버튼
