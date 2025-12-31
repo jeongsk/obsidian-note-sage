@@ -27,3 +27,4 @@ data.json
 .claude/*.local.json
 !CLAUDE.md
 CLAUDE.local.md
+.serena

@@ -1,6 +1,6 @@
 import { query } from '@anthropic-ai/claude-agent-sdk';
 import type { McpServerConfig } from '@anthropic-ai/claude-agent-sdk';
-import type { NoteSageSettings, SDKMessage, ChatMessage } from './types';
+import type { NoteSageSettings, SDKMessage, ChatMessage, ToolUseBlock } from './types';
 import { MessageFactory } from './MessageFactory';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -26,6 +26,8 @@ export interface AgentExecutionOptions {
 	onError: (error: Error) => void;
 	onComplete: () => void;
 	onMcpStatus?: (statuses: McpStatusInfo[]) => void;
+	/** 에이전트가 파일을 수정할 때 호출되는 콜백 */
+	onFileModified?: (filePath: string) => void;
 	signal?: AbortSignal;
 }
 
@@ -67,7 +69,7 @@ export class AgentService {
 	}
 
 	async execute(options: AgentExecutionOptions): Promise<string | null> {
-		const { prompt, workingDirectory, sessionId, onMessage, onError, onComplete, onMcpStatus, signal } = options;
+		const { prompt, workingDirectory, sessionId, onMessage, onError, onComplete, onMcpStatus, onFileModified, signal } = options;
 
 		// Validate workingDirectory
 		if (!workingDirectory || typeof workingDirectory !== 'string') {
@@ -129,6 +131,25 @@ export class AgentService {
 
 						if (this.settings.debugContext) {
 							console.log('[AgentService] MCP servers connected:', statuses);
+						}
+					}
+				}
+
+				// 파일 수정 도구 사용 감지 (Write, Edit)
+				if (onFileModified && message.type === 'assistant') {
+					const sdkMessage = message as SDKMessage;
+					const content = sdkMessage.message?.content;
+					if (content && Array.isArray(content)) {
+						for (const block of content) {
+							if (block.type === 'tool_use') {
+								const filePath = this.extractFilePathFromToolUse(block as ToolUseBlock);
+								if (filePath) {
+									onFileModified(filePath);
+									if (this.settings.debugContext) {
+										console.log('[AgentService] File modification detected:', filePath);
+									}
+								}
+							}
 						}
 					}
 				}
@@ -317,6 +338,22 @@ export class AgentService {
 		}
 
 		return options;
+	}
+
+	/**
+	 * tool_use 블록에서 파일 경로를 추출합니다.
+	 * Write, Edit 도구의 file_path 파라미터를 확인합니다.
+	 */
+	private extractFilePathFromToolUse(block: ToolUseBlock): string | null {
+		// 파일 수정 도구 목록
+		const fileModifyingTools = ['Write', 'Edit'];
+
+		if (fileModifyingTools.includes(block.name)) {
+			const input = block.input as Record<string, unknown>;
+			const filePath = input.file_path as string | undefined;
+			return filePath || null;
+		}
+		return null;
 	}
 
 	private handleError(

@@ -1,6 +1,6 @@
 # Feature Specification: MCP Server Integration
 
-**Feature Branch**: `001-mcp-server`
+**Feature Branch**: `002-mcp-server`
 **Created**: 2025-12-27
 **Status**: Draft
 **Input**: User description: "Claude Agent SDK의 MCP 서버 기능을 활용하여 사용자가 커스텀 도구를 추가하고 관리할 수 있는 기능 제공"

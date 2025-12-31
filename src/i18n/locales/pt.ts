@@ -247,4 +247,23 @@ export const pt: TranslationKeys = {
 		aboutText1: 'Este plugin usa o Claude Agent SDK para fornecer assistência alimentada por IA diretamente no Obsidian.',
 		aboutText2: 'O agente pode ler arquivos, executar comandos e ajudar com várias tarefas no seu vault.',
 	},
+
+	// Mention system
+	mention: {
+		noResults: 'Nenhum resultado encontrado',
+		file: 'Arquivo',
+		folder: 'Pasta',
+		binaryFile: 'Arquivo binário',
+		fileNotFound: 'Arquivo não encontrado',
+		fileReadError: 'Erro ao ler arquivo',
+		contentTruncated: '... conteúdo truncado ...',
+		invalidPath: 'Caminho inválido',
+	},
+
+	// Large file warning
+	largeFileWarningTitle: 'Aviso de arquivo grande',
+	largeFileWarningMessage: "O arquivo '{path}' é maior que 100KB ({size}). Arquivos grandes podem retardar a resposta.",
+	largeFileWarningQuestion: 'Deseja incluir este arquivo mesmo assim?',
+	includeAnyway: 'Incluir mesmo assim',
+	cancel: 'Cancelar',
 };

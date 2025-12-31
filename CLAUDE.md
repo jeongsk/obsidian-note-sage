@@ -229,12 +229,14 @@ This plugin is desktop-only (`isDesktopOnly: true` in manifest) as it relies on 
 ## Active Technologies
 - TypeScript 5.7+ + Obsidian API, @anthropic-ai/claude-agent-sdk (001-quick-action-buttons)
 - Obsidian Plugin Settings (JSON file in `.obsidian/plugins/` folder) (001-quick-action-buttons)
-- TypeScript 5.7+ (기존 프로젝트와 동일) + @anthropic-ai/claude-agent-sdk ^0.1.5, Obsidian API, Zod ^4.2.1 (001-mcp-server)
-- Obsidian 플러그인 설정 (JSON, data.json) (001-mcp-server)
-- TypeScript 5.7+ + Obsidian API, @anthropic-ai/claude-agent-sdk ^0.1.5 (002-mcp-tools-panel)
-- Obsidian Plugin Settings (data.json) (002-mcp-tools-panel)
-- TypeScript 5.9+ + @anthropic-ai/claude-agent-sdk ^0.1.76, Obsidian API (001-builtin-tools-toggle)
-- Obsidian plugin data.json (via `this.plugin.saveSettings()`) (001-builtin-tools-toggle)
+- TypeScript 5.7+ (기존 프로젝트와 동일) + @anthropic-ai/claude-agent-sdk ^0.1.5, Obsidian API, Zod ^4.2.1 (002-mcp-server)
+- Obsidian 플러그인 설정 (JSON, data.json) (002-mcp-server)
+- TypeScript 5.7+ + Obsidian API, @anthropic-ai/claude-agent-sdk ^0.1.5 (004-mcp-tools-panel)
+- Obsidian Plugin Settings (data.json) (004-mcp-tools-panel)
+- TypeScript 5.9+ + @anthropic-ai/claude-agent-sdk ^0.1.76, Obsidian API (006-builtin-tools-toggle)
+- Obsidian plugin data.json (via `this.plugin.saveSettings()`) (006-builtin-tools-toggle)
+- TypeScript 5.9+ + @anthropic-ai/claude-agent-sdk ^0.1.76, obsidian API (latest) (001-at-mention-context)
+- N/A (Obsidian vault 파일 시스템 직접 접근) (001-at-mention-context)
 
 ## Recent Changes
 - 001-quick-action-buttons: Added TypeScript 5.7+ + Obsidian API, @anthropic-ai/claude-agent-sdk

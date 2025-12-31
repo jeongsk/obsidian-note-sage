@@ -247,4 +247,23 @@ export const ar: TranslationKeys = {
 		aboutText1: 'تستخدم هذه الإضافة Claude Agent SDK لتوفير مساعدة مدعومة بالذكاء الاصطناعي مباشرة داخل Obsidian.',
 		aboutText2: 'يمكن للوكيل قراءة الملفات وتنفيذ الأوامر والمساعدة في مهام متنوعة في خزنتك.',
 	},
+
+	// Mention system
+	mention: {
+		noResults: 'لم يتم العثور على نتائج',
+		file: 'ملف',
+		folder: 'مجلد',
+		binaryFile: 'ملف ثنائي',
+		fileNotFound: 'الملف غير موجود',
+		fileReadError: 'خطأ في قراءة الملف',
+		contentTruncated: '... تم اقتطاع المحتوى ...',
+		invalidPath: 'مسار غير صالح',
+	},
+
+	// Large file warning
+	largeFileWarningTitle: 'تحذير: ملف كبير',
+	largeFileWarningMessage: "الملف '{path}' أكبر من 100 كيلوبايت ({size}). قد تبطئ الملفات الكبيرة الاستجابة.",
+	largeFileWarningQuestion: 'هل تريد تضمين هذا الملف على أي حال؟',
+	includeAnyway: 'تضمين على أي حال',
+	cancel: 'إلغاء',
 };

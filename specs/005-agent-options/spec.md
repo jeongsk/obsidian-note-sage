@@ -1,6 +1,6 @@
 # Feature Specification: Agent Options
 
-**Feature Branch**: `001-agent-options`
+**Feature Branch**: `005-agent-options`
 **Created**: 2025-12-28
 **Status**: Draft
 **Input**: User description: "Claude Agent SDK 옵션 기능 추가 - maxTurns, maxBudgetUsd, Extended Thinking 등 SDK에서 제공하는 고급 옵션들을 사용자가 설정할 수 있게 UI 제공"

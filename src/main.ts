@@ -18,8 +18,31 @@ export default class NoteSagePlugin extends Plugin {
 	isAgentExecuting: boolean = false;
 	mcpServerManager: McpServerManager;
 
+	// 에이전트가 수정한 파일 경로 추적
+	private modifiedFilesByAgent: Set<string> = new Set();
+	private rebuildViewDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+
 	setAgentExecuting(value: boolean): void {
 		this.isAgentExecuting = value;
+	}
+
+	/**
+	 * 에이전트가 수정한 파일 경로를 등록합니다.
+	 * 해당 파일만 에디터 리렌더링 대상이 됩니다.
+	 */
+	addAgentModifiedFile(filePath: string): void {
+		this.modifiedFilesByAgent.add(filePath);
+	}
+
+	/**
+	 * 에이전트 실행 종료 시 추적 데이터를 초기화합니다.
+	 */
+	resetAgentModifiedFiles(): void {
+		this.modifiedFilesByAgent.clear();
+		if (this.rebuildViewDebounceTimer) {
+			clearTimeout(this.rebuildViewDebounceTimer);
+			this.rebuildViewDebounceTimer = null;
+		}
 	}
 
 	// Phase 1-D: 빠른 프롬프트 정의 (i18n 키 사용)
@@ -44,15 +67,29 @@ export default class NoteSagePlugin extends Plugin {
 		this.mcpServerManager = new McpServerManager();
 
 		// 파일 변경 감지: Agent SDK가 fs로 직접 수정한 파일을 에디터에 반영
-		// 에이전트 실행 중일 때만 rebuildView() 호출 (사용자 직접 수정 시에는 무시)
+		// 에이전트가 실제로 수정한 파일만 리렌더링 (사용자 편집 파일은 무시)
 		this.registerEvent(
 			this.app.vault.on('modify', (file) => {
 				if (!this.isAgentExecuting) return;
 
+				// 에이전트가 수정한 파일만 처리
+				if (!this.modifiedFilesByAgent.has(file.path)) return;
+
 				const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
 				if (activeView && activeView.file?.path === file.path) {
-					// rebuildView()는 내부 API이므로 타입 단언 사용
-					(activeView.leaf as unknown as { rebuildView: () => void }).rebuildView();
+					// 디바운싱: 300ms 내에 추가 수정이 없으면 리렌더링
+					if (this.rebuildViewDebounceTimer) {
+						clearTimeout(this.rebuildViewDebounceTimer);
+					}
+
+					this.rebuildViewDebounceTimer = setTimeout(() => {
+						const currentView = this.app.workspace.getActiveViewOfType(MarkdownView);
+						if (currentView && currentView.file?.path === file.path) {
+							// rebuildView()는 내부 API이므로 타입 단언 사용
+							(currentView.leaf as unknown as { rebuildView: () => void }).rebuildView();
+						}
+						this.rebuildViewDebounceTimer = null;
+					}, 300);
 				}
 			})
 		);

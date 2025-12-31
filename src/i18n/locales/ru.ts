@@ -247,4 +247,23 @@ export const ru: TranslationKeys = {
 		aboutText1: 'Этот плагин использует Claude Agent SDK для предоставления помощи на основе ИИ непосредственно в Obsidian.',
 		aboutText2: 'Агент может читать файлы, выполнять команды и помогать с различными задачами в вашем хранилище.',
 	},
+
+	// Mention system
+	mention: {
+		noResults: 'Результаты не найдены',
+		file: 'Файл',
+		folder: 'Папка',
+		binaryFile: 'Бинарный файл',
+		fileNotFound: 'Файл не найден',
+		fileReadError: 'Ошибка чтения файла',
+		contentTruncated: '... содержимое обрезано ...',
+		invalidPath: 'Недействительный путь',
+	},
+
+	// Large file warning
+	largeFileWarningTitle: 'Предупреждение: большой файл',
+	largeFileWarningMessage: "Файл '{path}' больше 100КБ ({size}). Большие файлы могут замедлить ответ.",
+	largeFileWarningQuestion: 'Вы все равно хотите включить этот файл?',
+	includeAnyway: 'Включить все равно',
+	cancel: 'Отмена',
 };
