@@ -300,6 +300,8 @@ export const es: TranslationKeys = {
 			updateError: 'Error al actualizar skill',
 			skillsCount: '{count} Skills',
 			activeCount: '{active} activo',
+			// Documentation link
+			docsLink: 'Ver documentación oficial',
 		},
 
 		// About

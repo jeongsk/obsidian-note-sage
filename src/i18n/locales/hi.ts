@@ -300,6 +300,8 @@ export const hi: TranslationKeys = {
 			updateError: 'Skill अपडेट करने में त्रुटि',
 			skillsCount: '{count} Skills',
 			activeCount: '{active} सक्रिय',
+			// Documentation link
+			docsLink: 'आधिकारिक दस्तावेज देखें',
 		},
 
 		// About

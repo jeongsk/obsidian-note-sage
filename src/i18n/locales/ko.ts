@@ -301,6 +301,8 @@ export const ko: TranslationKeys = {
 			contentPlaceholder: '# skill-name\n\n## Instructions\n\n...',
 			updateSuccess: 'Skill이 업데이트되었습니다',
 			updateError: 'Skill 업데이트 중 오류 발생',
+			// Documentation link
+			docsLink: '공식 문서 보기',
 		},
 
 		// About

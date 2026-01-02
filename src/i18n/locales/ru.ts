@@ -300,6 +300,8 @@ export const ru: TranslationKeys = {
 			updateError: 'Ошибка при обновлении навыка',
 			skillsCount: '{count} навыков',
 			activeCount: '{active} активно',
+			// Documentation link
+			docsLink: 'Смотреть официальную документацию',
 		},
 
 		// About

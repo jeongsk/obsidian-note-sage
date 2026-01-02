@@ -300,6 +300,8 @@ export const ar: TranslationKeys = {
 			updateError: 'خطأ في تحديث المهارة',
 			skillsCount: '{count} مهارة',
 			activeCount: '{active} نشط',
+			// Documentation link
+			docsLink: 'عرض الوثائق الرسمية',
 		},
 
 		// About

@@ -130,6 +130,8 @@ interface SkillsSettingsTranslations {
 	contentPlaceholder: string;
 	updateSuccess: string;
 	updateError: string;
+	// Documentation link
+	docsLink: string;
 }
 
 interface McpSettingsTranslations {
@@ -603,6 +605,8 @@ export const en: TranslationKeys = {
 			contentPlaceholder: '# skill-name\n\n## Instructions\n\n...',
 			updateSuccess: 'Skill updated successfully',
 			updateError: 'Error updating skill',
+			// Documentation link
+			docsLink: 'View official documentation',
 		},
 
 		// About

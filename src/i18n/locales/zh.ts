@@ -300,6 +300,8 @@ export const zh: TranslationKeys = {
 			updateError: '更新技能时出错',
 			skillsCount: '{count} 个技能',
 			activeCount: '{active} 个已启用',
+			// Documentation link
+			docsLink: '查看官方文档',
 		},
 
 		// About

@@ -300,6 +300,8 @@ export const ja: TranslationKeys = {
 			updateError: 'Skillの更新中にエラーが発生しました',
 			skillsCount: '{count}個のSkill',
 			activeCount: '{active}個が有効',
+			// Documentation link
+			docsLink: '公式ドキュメントを見る',
 		},
 
 		// About

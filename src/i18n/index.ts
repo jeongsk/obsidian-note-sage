@@ -57,7 +57,7 @@ function detectSystemLanguage(): string {
 /**
  * Get the effective language (resolves 'auto' to actual language)
  */
-function getEffectiveLanguage(): string {
+export function getEffectiveLanguage(): string {
 	if (currentLanguage === 'auto') {
 		const detected = detectSystemLanguage();
 		// Return detected language if we have translations for it, otherwise fall back to English
