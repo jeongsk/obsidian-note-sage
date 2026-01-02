@@ -11,7 +11,7 @@ import {
 	PERMISSION_MODE_OPTIONS,
 	PermissionMode
 } from './types';
-import { t, setLanguage, AVAILABLE_LANGUAGES, SupportedLanguage } from './i18n';
+import { t, setLanguage, AVAILABLE_LANGUAGES, SupportedLanguage, getEffectiveLanguage } from './i18n';
 import { McpSettingsUI } from './mcp/McpSettingsUI';
 import { SkillsManager } from './skills/SkillsManager';
 import { SkillDetailModal } from './skills/SkillDetailModal';
@@ -21,6 +21,30 @@ import { SkillDeleteModal } from './skills/SkillDeleteModal';
 import { SkillEditModal } from './skills/SkillEditModal';
 import type { SkillEntry } from './types';
 import { CONTENT_LIMITS } from './constants';
+
+/**
+ * Claude Code Skills 문서 URL 매핑
+ * 지원되는 언어: en, ko, ja, es, fr, de, ru
+ * 미지원 언어(pt, zh, ar, hi)는 영어로 폴백
+ */
+const SKILLS_DOCS_LANGUAGES: Record<string, string> = {
+	en: 'en',
+	ko: 'ko',
+	ja: 'ja',
+	es: 'es',
+	fr: 'fr',
+	de: 'de',
+	ru: 'ru',
+};
+
+/**
+ * 현재 언어에 맞는 Claude Code Skills 문서 URL 반환
+ */
+function getSkillsDocsUrl(): string {
+	const effectiveLang = getEffectiveLanguage();
+	const docsLang = SKILLS_DOCS_LANGUAGES[effectiveLang] || 'en';
+	return `https://code.claude.com/docs/${docsLang}/skills`;
+}
 
 export class NoteSageSettingTab extends PluginSettingTab {
 	plugin: NoteSagePlugin;
@@ -347,10 +371,22 @@ export class NoteSageSettingTab extends PluginSettingTab {
 	private renderSkillsSettings(containerEl: HTMLElement): void {
 		containerEl.empty();
 
-		// 헤더 섹션
+		// 헤더 섹션 (description에 문서 링크 포함)
+		const descFragment = document.createDocumentFragment();
+		descFragment.appendText(t('settings.skills.description') + ' · ');
+		const docsLink = descFragment.createEl('a', {
+			cls: 'sage-skills-docs-link',
+			text: t('settings.skills.docsLink'),
+		});
+		docsLink.setAttr('href', getSkillsDocsUrl());
+		docsLink.setAttr('target', '_blank');
+		docsLink.setAttr('rel', 'noopener noreferrer');
+		const docsIconSpan = docsLink.createSpan({ cls: 'sage-skills-docs-link-icon' });
+		setIcon(docsIconSpan, 'external-link');
+
 		const headerSetting = new Setting(containerEl)
 			.setName(t('settings.skills.title'))
-			.setDesc(t('settings.skills.description'))
+			.setDesc(descFragment)
 			.setHeading();
 
 		// Skills 활성화 토글

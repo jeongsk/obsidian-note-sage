@@ -885,6 +885,25 @@
 		@apply tw-mt-4;
 	}
 
+	/* 문서 링크 (description 내 인라인) */
+	.sage-skills-docs-link {
+		@apply tw-inline-flex tw-items-center tw-gap-0.5 tw-no-underline;
+		color: var(--text-accent);
+	}
+
+	.sage-skills-docs-link:hover {
+		@apply tw-underline;
+		color: var(--interactive-accent-hover);
+	}
+
+	.sage-skills-docs-link-icon {
+		@apply tw-inline-flex tw-items-center;
+	}
+
+	.sage-skills-docs-link-icon svg {
+		@apply tw-w-3 tw-h-3;
+	}
+
 	/* 스킬 카운트 배지 */
 	.sage-skills-stats-badge {
 		@apply tw-ml-2 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-obs-text-on-accent tw-font-normal;

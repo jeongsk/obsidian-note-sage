@@ -1137,6 +1137,26 @@
 .sage-skills-settings {
 		margin-top: 1rem;
 }
+/* 문서 링크 (description 내 인라인) */
+.sage-skills-docs-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.125rem;
+		text-decoration-line: none;
+		color: var(--text-accent);
+}
+.sage-skills-docs-link:hover {
+		text-decoration-line: underline;
+		color: var(--interactive-accent-hover);
+}
+.sage-skills-docs-link-icon {
+		display: inline-flex;
+		align-items: center;
+}
+.sage-skills-docs-link-icon svg {
+		height: 0.75rem;
+		width: 0.75rem;
+}
 /* 스킬 카운트 배지 */
 .sage-skills-stats-badge {
 		margin-left: 0.5rem;
