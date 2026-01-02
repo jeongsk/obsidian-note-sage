@@ -1,6 +1,6 @@
 {
 	"name": "note-sage",
-	"version": "0.9.0",
+	"version": "0.9.1",
 	"description": "An AI assistant plugin powered by Claude Code that helps you work with your notes.",
 	"main": "main.js",
 	"scripts": {
