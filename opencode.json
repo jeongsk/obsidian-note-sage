@@ -1,0 +1,24 @@
+{
+	"$schema": "https://opencode.ai/config.json",
+	"permission": {
+		"edit": "allow",
+		"glob": "allow",
+		"grep": "allow",
+		"list": "allow",
+		"task": "allow",
+		"todowrite": "allow",
+		"todoread": "allow",
+		"lsp": "allow",
+		"doom_loop": "allow",
+		"webfetch": "allow",
+		"websearch": "allow",
+		"codesearch": "allow",
+		"read":"allow",
+		"bash": {
+			"git push": "ask",
+			"git status": "allow",
+			"npm run build": "allow",
+			"terraform *": "deny"
+		}
+	}
+}
