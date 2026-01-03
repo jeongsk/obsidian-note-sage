@@ -19,7 +19,7 @@
 
 ::-webkit-scrollbar-thumb {
 	background: var(--background-modifier-border);
-	border-radius: 4px;
+	border-radius: var(--radius-s);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -58,7 +58,7 @@
 	.sage-chat-messages {
 		@apply tw-flex tw-flex-1 tw-flex-col tw-gap-3 tw-overflow-y-auto tw-py-3;
 		font-size: var(--font-small);
-		line-height: 1.5;
+		line-height: var(--line-height-normal);
 		user-select: text;
 		-webkit-user-select: text;
 	}
@@ -199,7 +199,7 @@
 		padding: 3px 6px;
 		border: 0;
 		border-radius: 0;
-		line-height: 1.5;
+		line-height: var(--line-height-normal);
 		font-family: inherit;
 	}
 
@@ -511,13 +511,14 @@
 	}
 
 	.sage-toggle-sm-slider::before {
-		@apply tw-absolute tw-rounded-full tw-bg-white tw-transition-all tw-duration-200;
+		@apply tw-absolute tw-rounded-full tw-transition-all tw-duration-200;
 		content: "";
 		height: 14px;
 		width: 14px;
 		left: 2px;
 		bottom: 2px;
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+		background-color: var(--toggle-thumb-color, #fff);
+		box-shadow: var(--input-shadow);
 	}
 
 	.sage-toggle-sm-checkbox:checked + .sage-toggle-sm-slider {
@@ -1081,7 +1082,7 @@
 
 	/* Skill 삭제 확인 모달 */
 	.sage-skill-delete-modal .sage-modal-title {
-		@apply tw-text-lg tw-font-semibold tw-text-obs-text tw-mb-4;
+		@apply tw-text-obs-ui-large tw-font-obs-semibold tw-text-obs-text tw-mb-4;
 	}
 
 	.sage-skill-delete-modal .sage-modal-message {
@@ -1089,7 +1090,7 @@
 	}
 
 	.sage-skill-delete-modal .sage-modal-hint {
-		@apply tw-text-obs-text-muted tw-text-sm tw-mb-4;
+		@apply tw-text-obs-text-muted tw-text-obs-small tw-mb-4;
 	}
 
 	/* Skill 삭제 Undo Notice */
@@ -1098,7 +1099,7 @@
 	}
 
 	.sage-notice-undo-btn {
-		@apply tw-px-3 tw-py-1 tw-text-xs tw-rounded tw-cursor-pointer tw-font-medium;
+		@apply tw-px-3 tw-py-1 tw-text-obs-smallest tw-rounded tw-cursor-pointer tw-font-obs-medium;
 		@apply tw-bg-obs-accent tw-text-obs-text-on-accent;
 		@apply tw-border-none tw-transition-opacity tw-duration-150;
 	}
