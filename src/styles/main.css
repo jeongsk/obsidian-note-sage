@@ -1108,6 +1108,63 @@
 		@apply tw-opacity-90;
 	}
 
+	/* Custom Quick Actions Settings */
+	.sage-custom-quick-actions-empty {
+		@apply tw-py-4 tw-text-obs-text-muted tw-text-center;
+		font-size: var(--font-small);
+	}
+
+	.sage-custom-quick-action-item {
+		@apply tw-p-3 tw-mb-3 tw-bg-obs-bg-secondary tw-border tw-border-obs-border tw-rounded-obs;
+		border-left: 3px solid var(--interactive-accent);
+	}
+
+	.sage-custom-quick-action-item .setting-item {
+		@apply tw-border-none tw-py-1;
+	}
+
+	.sage-custom-quick-action-controls {
+		@apply tw-flex tw-items-center tw-justify-end tw-gap-2 tw-mt-2 tw-pt-2;
+		border-top: 1px solid var(--background-modifier-border);
+	}
+
+	.sage-custom-quick-action-btn {
+		@apply tw-flex tw-items-center tw-justify-center tw-w-7 tw-h-7 tw-p-0 tw-bg-transparent tw-border-none tw-rounded-obs tw-cursor-pointer tw-text-obs-text-muted tw-transition-colors tw-duration-150;
+	}
+
+	.sage-custom-quick-action-btn:hover {
+		@apply tw-bg-obs-bg-hover tw-text-obs-text;
+	}
+
+	.sage-custom-quick-action-btn.disabled {
+		@apply tw-opacity-30 tw-cursor-not-allowed;
+	}
+
+	.sage-custom-quick-action-btn.disabled:hover {
+		@apply tw-bg-transparent tw-text-obs-text-muted;
+	}
+
+	.sage-custom-quick-action-btn svg {
+		@apply tw-w-4 tw-h-4;
+	}
+
+	.sage-custom-quick-action-delete-btn {
+		@apply tw-flex tw-items-center tw-justify-center tw-w-7 tw-h-7 tw-p-0 tw-bg-transparent tw-border-none tw-rounded-obs tw-cursor-pointer tw-text-obs-text-muted tw-transition-colors tw-duration-150;
+	}
+
+	.sage-custom-quick-action-delete-btn:hover {
+		@apply tw-text-obs-red;
+		background: color-mix(in srgb, var(--color-red) 10%, transparent);
+	}
+
+	.sage-custom-quick-action-delete-btn svg {
+		@apply tw-w-4 tw-h-4;
+	}
+
+	.sage-custom-quick-action-delete-modal .sage-modal-message {
+		@apply tw-mb-4;
+	}
+
 	/* ==================== RTL Support ==================== */
 	.sage-rtl {
 		direction: rtl;
