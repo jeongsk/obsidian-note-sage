@@ -484,27 +484,27 @@ export class NoteSageView extends ItemView {
 		this.renderQuickActions();
 	}
 
-	// Quick Actions 버튼 렌더링 (설정 변경 시 재호출)
 	private renderQuickActions(): void {
 		this.quickActionsContainer.empty();
 
-		// 활성화된 버튼만 필터링
-		const enabledActions = QUICK_ACTION_DEFINITIONS.filter(def => {
+		const enabledDefaultActions = QUICK_ACTION_DEFINITIONS.filter(def => {
 			const config = this.getQuickActionConfig(def.id);
 			return config.enabled;
 		});
 
-		// 모든 버튼이 비활성화되면 컨테이너 숨김
-		if (enabledActions.length === 0) {
+		const enabledCustomActions = (this.settings.customQuickActions || [])
+			.filter(a => a.enabled && a.name && a.prompt)
+			.sort((a, b) => a.order - b.order);
+
+		if (enabledDefaultActions.length === 0 && enabledCustomActions.length === 0) {
 			this.quickActionsContainer.addClass('hidden');
 			return;
 		}
 
 		this.quickActionsContainer.removeClass('hidden');
 
-		for (const action of enabledActions) {
+		for (const action of enabledDefaultActions) {
 			const config = this.getQuickActionConfig(action.id);
-			// customPrompt가 있으면 사용, 없으면 기본 프롬프트 사용
 			const prompt = config.customPrompt || t(action.promptKey);
 
 			const button = this.quickActionsContainer.createEl('button', {
@@ -520,6 +520,24 @@ export class NoteSageView extends ItemView {
 			this.registerDomEvent(button, 'click', () => {
 				if (!this.isProcessing) {
 					this.sendMessage(prompt);
+				}
+			});
+		}
+
+		for (const action of enabledCustomActions) {
+			const button = this.quickActionsContainer.createEl('button', {
+				cls: 'sage-quick-action-button',
+				attr: { 'aria-label': action.name }
+			});
+
+			const iconEl = button.createEl('span', { cls: 'sage-quick-action-icon' });
+			setIcon(iconEl, 'zap');
+
+			button.createEl('span', { text: action.name, cls: 'sage-quick-action-label' });
+
+			this.registerDomEvent(button, 'click', () => {
+				if (!this.isProcessing) {
+					this.sendMessage(action.prompt);
 				}
 			});
 		}
