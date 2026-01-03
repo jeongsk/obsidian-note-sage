@@ -2,7 +2,6 @@
 
 [한국어](README.md) | [English](README_EN.md) | [简体中文](README_ZH.md) | [日本語](README_JA.md) | [Deutsch](README_DE.md) | [Français](README_FR.md) | [Español](README_ES.md) | [Português](README_PT.md) | [Русский](README_RU.md) | [हिन्दी](README_HI.md) | [العربية](README_AR.md)
 
-https://github.com/user-attachments/assets/3b251604-cf52-4f38-8c9d-fba67e280b64
 
 Intégrez des agents IA directement dans votre coffre Obsidian. Ce plugin intègre Claude Code CLI de manière transparente avec Obsidian - vous permettant de discuter avec l'IA, d'éditer des fichiers et de gérer votre base de connaissances sans quitter votre espace de travail.
 

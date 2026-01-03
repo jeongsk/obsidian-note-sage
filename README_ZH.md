@@ -2,7 +2,6 @@
 
 [한국어](README.md) | [English](README_EN.md) | [简体中文](README_ZH.md) | [日本語](README_JA.md) | [Deutsch](README_DE.md) | [Français](README_FR.md) | [Español](README_ES.md) | [Português](README_PT.md) | [Русский](README_RU.md) | [हिन्दी](README_HI.md) | [العربية](README_AR.md)
 
-https://github.com/user-attachments/assets/3b251604-cf52-4f38-8c9d-fba67e280b64
 
 将 AI 代理直接集成到您的 Obsidian 库中。本插件将 Claude Code CLI 与 Obsidian 无缝集成，让您无需离开工作区即可与 AI 聊天、编辑文件和管理知识库。
 

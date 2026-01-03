@@ -2,7 +2,6 @@
 
 [한국어](README.md) | [English](README_EN.md) | [简体中文](README_ZH.md) | [日本語](README_JA.md) | [Deutsch](README_DE.md) | [Français](README_FR.md) | [Español](README_ES.md) | [Português](README_PT.md) | [Русский](README_RU.md) | [हिन्दी](README_HI.md) | [العربية](README_AR.md)
 
-https://github.com/user-attachments/assets/3b251604-cf52-4f38-8c9d-fba67e280b64
 
 Obsidian에서 AI 에이전트를 직접 사용할 수 있는 플러그인입니다. Claude Code CLI를 Obsidian과 통합하여 터미널 없이도 AI와 대화하고, 파일을 편집하고, 지식 베이스를 관리할 수 있습니다.
 
