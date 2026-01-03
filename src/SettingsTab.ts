@@ -1,4 +1,4 @@
-import { App, Notice, PluginSettingTab, Setting, setIcon } from 'obsidian';
+import { App, Modal, Notice, PluginSettingTab, Setting, setIcon } from 'obsidian';
 import type NoteSagePlugin from './main';
 import {
 	AVAILABLE_MODELS,
@@ -9,7 +9,7 @@ import {
 	AGENT_OPTIONS_DEFAULTS,
 	PERMISSION_MODE_OPTIONS,
 } from './types';
-import type { QuickActionConfig, PermissionMode, NoteSageSettings } from './types';
+import type { QuickActionConfig, PermissionMode, NoteSageSettings, CustomQuickAction } from './types';
 import { t, setLanguage, AVAILABLE_LANGUAGES, getEffectiveLanguage } from './i18n';
 import type { SupportedLanguage } from './i18n';
 import { McpSettingsUI } from './mcp/McpSettingsUI';
@@ -181,6 +181,9 @@ export class NoteSageSettingTab extends PluginSettingTab {
 
 		this.renderQuickActionsSettings(containerEl);
 
+		// ==================== 커스텀 빠른 액션 설정 ====================
+		this.renderCustomQuickActionsSettings(containerEl);
+
 		// ==================== 내장 도구 설정 ====================
 		new Setting(containerEl)
 			.setName(t('settings.builtinTools.title'))
@@ -342,6 +345,191 @@ export class NoteSageSettingTab extends PluginSettingTab {
 
 		await this.plugin.saveSettings();
 		this.updateViews();
+	}
+
+	private addCustomQuickAction(): void {
+		if (!this.plugin.settings.customQuickActions) {
+			this.plugin.settings.customQuickActions = [];
+		}
+
+		const newAction: CustomQuickAction = {
+			id: crypto.randomUUID(),
+			name: '',
+			prompt: '',
+			enabled: true,
+			order: this.plugin.settings.customQuickActions.length
+		};
+
+		this.plugin.settings.customQuickActions.push(newAction);
+		this.plugin.saveSettings();
+		this.updateViews();
+		this.display();
+	}
+
+	private async updateCustomQuickAction(id: string, updates: Partial<CustomQuickAction>): Promise<void> {
+		if (!this.plugin.settings.customQuickActions) return;
+
+		const index = this.plugin.settings.customQuickActions.findIndex(a => a.id === id);
+		if (index >= 0) {
+			this.plugin.settings.customQuickActions[index] = {
+				...this.plugin.settings.customQuickActions[index],
+				...updates
+			};
+			await this.plugin.saveSettings();
+			this.updateViews();
+		}
+	}
+
+	private async deleteCustomQuickAction(id: string): Promise<void> {
+		if (!this.plugin.settings.customQuickActions) return;
+
+		this.plugin.settings.customQuickActions = this.plugin.settings.customQuickActions
+			.filter(a => a.id !== id)
+			.map((a, idx) => ({ ...a, order: idx }));
+
+		await this.plugin.saveSettings();
+		this.updateViews();
+		this.display();
+	}
+
+	private async moveCustomQuickActionUp(id: string): Promise<void> {
+		if (!this.plugin.settings.customQuickActions) return;
+
+		const actions = [...this.plugin.settings.customQuickActions].sort((a, b) => a.order - b.order);
+		const index = actions.findIndex(a => a.id === id);
+		if (index <= 0) return;
+
+		const temp = actions[index].order;
+		actions[index].order = actions[index - 1].order;
+		actions[index - 1].order = temp;
+
+		this.plugin.settings.customQuickActions = actions;
+		await this.plugin.saveSettings();
+		this.updateViews();
+		this.display();
+	}
+
+	private async moveCustomQuickActionDown(id: string): Promise<void> {
+		if (!this.plugin.settings.customQuickActions) return;
+
+		const actions = [...this.plugin.settings.customQuickActions].sort((a, b) => a.order - b.order);
+		const index = actions.findIndex(a => a.id === id);
+		if (index < 0 || index >= actions.length - 1) return;
+
+		const temp = actions[index].order;
+		actions[index].order = actions[index + 1].order;
+		actions[index + 1].order = temp;
+
+		this.plugin.settings.customQuickActions = actions;
+		await this.plugin.saveSettings();
+		this.updateViews();
+		this.display();
+	}
+
+	private renderCustomQuickActionsSettings(containerEl: HTMLElement): void {
+		new Setting(containerEl)
+			.setName(t('settings.customQuickActions.title'))
+			.setHeading();
+
+		const customActions = this.plugin.settings.customQuickActions || [];
+
+		if (customActions.length === 0) {
+			const emptyEl = containerEl.createDiv({ cls: 'sage-custom-quick-actions-empty' });
+			emptyEl.setText(t('settings.customQuickActions.empty'));
+		} else {
+			const sortedActions = [...customActions].sort((a, b) => a.order - b.order);
+			const totalCount = sortedActions.length;
+			sortedActions.forEach((action, index) => {
+				this.renderCustomQuickActionItem(containerEl, action, index, totalCount);
+			});
+		}
+
+		new Setting(containerEl)
+			.addButton(button => {
+				button
+					.setButtonText(t('settings.customQuickActions.add'))
+					.setCta()
+					.onClick(() => this.addCustomQuickAction());
+			});
+	}
+
+	private renderCustomQuickActionItem(containerEl: HTMLElement, action: CustomQuickAction, index: number, totalCount: number): void {
+		const itemEl = containerEl.createDiv({ cls: 'sage-custom-quick-action-item' });
+
+		new Setting(itemEl)
+			.setName(t('settings.customQuickActions.name'))
+			.addText(text => {
+				text
+					.setPlaceholder(t('settings.customQuickActions.namePlaceholder'))
+					.setValue(action.name)
+					.onChange(async (value) => {
+						await this.updateCustomQuickAction(action.id, { name: value });
+					});
+				text.inputEl.style.width = '100%';
+			});
+
+		new Setting(itemEl)
+			.setName(t('settings.customQuickActions.prompt'))
+			.addTextArea(text => {
+				text
+					.setPlaceholder(t('settings.customQuickActions.promptPlaceholder'))
+					.setValue(action.prompt)
+					.onChange(async (value) => {
+						await this.updateCustomQuickAction(action.id, { prompt: value });
+					});
+				text.inputEl.rows = 2;
+				text.inputEl.style.width = '100%';
+			});
+
+		const controlsEl = itemEl.createDiv({ cls: 'sage-custom-quick-action-controls' });
+
+		const isFirst = index === 0;
+		const isLast = index === totalCount - 1;
+
+		const moveUpBtn = controlsEl.createEl('button', {
+			cls: `sage-custom-quick-action-btn${isFirst ? ' disabled' : ''}`,
+			attr: { 'aria-label': t('settings.customQuickActions.moveUp') }
+		});
+		setIcon(moveUpBtn, 'chevron-up');
+		if (!isFirst) {
+			moveUpBtn.addEventListener('click', async () => {
+				await this.moveCustomQuickActionUp(action.id);
+			});
+		}
+
+		const moveDownBtn = controlsEl.createEl('button', {
+			cls: `sage-custom-quick-action-btn${isLast ? ' disabled' : ''}`,
+			attr: { 'aria-label': t('settings.customQuickActions.moveDown') }
+		});
+		setIcon(moveDownBtn, 'chevron-down');
+		if (!isLast) {
+			moveDownBtn.addEventListener('click', async () => {
+				await this.moveCustomQuickActionDown(action.id);
+			});
+		}
+
+		const toggleLabel = controlsEl.createEl('label', { cls: 'sage-toggle-sm' });
+		const toggleInput = toggleLabel.createEl('input', {
+			type: 'checkbox',
+			cls: 'sage-toggle-sm-checkbox',
+		});
+		toggleInput.checked = action.enabled;
+		toggleLabel.createSpan({ cls: 'sage-toggle-sm-slider' });
+		toggleInput.addEventListener('change', async () => {
+			await this.updateCustomQuickAction(action.id, { enabled: toggleInput.checked });
+		});
+
+		const deleteBtn = controlsEl.createEl('button', {
+			cls: 'sage-custom-quick-action-delete-btn',
+			attr: { 'aria-label': t('settings.customQuickActions.delete') }
+		});
+		setIcon(deleteBtn, 'trash-2');
+		deleteBtn.addEventListener('click', () => {
+			const actionName = action.name || 'Untitled';
+			new CustomQuickActionDeleteModal(this.app, actionName, async () => {
+				await this.deleteCustomQuickAction(action.id);
+			}).open();
+		});
 	}
 
 	// MCP 설정 UI 렌더링
@@ -950,5 +1138,58 @@ export class NoteSageSettingTab extends PluginSettingTab {
 		modeDescEl.style.marginBottom = '10px';
 		modeDescEl.style.paddingLeft = '10px';
 		modeDescEl.style.fontStyle = 'italic';
+	}
+}
+
+class CustomQuickActionDeleteModal extends Modal {
+	private actionName: string;
+	private onConfirm: () => void;
+	private resolved = false;
+
+	constructor(app: App, actionName: string, onConfirm: () => void) {
+		super(app);
+		this.actionName = actionName;
+		this.onConfirm = onConfirm;
+	}
+
+	onOpen(): void {
+		const { contentEl } = this;
+		contentEl.empty();
+		contentEl.addClass('sage-custom-quick-action-delete-modal');
+
+		this.setTitle(t('settings.customQuickActions.delete'));
+
+		const messageEl = contentEl.createEl('p', { cls: 'sage-modal-message' });
+		const confirmMessage = t('settings.customQuickActions.deleteConfirm', { name: this.actionName });
+		const parts = confirmMessage.split(this.actionName);
+		if (parts.length > 1) {
+			messageEl.appendText(parts[0]);
+			messageEl.createEl('strong', { text: this.actionName });
+			messageEl.appendText(parts[1]);
+		} else {
+			messageEl.appendText(confirmMessage);
+		}
+
+		const buttonContainer = contentEl.createDiv({ cls: 'modal-button-container' });
+
+		const cancelBtn = buttonContainer.createEl('button', { text: t('common.cancel') });
+		cancelBtn.addEventListener('click', () => this.close());
+
+		const deleteBtn = buttonContainer.createEl('button', {
+			text: t('common.delete'),
+			cls: 'mod-warning',
+		});
+		deleteBtn.addEventListener('click', () => this.resolve());
+	}
+
+	private resolve(): void {
+		if (this.resolved) return;
+		this.resolved = true;
+		this.onConfirm();
+		this.close();
+	}
+
+	onClose(): void {
+		this.contentEl.empty();
 	}
 }
