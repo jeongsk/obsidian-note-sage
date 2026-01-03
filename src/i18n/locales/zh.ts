@@ -148,6 +148,21 @@ export const zh: TranslationKeys = {
 		customPromptPlaceholder: '输入自定义提示词（留空使用默认）',
 		resetToDefault: '重置为默认值',
 
+		// Custom Quick Actions
+		customQuickActions: {
+			title: '自定义快捷操作',
+			add: '添加自定义快捷操作',
+			name: '名称',
+			namePlaceholder: '例如：代码审查',
+			prompt: '提示词',
+			promptPlaceholder: '输入要发送的提示词...',
+			delete: '删除',
+			deleteConfirm: '确定要删除"{name}"吗？',
+			moveUp: '上移',
+			moveDown: '下移',
+			empty: '暂无自定义快捷操作。点击"添加"创建一个。',
+		},
+
 		// Plugin Tools
 		pluginTools: '插件管理工具',
 		pluginToolsDesc: '允许代理列出、启用和禁用Obsidian插件',

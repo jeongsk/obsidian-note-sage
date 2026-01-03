@@ -148,6 +148,21 @@ export const fr: TranslationKeys = {
 		customPromptPlaceholder: 'Entrez une invite personnalisée (laisser vide pour défaut)',
 		resetToDefault: 'Rétablir les valeurs par défaut',
 
+		// Custom Quick Actions
+		customQuickActions: {
+			title: 'Actions rapides personnalisées',
+			add: 'Ajouter une action rapide personnalisée',
+			name: 'Nom',
+			namePlaceholder: 'ex. Revue de code',
+			prompt: 'Invite',
+			promptPlaceholder: 'Entrez l\'invite à envoyer...',
+			delete: 'Supprimer',
+			deleteConfirm: 'Êtes-vous sûr de vouloir supprimer "{name}" ?',
+			moveUp: 'Monter',
+			moveDown: 'Descendre',
+			empty: 'Pas encore d\'actions rapides personnalisées. Cliquez sur "Ajouter" pour en créer une.',
+		},
+
 		// Plugin Tools
 		pluginTools: 'Outils de gestion des plugins',
 		pluginToolsDesc: 'Permettre à l\'agent de lister, activer et désactiver les plugins Obsidian',

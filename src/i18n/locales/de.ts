@@ -148,6 +148,21 @@ export const de: TranslationKeys = {
 		customPromptPlaceholder: 'Benutzerdefinierten Prompt eingeben (leer für Standard)',
 		resetToDefault: 'Auf Standard zurücksetzen',
 
+		// Custom Quick Actions
+		customQuickActions: {
+			title: 'Benutzerdefinierte Schnellaktionen',
+			add: 'Benutzerdefinierte Schnellaktion hinzufügen',
+			name: 'Name',
+			namePlaceholder: 'z.B. Code-Review',
+			prompt: 'Prompt',
+			promptPlaceholder: 'Geben Sie den zu sendenden Prompt ein...',
+			delete: 'Löschen',
+			deleteConfirm: 'Sind Sie sicher, dass Sie "{name}" löschen möchten?',
+			moveUp: 'Nach oben',
+			moveDown: 'Nach unten',
+			empty: 'Noch keine benutzerdefinierten Schnellaktionen. Klicken Sie auf "Hinzufügen", um eine zu erstellen.',
+		},
+
 		// Plugin Tools
 		pluginTools: 'Plugin-Verwaltungswerkzeuge',
 		pluginToolsDesc: 'Dem Agenten erlauben, Obsidian-Plugins aufzulisten, zu aktivieren und zu deaktivieren',

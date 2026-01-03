@@ -148,6 +148,21 @@ export const ko: TranslationKeys = {
 		customPromptPlaceholder: '사용자 지정 프롬프트 입력 (기본값 사용 시 비워두세요)',
 		resetToDefault: '기본값으로 리셋',
 
+		// Custom Quick Actions
+		customQuickActions: {
+			title: '커스텀 빠른 액션',
+			add: '커스텀 빠른 액션 추가',
+			name: '이름',
+			namePlaceholder: '예: 코드 리뷰',
+			prompt: '프롬프트',
+			promptPlaceholder: '전송할 프롬프트를 입력하세요...',
+			delete: '삭제',
+			deleteConfirm: '"{name}"을(를) 삭제하시겠습니까?',
+			moveUp: '위로 이동',
+			moveDown: '아래로 이동',
+			empty: '커스텀 빠른 액션이 없습니다. "추가"를 클릭하여 생성하세요.',
+		},
+
 		// Plugin Tools
 		pluginTools: '플러그인 관리 도구',
 		pluginToolsDesc: '에이전트가 Obsidian 플러그인을 조회하고 활성화/비활성화할 수 있습니다',

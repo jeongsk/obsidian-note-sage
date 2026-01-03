@@ -182,6 +182,20 @@ interface McpSettingsTranslations {
 	saveError: string;
 }
 
+interface CustomQuickActionsTranslations {
+	title: string;
+	add: string;
+	name: string;
+	namePlaceholder: string;
+	prompt: string;
+	promptPlaceholder: string;
+	delete: string;
+	deleteConfirm: string;
+	moveUp: string;
+	moveDown: string;
+	empty: string;
+}
+
 interface SettingsTranslations {
 	apiKey: string;
 	apiKeyDesc: string;
@@ -220,6 +234,8 @@ interface SettingsTranslations {
 	quickActionsDesc: string;
 	customPromptPlaceholder: string;
 	resetToDefault: string;
+	// Custom Quick Actions
+	customQuickActions: CustomQuickActionsTranslations;
 	// Plugin Tools
 	pluginTools: string;
 	pluginToolsDesc: string;
@@ -451,6 +467,21 @@ export const en: TranslationKeys = {
 		quickActionsDesc: 'Configure quick action buttons above the chat input',
 		customPromptPlaceholder: 'Enter custom prompt (leave empty for default)',
 		resetToDefault: 'Reset to default',
+
+		// Custom Quick Actions
+		customQuickActions: {
+			title: 'Custom Quick Actions',
+			add: 'Add Custom Quick Action',
+			name: 'Name',
+			namePlaceholder: 'e.g., Code Review',
+			prompt: 'Prompt',
+			promptPlaceholder: 'Enter the prompt to send...',
+			delete: 'Delete',
+			deleteConfirm: 'Are you sure you want to delete "{name}"?',
+			moveUp: 'Move Up',
+			moveDown: 'Move Down',
+			empty: 'No custom quick actions yet. Click "Add" to create one.',
+		},
 
 		// Plugin Tools
 		pluginTools: 'Plugin management tools',

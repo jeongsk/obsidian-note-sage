@@ -148,6 +148,21 @@ export const ru: TranslationKeys = {
 		customPromptPlaceholder: 'Введите пользовательский промпт (оставьте пустым для значения по умолчанию)',
 		resetToDefault: 'Сбросить к значениям по умолчанию',
 
+		// Custom Quick Actions
+		customQuickActions: {
+			title: 'Пользовательские быстрые действия',
+			add: 'Добавить пользовательское быстрое действие',
+			name: 'Название',
+			namePlaceholder: 'напр. Ревью кода',
+			prompt: 'Промпт',
+			promptPlaceholder: 'Введите промпт для отправки...',
+			delete: 'Удалить',
+			deleteConfirm: 'Вы уверены, что хотите удалить "{name}"?',
+			moveUp: 'Вверх',
+			moveDown: 'Вниз',
+			empty: 'Пользовательских быстрых действий пока нет. Нажмите "Добавить", чтобы создать.',
+		},
+
 		// Plugin Tools
 		pluginTools: 'Инструменты управления плагинами',
 		pluginToolsDesc: 'Разрешить агенту перечислять, включать и отключать плагины Obsidian',
