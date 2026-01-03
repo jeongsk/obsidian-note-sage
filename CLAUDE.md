@@ -105,6 +105,72 @@ User Input → ChatView → AgentService → Claude SDK → Streaming → ChatVi
 3. 색상: Obsidian 매핑 색상(`obs-*`) 사용, raw Tailwind 색상 금지
 4. Preflight 비활성화: Obsidian 기본 스타일 유지
 
+## Obsidian CSS Variables 스타일링 규칙
+
+### Typography 매핑
+
+| 용도 | Tailwind 클래스 | Obsidian 변수 | 기본값 |
+|------|----------------|---------------|--------|
+| 가장 작은 텍스트 | `tw-text-obs-smallest` | `--font-smallest` | 0.8em |
+| 작은 텍스트 | `tw-text-obs-smaller` | `--font-smaller` | 0.875em |
+| 일반 작은 텍스트 | `tw-text-obs-small` | `--font-small` | 0.933em |
+| UI 더 작은 텍스트 | `tw-text-obs-ui-smaller` | `--font-ui-smaller` | 12px |
+| UI 작은 텍스트 | `tw-text-obs-ui-small` | `--font-ui-small` | 13px |
+| UI 중간 텍스트 | `tw-text-obs-ui-medium` | `--font-ui-medium` | 15px |
+| UI 큰 텍스트 | `tw-text-obs-ui-large` | `--font-ui-large` | - |
+| UI 더 큰 텍스트 | `tw-text-obs-ui-larger` | `--font-ui-larger` | 20px |
+
+### Font Family/Weight 매핑
+
+| Tailwind 클래스 | Obsidian 변수 | 용도/값 |
+|----------------|---------------|---------|
+| `tw-font-obs-interface` | `--font-interface` | UI 요소 |
+| `tw-font-obs-text` | `--font-text` | 본문 텍스트 |
+| `tw-font-obs-mono` | `--font-monospace` | 코드, 고정폭 |
+| `tw-font-obs-normal` | `--font-normal` | 400 |
+| `tw-font-obs-medium` | `--font-medium` | 500 |
+| `tw-font-obs-semibold` | `--font-semibold` | 600 |
+| `tw-font-obs-bold` | `--font-bold` | 700 |
+
+### Line Height 매핑
+
+| Tailwind 클래스 | Obsidian 변수 | 값 | 용도 |
+|----------------|---------------|-----|------|
+| `tw-leading-obs-normal` | `--line-height-normal` | 1.5 | 일반 텍스트 |
+| `tw-leading-obs-tight` | `--line-height-tight` | 1.3 | 검색 결과, 트리 아이템 |
+
+### 금지된 클래스 (사용 금지)
+
+| 금지 클래스 | 대체 클래스 |
+|------------|------------|
+| `tw-text-xs` | `tw-text-obs-smallest` |
+| `tw-text-sm` | `tw-text-obs-small` |
+| `tw-text-lg` | `tw-text-obs-ui-large` |
+| `tw-font-mono` | `tw-font-obs-mono` |
+| `tw-font-semibold` | `tw-font-obs-semibold` |
+| `tw-bg-white` | `tw-bg-obs-bg` 또는 CSS 변수 |
+| `tw-text-red-500` | `tw-text-obs-text-error` |
+
+### CSS에서 직접 사용 시
+
+```css
+/* ✅ 올바른 사용 */
+.my-component {
+  font-size: var(--font-small);
+  line-height: var(--line-height-normal);
+  font-weight: var(--font-medium);
+  border-radius: var(--radius-s);
+}
+
+/* ❌ 잘못된 사용 */
+.my-component {
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 500;
+  border-radius: 4px;
+}
+```
+
 ## Development
 
 ```bash
