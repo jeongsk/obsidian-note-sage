@@ -1,7 +1,8 @@
 import { Plugin, WorkspaceLeaf, MarkdownView } from 'obsidian';
 import { NoteSageView, VIEW_TYPE_NOTE_SAGE } from './ChatView';
 import { NoteSageSettingTab } from './SettingsTab';
-import { NoteSageSettings, DEFAULT_SETTINGS, DEFAULT_QUICK_ACTIONS } from './types';
+import { DEFAULT_SETTINGS, DEFAULT_QUICK_ACTIONS } from './types';
+import type { NoteSageSettings } from './types';
 import { t, setLanguage } from './i18n';
 import { McpServerManager } from './mcp/McpServerManager';
 
@@ -14,9 +15,9 @@ interface QuickPrompt {
 }
 
 export default class NoteSagePlugin extends Plugin {
-	settings: NoteSageSettings;
+	settings!: NoteSageSettings;
 	isAgentExecuting: boolean = false;
-	mcpServerManager: McpServerManager;
+	mcpServerManager!: McpServerManager;
 
 	// 에이전트가 수정한 파일 경로 추적
 	private modifiedFilesByAgent: Set<string> = new Set();

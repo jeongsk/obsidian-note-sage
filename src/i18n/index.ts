@@ -1,5 +1,6 @@
 // Internationalization (i18n) module for Note Sage
-import { en, TranslationKeys } from './locales/en';
+import { en } from './locales/en';
+import type { TranslationKeys } from './locales/en';
 import { ko } from './locales/ko';
 import { es } from './locales/es';
 import { fr } from './locales/fr';

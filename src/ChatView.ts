@@ -30,7 +30,7 @@ export class NoteSageView extends ItemView {
 	private plugin: NoteSagePlugin;
 	private settings: NoteSageSettings;
 	private agentService: AgentService;
-	private renderer: ChatRenderer;
+	private renderer!: ChatRenderer;
 
 	// 상태
 	private messages: ChatMessage[] = [];
@@ -39,22 +39,22 @@ export class NoteSageView extends ItemView {
 	private isProcessing: boolean = false;
 
 	// DOM 요소
-	private chatContainer: HTMLElement;
-	private messagesContainer: HTMLElement;
-	private inputContainer: HTMLElement;
-	private inputField: HTMLTextAreaElement;
-	private sendButton: HTMLButtonElement;
-	private loadingIndicator: HTMLElement;
-	private fileContextHeader: HTMLElement;
-	private modelSelector: HTMLSelectElement;
-	private quickActionsContainer: HTMLElement;
-	private mcpStatusContainer: HTMLElement;
+	private chatContainer!: HTMLElement;
+	private messagesContainer!: HTMLElement;
+	private inputContainer!: HTMLElement;
+	private inputField!: HTMLTextAreaElement;
+	private sendButton!: HTMLButtonElement;
+	private loadingIndicator!: HTMLElement;
+	private fileContextHeader!: HTMLElement;
+	private modelSelector!: HTMLSelectElement;
+	private quickActionsContainer!: HTMLElement;
+	private mcpStatusContainer!: HTMLElement;
 
 	// 멘션 관련
-	private mentionService: MentionService;
+	private mentionService!: MentionService;
 	private mentionInput?: MentionInput;
 	private autocompletePopup?: AutocompletePopup;
-	private mentionChipsContainer: HTMLElement;
+	private mentionChipsContainer!: HTMLElement;
 
 	// MCP 상태 구독 해제 함수
 	private unsubscribeMcpStatus?: () => void;

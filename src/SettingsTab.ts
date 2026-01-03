@@ -4,14 +4,14 @@ import {
 	AVAILABLE_MODELS,
 	QUICK_ACTION_DEFINITIONS,
 	DEFAULT_QUICK_ACTIONS,
-	QuickActionConfig,
 	TOGGLEABLE_BUILTIN_TOOLS,
 	AGENT_OPTIONS_LIMITS,
 	AGENT_OPTIONS_DEFAULTS,
 	PERMISSION_MODE_OPTIONS,
-	PermissionMode
 } from './types';
-import { t, setLanguage, AVAILABLE_LANGUAGES, SupportedLanguage, getEffectiveLanguage } from './i18n';
+import type { QuickActionConfig, PermissionMode, NoteSageSettings } from './types';
+import { t, setLanguage, AVAILABLE_LANGUAGES, getEffectiveLanguage } from './i18n';
+import type { SupportedLanguage } from './i18n';
 import { McpSettingsUI } from './mcp/McpSettingsUI';
 import { SkillsManager } from './skills/SkillsManager';
 import { SkillDetailModal } from './skills/SkillDetailModal';
@@ -302,10 +302,11 @@ export class NoteSageSettingTab extends PluginSettingTab {
 
 	private updateViews(): void {
 		// Update all open chat views with new settings
+		const settings = this.plugin.settings;
 		this.app.workspace.getLeavesOfType('note-sage-view').forEach(leaf => {
 			const view = leaf.view;
 			if (view && 'updateSettings' in view && typeof view.updateSettings === 'function') {
-				(view as { updateSettings: (settings: typeof this.plugin.settings) => void }).updateSettings(this.plugin.settings);
+				(view as { updateSettings: (settings: NoteSageSettings) => void }).updateSettings(settings);
 			}
 		});
 	}
