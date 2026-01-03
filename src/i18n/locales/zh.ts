@@ -161,6 +161,9 @@ export const zh: TranslationKeys = {
 			moveUp: '上移',
 			moveDown: '下移',
 			empty: '暂无自定义快捷操作。点击"添加"创建一个。',
+			noActions: '没有自定义快捷操作',
+			noActionsGuide: '点击下方按钮创建新的快捷操作。',
+			untitled: '未命名',
 		},
 
 		// Plugin Tools

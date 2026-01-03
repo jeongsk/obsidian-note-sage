@@ -161,6 +161,9 @@ export const ko: TranslationKeys = {
 			moveUp: '위로 이동',
 			moveDown: '아래로 이동',
 			empty: '커스텀 빠른 액션이 없습니다. "추가"를 클릭하여 생성하세요.',
+			noActions: '커스텀 빠른 액션 없음',
+			noActionsGuide: '아래 버튼을 클릭하여 새로운 빠른 액션을 만들어 보세요.',
+			untitled: '이름 없음',
 		},
 
 		// Plugin Tools

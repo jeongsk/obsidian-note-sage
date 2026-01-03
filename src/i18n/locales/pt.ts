@@ -161,6 +161,9 @@ export const pt: TranslationKeys = {
 			moveUp: 'Mover para cima',
 			moveDown: 'Mover para baixo',
 			empty: 'Nenhuma ação rápida personalizada ainda. Clique em "Adicionar" para criar uma.',
+			noActions: 'Sem ações rápidas personalizadas',
+			noActionsGuide: 'Clique no botão abaixo para criar uma nova ação rápida.',
+			untitled: 'Sem título',
 		},
 
 		// Plugin Tools

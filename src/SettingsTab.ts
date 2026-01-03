@@ -427,61 +427,110 @@ export class NoteSageSettingTab extends PluginSettingTab {
 	}
 
 	private renderCustomQuickActionsSettings(containerEl: HTMLElement): void {
-		new Setting(containerEl)
+		const customActions = this.plugin.settings.customQuickActions || [];
+
+		// 헤더 설정
+		const headerSetting = new Setting(containerEl)
 			.setName(t('settings.customQuickActions.title'))
 			.setHeading();
 
-		const customActions = this.plugin.settings.customQuickActions || [];
+		// 활성화된 액션 수 배지
+		const enabledCount = customActions.filter(a => a.enabled).length;
+		const totalCount = customActions.length;
+
+		if (totalCount > 0) {
+			const badgeEl = headerSetting.nameEl.createSpan({
+				cls: 'sage-custom-quick-actions-stats-badge'
+			});
+			badgeEl.setText(`${enabledCount}/${totalCount}`);
+		}
+
+		// 리스트 컨테이너
+		const listContainer = containerEl.createDiv({ cls: 'sage-custom-quick-actions-list' });
 
 		if (customActions.length === 0) {
-			const emptyEl = containerEl.createDiv({ cls: 'sage-custom-quick-actions-empty' });
-			emptyEl.setText(t('settings.customQuickActions.empty'));
+			// 빈 상태 - Skills 스타일 참조
+			const emptyEl = listContainer.createDiv({ cls: 'sage-custom-quick-actions-empty' });
+
+			// 아이콘
+			const iconEl = emptyEl.createDiv({ cls: 'sage-custom-quick-actions-empty-icon' });
+			setIcon(iconEl, 'zap');
+
+			// 제목
+			emptyEl.createEl('p', {
+				text: t('settings.customQuickActions.noActions'),
+				cls: 'sage-custom-quick-actions-empty-title',
+			});
+
+			// 안내 문구
+			emptyEl.createEl('p', {
+				text: t('settings.customQuickActions.noActionsGuide'),
+				cls: 'sage-custom-quick-actions-empty-desc',
+			});
 		} else {
 			const sortedActions = [...customActions].sort((a, b) => a.order - b.order);
-			const totalCount = sortedActions.length;
 			sortedActions.forEach((action, index) => {
-				this.renderCustomQuickActionItem(containerEl, action, index, totalCount);
+				this.renderCustomQuickActionItem(listContainer, action, index, totalCount);
 			});
 		}
 
-		new Setting(containerEl)
-			.addButton(button => {
-				button
-					.setButtonText(t('settings.customQuickActions.add'))
-					.setCta()
-					.onClick(() => this.addCustomQuickAction());
-			});
+		// 버튼 컨테이너
+		const buttonContainer = containerEl.createDiv({
+			cls: 'sage-custom-quick-actions-buttons',
+		});
+
+		// 추가 버튼 (CTA 스타일)
+		const addBtn = buttonContainer.createEl('button', {
+			cls: 'sage-custom-quick-actions-create-btn sage-custom-quick-actions-create-btn--cta',
+		});
+		const addIconSpan = addBtn.createSpan({ cls: 'sage-custom-quick-actions-create-btn-icon' });
+		setIcon(addIconSpan, 'plus');
+		addBtn.createSpan({ text: t('settings.customQuickActions.add') });
+		addBtn.addEventListener('click', () => this.addCustomQuickAction());
 	}
 
 	private renderCustomQuickActionItem(containerEl: HTMLElement, action: CustomQuickAction, index: number, totalCount: number): void {
-		const itemEl = containerEl.createDiv({ cls: 'sage-custom-quick-action-item' });
+		// 상태에 따른 클래스 결정
+		const statusClass = action.enabled
+			? 'sage-custom-quick-action-item--active'
+			: 'sage-custom-quick-action-item--disabled';
 
-		new Setting(itemEl)
-			.setName(t('settings.customQuickActions.name'))
-			.addText(text => {
-				text
-					.setPlaceholder(t('settings.customQuickActions.namePlaceholder'))
-					.setValue(action.name)
-					.onChange(async (value) => {
-						await this.updateCustomQuickAction(action.id, { name: value });
-					});
-				text.inputEl.style.width = '100%';
+		const itemEl = containerEl.createDiv({
+			cls: `sage-custom-quick-action-item ${statusClass}`,
+		});
+
+		// 헤더 영역 (아이콘 + 이름 미리보기 + 컨트롤)
+		const headerEl = itemEl.createDiv({ cls: 'sage-custom-quick-action-header' });
+
+		// 상태 아이콘
+		const iconEl = headerEl.createSpan({ cls: 'sage-custom-quick-action-icon' });
+		if (action.enabled) {
+			setIcon(iconEl, 'zap');
+			iconEl.addClass('sage-custom-quick-action-icon--active');
+		} else {
+			setIcon(iconEl, 'zap-off');
+			iconEl.addClass('sage-custom-quick-action-icon--disabled');
+		}
+
+		// 정보 영역 (이름 + 프롬프트 미리보기)
+		const infoEl = headerEl.createDiv({ cls: 'sage-custom-quick-action-info' });
+		const namePreview = action.name || t('settings.customQuickActions.untitled');
+		infoEl.createDiv({
+			cls: 'sage-custom-quick-action-name',
+			text: namePreview,
+		});
+		if (action.prompt) {
+			const promptPreview = action.prompt.length > 50
+				? action.prompt.substring(0, 50) + '...'
+				: action.prompt;
+			infoEl.createDiv({
+				cls: 'sage-custom-quick-action-desc',
+				text: promptPreview,
 			});
+		}
 
-		new Setting(itemEl)
-			.setName(t('settings.customQuickActions.prompt'))
-			.addTextArea(text => {
-				text
-					.setPlaceholder(t('settings.customQuickActions.promptPlaceholder'))
-					.setValue(action.prompt)
-					.onChange(async (value) => {
-						await this.updateCustomQuickAction(action.id, { prompt: value });
-					});
-				text.inputEl.rows = 2;
-				text.inputEl.style.width = '100%';
-			});
-
-		const controlsEl = itemEl.createDiv({ cls: 'sage-custom-quick-action-controls' });
+		// 컨트롤 버튼들 (헤더 우측)
+		const controlsEl = headerEl.createDiv({ cls: 'sage-custom-quick-action-controls' });
 
 		const isFirst = index === 0;
 		const isLast = index === totalCount - 1;
@@ -517,19 +566,61 @@ export class NoteSageSettingTab extends PluginSettingTab {
 		toggleLabel.createSpan({ cls: 'sage-toggle-sm-slider' });
 		toggleInput.addEventListener('change', async () => {
 			await this.updateCustomQuickAction(action.id, { enabled: toggleInput.checked });
+			this.display(); // UI 갱신
 		});
 
 		const deleteBtn = controlsEl.createEl('button', {
-			cls: 'sage-custom-quick-action-delete-btn',
+			cls: 'sage-custom-quick-action-btn sage-custom-quick-action-btn-delete',
 			attr: { 'aria-label': t('settings.customQuickActions.delete') }
 		});
 		setIcon(deleteBtn, 'trash-2');
 		deleteBtn.addEventListener('click', () => {
-			const actionName = action.name || 'Untitled';
+			const actionName = action.name || t('settings.customQuickActions.untitled');
 			new CustomQuickActionDeleteModal(this.app, actionName, async () => {
 				await this.deleteCustomQuickAction(action.id);
 			}).open();
 		});
+
+		// 편집 폼 영역
+		const formEl = itemEl.createDiv({ cls: 'sage-custom-quick-action-form' });
+
+		new Setting(formEl)
+			.setName(t('settings.customQuickActions.name'))
+			.addText(text => {
+				text
+					.setPlaceholder(t('settings.customQuickActions.namePlaceholder'))
+					.setValue(action.name)
+					.onChange(async (value) => {
+						await this.updateCustomQuickAction(action.id, { name: value });
+						// 이름 미리보기 업데이트
+						const nameEl = itemEl.querySelector('.sage-custom-quick-action-name');
+						if (nameEl) {
+							nameEl.textContent = value || t('settings.customQuickActions.untitled');
+						}
+					});
+				text.inputEl.style.width = '100%';
+			});
+
+		new Setting(formEl)
+			.setName(t('settings.customQuickActions.prompt'))
+			.addTextArea(text => {
+				text
+					.setPlaceholder(t('settings.customQuickActions.promptPlaceholder'))
+					.setValue(action.prompt)
+					.onChange(async (value) => {
+						await this.updateCustomQuickAction(action.id, { prompt: value });
+						// 프롬프트 미리보기 업데이트
+						const descEl = itemEl.querySelector('.sage-custom-quick-action-desc');
+						if (descEl) {
+							const promptPreview = value.length > 50
+								? value.substring(0, 50) + '...'
+								: value;
+							descEl.textContent = promptPreview;
+						}
+					});
+				text.inputEl.rows = 2;
+				text.inputEl.style.width = '100%';
+			});
 	}
 
 	// MCP 설정 UI 렌더링

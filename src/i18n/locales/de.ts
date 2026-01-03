@@ -161,6 +161,9 @@ export const de: TranslationKeys = {
 			moveUp: 'Nach oben',
 			moveDown: 'Nach unten',
 			empty: 'Noch keine benutzerdefinierten Schnellaktionen. Klicken Sie auf "Hinzufügen", um eine zu erstellen.',
+			noActions: 'Keine benutzerdefinierten Schnellaktionen',
+			noActionsGuide: 'Klicken Sie auf die Schaltfläche unten, um eine neue Schnellaktion zu erstellen.',
+			untitled: 'Ohne Titel',
 		},
 
 		// Plugin Tools

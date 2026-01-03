@@ -161,6 +161,9 @@ export const ar: TranslationKeys = {
 			moveUp: 'نقل لأعلى',
 			moveDown: 'نقل لأسفل',
 			empty: 'لا توجد إجراءات سريعة مخصصة بعد. انقر على "إضافة" لإنشاء واحدة.',
+			noActions: 'لا توجد إجراءات سريعة مخصصة',
+			noActionsGuide: 'انقر على الزر أدناه لإنشاء إجراء سريع جديد.',
+			untitled: 'بدون عنوان',
 		},
 
 		// Plugin Tools

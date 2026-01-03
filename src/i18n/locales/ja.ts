@@ -161,6 +161,9 @@ export const ja: TranslationKeys = {
 			moveUp: '上に移動',
 			moveDown: '下に移動',
 			empty: 'カスタムクイックアクションはありません。「追加」をクリックして作成してください。',
+			noActions: 'カスタムクイックアクションなし',
+			noActionsGuide: '下のボタンをクリックして新しいクイックアクションを作成してください。',
+			untitled: '無題',
 		},
 
 		// Plugin Tools

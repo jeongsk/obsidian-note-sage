@@ -1108,28 +1108,108 @@
 		@apply tw-opacity-90;
 	}
 
-	/* Custom Quick Actions Settings */
+	/* ==================== Custom Quick Actions Settings (개선) ==================== */
+
+	/* 리스트 컨테이너 */
+	.sage-custom-quick-actions-list {
+		@apply tw-mt-2;
+	}
+
+	/* 빈 상태 - Skills 스타일 참조 */
 	.sage-custom-quick-actions-empty {
-		@apply tw-py-4 tw-text-obs-text-muted tw-text-center;
+		@apply tw-flex tw-flex-col tw-items-center tw-justify-center tw-p-8 tw-text-center tw-bg-obs-bg-secondary tw-rounded-obs tw-mb-2 tw-border tw-border-dashed tw-border-obs-border;
+	}
+
+	.sage-custom-quick-actions-empty-icon {
+		@apply tw-flex tw-items-center tw-justify-center tw-w-12 tw-h-12 tw-mb-3 tw-rounded-full tw-bg-obs-bg tw-text-obs-text-muted;
+	}
+
+	.sage-custom-quick-actions-empty-icon svg {
+		@apply tw-w-6 tw-h-6;
+	}
+
+	.sage-custom-quick-actions-empty-title {
+		@apply tw-font-medium tw-text-obs-text tw-m-0 tw-mb-1;
 		font-size: var(--font-small);
 	}
 
+	.sage-custom-quick-actions-empty-desc {
+		@apply tw-text-obs-text-muted tw-m-0;
+		font-size: var(--font-smaller);
+		max-width: 280px;
+	}
+
+	/* 카운트 배지 */
+	.sage-custom-quick-actions-stats-badge {
+		@apply tw-ml-2 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-obs-text-on-accent tw-font-normal;
+		font-size: var(--font-smaller);
+		background: var(--interactive-accent);
+	}
+
+	/* 리스트 아이템 */
 	.sage-custom-quick-action-item {
-		@apply tw-p-3 tw-mb-3 tw-bg-obs-bg-secondary tw-border tw-border-obs-border tw-rounded-obs;
+		@apply tw-flex tw-flex-col tw-p-3 tw-mb-2 tw-bg-obs-bg-secondary tw-border tw-border-obs-border tw-rounded-obs tw-transition-all tw-duration-150;
+	}
+
+	.sage-custom-quick-action-item:hover {
+		@apply tw-border-obs-border-hover;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	}
+
+	.sage-custom-quick-action-item--active {
 		border-left: 3px solid var(--interactive-accent);
 	}
 
-	.sage-custom-quick-action-item .setting-item {
-		@apply tw-border-none tw-py-1;
+	.sage-custom-quick-action-item--disabled {
+		@apply tw-opacity-60;
+		border-left: 3px solid var(--background-modifier-border);
 	}
 
+	/* 아이템 헤더 (아이콘 + 이름 + 컨트롤) */
+	.sage-custom-quick-action-header {
+		@apply tw-flex tw-items-center tw-gap-2 tw-mb-2;
+	}
+
+	/* 상태 아이콘 */
+	.sage-custom-quick-action-icon {
+		@apply tw-flex tw-items-center tw-justify-center tw-w-8 tw-h-8 tw-flex-shrink-0 tw-rounded-obs;
+		background: var(--background-primary);
+	}
+
+	.sage-custom-quick-action-icon svg {
+		@apply tw-w-4 tw-h-4;
+	}
+
+	.sage-custom-quick-action-icon--active {
+		@apply tw-text-obs-accent;
+	}
+
+	.sage-custom-quick-action-icon--disabled {
+		@apply tw-text-obs-text-faint;
+	}
+
+	/* 정보 영역 */
+	.sage-custom-quick-action-info {
+		@apply tw-flex-1 tw-min-w-0;
+	}
+
+	.sage-custom-quick-action-name {
+		@apply tw-font-medium tw-text-obs-text tw-truncate;
+		font-size: var(--font-small);
+	}
+
+	.sage-custom-quick-action-desc {
+		@apply tw-text-obs-text-muted tw-truncate tw-mt-0.5;
+		font-size: var(--font-smaller);
+	}
+
+	/* 컨트롤 버튼들 */
 	.sage-custom-quick-action-controls {
-		@apply tw-flex tw-items-center tw-justify-end tw-gap-2 tw-mt-2 tw-pt-2;
-		border-top: 1px solid var(--background-modifier-border);
+		@apply tw-flex tw-items-center tw-gap-1.5 tw-flex-shrink-0;
 	}
 
 	.sage-custom-quick-action-btn {
-		@apply tw-flex tw-items-center tw-justify-center tw-w-7 tw-h-7 tw-p-0 tw-bg-transparent tw-border-none tw-rounded-obs tw-cursor-pointer tw-text-obs-text-muted tw-transition-colors tw-duration-150;
+		@apply tw-flex tw-items-center tw-justify-center tw-w-7 tw-h-7 tw-p-0 tw-bg-transparent tw-border-none tw-rounded-obs tw-cursor-pointer tw-text-obs-text-muted tw-transition-all tw-duration-150;
 	}
 
 	.sage-custom-quick-action-btn:hover {
@@ -1148,19 +1228,65 @@
 		@apply tw-w-4 tw-h-4;
 	}
 
-	.sage-custom-quick-action-delete-btn {
-		@apply tw-flex tw-items-center tw-justify-center tw-w-7 tw-h-7 tw-p-0 tw-bg-transparent tw-border-none tw-rounded-obs tw-cursor-pointer tw-text-obs-text-muted tw-transition-colors tw-duration-150;
-	}
-
-	.sage-custom-quick-action-delete-btn:hover {
+	.sage-custom-quick-action-btn-delete:hover {
 		@apply tw-text-obs-red;
 		background: color-mix(in srgb, var(--color-red) 10%, transparent);
 	}
 
-	.sage-custom-quick-action-delete-btn svg {
+	/* 편집 폼 영역 */
+	.sage-custom-quick-action-form {
+		@apply tw-pt-2 tw-mt-2;
+		border-top: 1px solid var(--background-modifier-border);
+	}
+
+	.sage-custom-quick-action-form .setting-item {
+		@apply tw-border-none tw-py-1;
+	}
+
+	/* 버튼 컨테이너 */
+	.sage-custom-quick-actions-buttons {
+		@apply tw-flex tw-flex-wrap tw-gap-2 tw-mt-4;
+	}
+
+	.sage-custom-quick-actions-create-btn {
+		@apply tw-inline-flex tw-items-center tw-gap-2 tw-px-4 tw-py-2 tw-rounded-obs tw-border tw-border-obs-border tw-bg-obs-bg tw-text-obs-text tw-cursor-pointer tw-transition-all tw-duration-150 tw-font-medium;
+		font-size: var(--font-small);
+	}
+
+	.sage-custom-quick-actions-create-btn:hover {
+		@apply tw-bg-obs-bg-hover tw-border-obs-border-hover;
+	}
+
+	.sage-custom-quick-actions-create-btn-icon {
+		@apply tw-flex tw-items-center tw-justify-center;
+	}
+
+	.sage-custom-quick-actions-create-btn-icon svg {
 		@apply tw-w-4 tw-h-4;
 	}
 
+	.sage-custom-quick-actions-create-btn--cta {
+		background-color: var(--interactive-accent) !important;
+		border-color: var(--interactive-accent) !important;
+		color: var(--text-on-accent) !important;
+	}
+
+	.sage-custom-quick-actions-create-btn--cta:hover {
+		background-color: var(--interactive-accent-hover) !important;
+		border-color: var(--interactive-accent-hover) !important;
+	}
+
+	.sage-custom-quick-actions-create-btn--cta .sage-custom-quick-actions-create-btn-icon,
+	.sage-custom-quick-actions-create-btn--cta .sage-custom-quick-actions-create-btn-icon svg,
+	.sage-custom-quick-actions-create-btn--cta span {
+		color: var(--text-on-accent) !important;
+	}
+
+	.sage-custom-quick-actions-create-btn--cta .sage-custom-quick-actions-create-btn-icon svg {
+		stroke: var(--text-on-accent) !important;
+	}
+
+	/* 삭제 모달 */
 	.sage-custom-quick-action-delete-modal .sage-modal-message {
 		@apply tw-mb-4;
 	}

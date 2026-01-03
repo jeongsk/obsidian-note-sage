@@ -194,6 +194,9 @@ interface CustomQuickActionsTranslations {
 	moveUp: string;
 	moveDown: string;
 	empty: string;
+	noActions: string;
+	noActionsGuide: string;
+	untitled: string;
 }
 
 interface SettingsTranslations {
@@ -481,6 +484,9 @@ export const en: TranslationKeys = {
 			moveUp: 'Move Up',
 			moveDown: 'Move Down',
 			empty: 'No custom quick actions yet. Click "Add" to create one.',
+			noActions: 'No Custom Quick Actions',
+			noActionsGuide: 'Click the button below to create a new quick action.',
+			untitled: 'Untitled',
 		},
 
 		// Plugin Tools
