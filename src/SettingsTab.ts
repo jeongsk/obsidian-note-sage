@@ -1,4 +1,4 @@
-import { App, Notice, PluginSettingTab, Setting, setIcon } from 'obsidian';
+import { App, Modal, Notice, PluginSettingTab, Setting, setIcon } from 'obsidian';
 import type NoteSagePlugin from './main';
 import {
 	AVAILABLE_MODELS,
@@ -9,7 +9,7 @@ import {
 	AGENT_OPTIONS_DEFAULTS,
 	PERMISSION_MODE_OPTIONS,
 } from './types';
-import type { QuickActionConfig, PermissionMode, NoteSageSettings } from './types';
+import type { QuickActionConfig, PermissionMode, NoteSageSettings, CustomQuickAction } from './types';
 import { t, setLanguage, AVAILABLE_LANGUAGES, getEffectiveLanguage } from './i18n';
 import type { SupportedLanguage } from './i18n';
 import { McpSettingsUI } from './mcp/McpSettingsUI';
@@ -181,6 +181,9 @@ export class NoteSageSettingTab extends PluginSettingTab {
 
 		this.renderQuickActionsSettings(containerEl);
 
+		// ==================== 커스텀 빠른 액션 설정 ====================
+		this.renderCustomQuickActionsSettings(containerEl);
+
 		// ==================== 내장 도구 설정 ====================
 		new Setting(containerEl)
 			.setName(t('settings.builtinTools.title'))
@@ -342,6 +345,282 @@ export class NoteSageSettingTab extends PluginSettingTab {
 
 		await this.plugin.saveSettings();
 		this.updateViews();
+	}
+
+	private addCustomQuickAction(): void {
+		if (!this.plugin.settings.customQuickActions) {
+			this.plugin.settings.customQuickActions = [];
+		}
+
+		const newAction: CustomQuickAction = {
+			id: crypto.randomUUID(),
+			name: '',
+			prompt: '',
+			enabled: true,
+			order: this.plugin.settings.customQuickActions.length
+		};
+
+		this.plugin.settings.customQuickActions.push(newAction);
+		this.plugin.saveSettings();
+		this.updateViews();
+		this.display();
+	}
+
+	private async updateCustomQuickAction(id: string, updates: Partial<CustomQuickAction>): Promise<void> {
+		if (!this.plugin.settings.customQuickActions) return;
+
+		const index = this.plugin.settings.customQuickActions.findIndex(a => a.id === id);
+		if (index >= 0) {
+			this.plugin.settings.customQuickActions[index] = {
+				...this.plugin.settings.customQuickActions[index],
+				...updates
+			};
+			await this.plugin.saveSettings();
+			this.updateViews();
+		}
+	}
+
+	private async deleteCustomQuickAction(id: string): Promise<void> {
+		if (!this.plugin.settings.customQuickActions) return;
+
+		this.plugin.settings.customQuickActions = this.plugin.settings.customQuickActions
+			.filter(a => a.id !== id)
+			.map((a, idx) => ({ ...a, order: idx }));
+
+		await this.plugin.saveSettings();
+		this.updateViews();
+		this.display();
+	}
+
+	private async moveCustomQuickActionUp(id: string): Promise<void> {
+		if (!this.plugin.settings.customQuickActions) return;
+
+		const actions = [...this.plugin.settings.customQuickActions].sort((a, b) => a.order - b.order);
+		const index = actions.findIndex(a => a.id === id);
+		if (index <= 0) return;
+
+		const temp = actions[index].order;
+		actions[index].order = actions[index - 1].order;
+		actions[index - 1].order = temp;
+
+		this.plugin.settings.customQuickActions = actions;
+		await this.plugin.saveSettings();
+		this.updateViews();
+		this.display();
+	}
+
+	private async moveCustomQuickActionDown(id: string): Promise<void> {
+		if (!this.plugin.settings.customQuickActions) return;
+
+		const actions = [...this.plugin.settings.customQuickActions].sort((a, b) => a.order - b.order);
+		const index = actions.findIndex(a => a.id === id);
+		if (index < 0 || index >= actions.length - 1) return;
+
+		const temp = actions[index].order;
+		actions[index].order = actions[index + 1].order;
+		actions[index + 1].order = temp;
+
+		this.plugin.settings.customQuickActions = actions;
+		await this.plugin.saveSettings();
+		this.updateViews();
+		this.display();
+	}
+
+	private renderCustomQuickActionsSettings(containerEl: HTMLElement): void {
+		const customActions = this.plugin.settings.customQuickActions || [];
+
+		// 헤더 설정
+		const headerSetting = new Setting(containerEl)
+			.setName(t('settings.customQuickActions.title'))
+			.setHeading();
+
+		// 활성화된 액션 수 배지
+		const enabledCount = customActions.filter(a => a.enabled).length;
+		const totalCount = customActions.length;
+
+		if (totalCount > 0) {
+			const badgeEl = headerSetting.nameEl.createSpan({
+				cls: 'sage-custom-quick-actions-stats-badge'
+			});
+			badgeEl.setText(`${enabledCount}/${totalCount}`);
+		}
+
+		// 리스트 컨테이너
+		const listContainer = containerEl.createDiv({ cls: 'sage-custom-quick-actions-list' });
+
+		if (customActions.length === 0) {
+			// 빈 상태 - Skills 스타일 참조
+			const emptyEl = listContainer.createDiv({ cls: 'sage-custom-quick-actions-empty' });
+
+			// 아이콘
+			const iconEl = emptyEl.createDiv({ cls: 'sage-custom-quick-actions-empty-icon' });
+			setIcon(iconEl, 'zap');
+
+			// 제목
+			emptyEl.createEl('p', {
+				text: t('settings.customQuickActions.noActions'),
+				cls: 'sage-custom-quick-actions-empty-title',
+			});
+
+			// 안내 문구
+			emptyEl.createEl('p', {
+				text: t('settings.customQuickActions.noActionsGuide'),
+				cls: 'sage-custom-quick-actions-empty-desc',
+			});
+		} else {
+			const sortedActions = [...customActions].sort((a, b) => a.order - b.order);
+			sortedActions.forEach((action, index) => {
+				this.renderCustomQuickActionItem(listContainer, action, index, totalCount);
+			});
+		}
+
+		// 버튼 컨테이너
+		const buttonContainer = containerEl.createDiv({
+			cls: 'sage-custom-quick-actions-buttons',
+		});
+
+		// 추가 버튼 (CTA 스타일)
+		const addBtn = buttonContainer.createEl('button', {
+			cls: 'sage-custom-quick-actions-create-btn sage-custom-quick-actions-create-btn--cta',
+		});
+		const addIconSpan = addBtn.createSpan({ cls: 'sage-custom-quick-actions-create-btn-icon' });
+		setIcon(addIconSpan, 'plus');
+		addBtn.createSpan({ text: t('settings.customQuickActions.add') });
+		addBtn.addEventListener('click', () => this.addCustomQuickAction());
+	}
+
+	private renderCustomQuickActionItem(containerEl: HTMLElement, action: CustomQuickAction, index: number, totalCount: number): void {
+		// 상태에 따른 클래스 결정
+		const statusClass = action.enabled
+			? 'sage-custom-quick-action-item--active'
+			: 'sage-custom-quick-action-item--disabled';
+
+		const itemEl = containerEl.createDiv({
+			cls: `sage-custom-quick-action-item ${statusClass}`,
+		});
+
+		// 헤더 영역 (아이콘 + 이름 미리보기 + 컨트롤)
+		const headerEl = itemEl.createDiv({ cls: 'sage-custom-quick-action-header' });
+
+		// 상태 아이콘
+		const iconEl = headerEl.createSpan({ cls: 'sage-custom-quick-action-icon' });
+		if (action.enabled) {
+			setIcon(iconEl, 'zap');
+			iconEl.addClass('sage-custom-quick-action-icon--active');
+		} else {
+			setIcon(iconEl, 'zap-off');
+			iconEl.addClass('sage-custom-quick-action-icon--disabled');
+		}
+
+		// 정보 영역 (이름 + 프롬프트 미리보기)
+		const infoEl = headerEl.createDiv({ cls: 'sage-custom-quick-action-info' });
+		const namePreview = action.name || t('settings.customQuickActions.untitled');
+		infoEl.createDiv({
+			cls: 'sage-custom-quick-action-name',
+			text: namePreview,
+		});
+		if (action.prompt) {
+			const promptPreview = action.prompt.length > 50
+				? action.prompt.substring(0, 50) + '...'
+				: action.prompt;
+			infoEl.createDiv({
+				cls: 'sage-custom-quick-action-desc',
+				text: promptPreview,
+			});
+		}
+
+		// 컨트롤 버튼들 (헤더 우측)
+		const controlsEl = headerEl.createDiv({ cls: 'sage-custom-quick-action-controls' });
+
+		const isFirst = index === 0;
+		const isLast = index === totalCount - 1;
+
+		const moveUpBtn = controlsEl.createEl('button', {
+			cls: `sage-custom-quick-action-btn${isFirst ? ' disabled' : ''}`,
+			attr: { 'aria-label': t('settings.customQuickActions.moveUp') }
+		});
+		setIcon(moveUpBtn, 'chevron-up');
+		if (!isFirst) {
+			moveUpBtn.addEventListener('click', async () => {
+				await this.moveCustomQuickActionUp(action.id);
+			});
+		}
+
+		const moveDownBtn = controlsEl.createEl('button', {
+			cls: `sage-custom-quick-action-btn${isLast ? ' disabled' : ''}`,
+			attr: { 'aria-label': t('settings.customQuickActions.moveDown') }
+		});
+		setIcon(moveDownBtn, 'chevron-down');
+		if (!isLast) {
+			moveDownBtn.addEventListener('click', async () => {
+				await this.moveCustomQuickActionDown(action.id);
+			});
+		}
+
+		const toggleLabel = controlsEl.createEl('label', { cls: 'sage-toggle-sm' });
+		const toggleInput = toggleLabel.createEl('input', {
+			type: 'checkbox',
+			cls: 'sage-toggle-sm-checkbox',
+		});
+		toggleInput.checked = action.enabled;
+		toggleLabel.createSpan({ cls: 'sage-toggle-sm-slider' });
+		toggleInput.addEventListener('change', async () => {
+			await this.updateCustomQuickAction(action.id, { enabled: toggleInput.checked });
+			this.display(); // UI 갱신
+		});
+
+		const deleteBtn = controlsEl.createEl('button', {
+			cls: 'sage-custom-quick-action-btn sage-custom-quick-action-btn-delete',
+			attr: { 'aria-label': t('settings.customQuickActions.delete') }
+		});
+		setIcon(deleteBtn, 'trash-2');
+		deleteBtn.addEventListener('click', () => {
+			const actionName = action.name || t('settings.customQuickActions.untitled');
+			new CustomQuickActionDeleteModal(this.app, actionName, async () => {
+				await this.deleteCustomQuickAction(action.id);
+			}).open();
+		});
+
+		// 편집 폼 영역
+		const formEl = itemEl.createDiv({ cls: 'sage-custom-quick-action-form' });
+
+		new Setting(formEl)
+			.setName(t('settings.customQuickActions.name'))
+			.addText(text => {
+				text
+					.setPlaceholder(t('settings.customQuickActions.namePlaceholder'))
+					.setValue(action.name)
+					.onChange(async (value) => {
+						await this.updateCustomQuickAction(action.id, { name: value });
+						// 이름 미리보기 업데이트
+						const nameEl = itemEl.querySelector('.sage-custom-quick-action-name');
+						if (nameEl) {
+							nameEl.textContent = value || t('settings.customQuickActions.untitled');
+						}
+					});
+				text.inputEl.style.width = '100%';
+			});
+
+		new Setting(formEl)
+			.setName(t('settings.customQuickActions.prompt'))
+			.addTextArea(text => {
+				text
+					.setPlaceholder(t('settings.customQuickActions.promptPlaceholder'))
+					.setValue(action.prompt)
+					.onChange(async (value) => {
+						await this.updateCustomQuickAction(action.id, { prompt: value });
+						// 프롬프트 미리보기 업데이트
+						const descEl = itemEl.querySelector('.sage-custom-quick-action-desc');
+						if (descEl) {
+							const promptPreview = value.length > 50
+								? value.substring(0, 50) + '...'
+								: value;
+							descEl.textContent = promptPreview;
+						}
+					});
+				text.inputEl.rows = 2;
+				text.inputEl.style.width = '100%';
+			});
 	}
 
 	// MCP 설정 UI 렌더링
@@ -950,5 +1229,58 @@ export class NoteSageSettingTab extends PluginSettingTab {
 		modeDescEl.style.marginBottom = '10px';
 		modeDescEl.style.paddingLeft = '10px';
 		modeDescEl.style.fontStyle = 'italic';
+	}
+}
+
+class CustomQuickActionDeleteModal extends Modal {
+	private actionName: string;
+	private onConfirm: () => void;
+	private resolved = false;
+
+	constructor(app: App, actionName: string, onConfirm: () => void) {
+		super(app);
+		this.actionName = actionName;
+		this.onConfirm = onConfirm;
+	}
+
+	onOpen(): void {
+		const { contentEl } = this;
+		contentEl.empty();
+		contentEl.addClass('sage-custom-quick-action-delete-modal');
+
+		this.setTitle(t('settings.customQuickActions.delete'));
+
+		const messageEl = contentEl.createEl('p', { cls: 'sage-modal-message' });
+		const confirmMessage = t('settings.customQuickActions.deleteConfirm', { name: this.actionName });
+		const parts = confirmMessage.split(this.actionName);
+		if (parts.length > 1) {
+			messageEl.appendText(parts[0]);
+			messageEl.createEl('strong', { text: this.actionName });
+			messageEl.appendText(parts[1]);
+		} else {
+			messageEl.appendText(confirmMessage);
+		}
+
+		const buttonContainer = contentEl.createDiv({ cls: 'modal-button-container' });
+
+		const cancelBtn = buttonContainer.createEl('button', { text: t('common.cancel') });
+		cancelBtn.addEventListener('click', () => this.close());
+
+		const deleteBtn = buttonContainer.createEl('button', {
+			text: t('common.delete'),
+			cls: 'mod-warning',
+		});
+		deleteBtn.addEventListener('click', () => this.resolve());
+	}
+
+	private resolve(): void {
+		if (this.resolved) return;
+		this.resolved = true;
+		this.onConfirm();
+		this.close();
+	}
+
+	onClose(): void {
+		this.contentEl.empty();
 	}
 }

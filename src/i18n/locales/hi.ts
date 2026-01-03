@@ -148,6 +148,24 @@ export const hi: TranslationKeys = {
 		customPromptPlaceholder: 'कस्टम प्रॉम्प्ट दर्ज करें (डिफ़ॉल्ट के लिए खाली छोड़ें)',
 		resetToDefault: 'डिफ़ॉल्ट पर रीसेट करें',
 
+		// Custom Quick Actions
+		customQuickActions: {
+			title: 'कस्टम त्वरित कार्रवाइयां',
+			add: 'कस्टम त्वरित कार्रवाई जोड़ें',
+			name: 'नाम',
+			namePlaceholder: 'उदा. कोड समीक्षा',
+			prompt: 'प्रॉम्प्ट',
+			promptPlaceholder: 'भेजने के लिए प्रॉम्प्ट दर्ज करें...',
+			delete: 'हटाएं',
+			deleteConfirm: 'क्या आप वाकई "{name}" को हटाना चाहते हैं?',
+			moveUp: 'ऊपर ले जाएं',
+			moveDown: 'नीचे ले जाएं',
+			empty: 'अभी कोई कस्टम त्वरित कार्रवाई नहीं है। एक बनाने के लिए "जोड़ें" पर क्लिक करें।',
+			noActions: 'कोई कस्टम त्वरित कार्रवाई नहीं',
+			noActionsGuide: 'नई त्वरित कार्रवाई बनाने के लिए नीचे दिए गए बटन पर क्लिक करें।',
+			untitled: 'शीर्षकहीन',
+		},
+
 		// Plugin Tools
 		pluginTools: 'प्लगइन प्रबंधन टूल',
 		pluginToolsDesc: 'एजेंट को Obsidian प्लगइन सूचीबद्ध करने, सक्षम और अक्षम करने की अनुमति दें',

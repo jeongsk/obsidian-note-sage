@@ -148,6 +148,24 @@ export const es: TranslationKeys = {
 		customPromptPlaceholder: 'Ingresa prompt personalizado (dejar vacío para predeterminado)',
 		resetToDefault: 'Restablecer valores predeterminados',
 
+		// Custom Quick Actions
+		customQuickActions: {
+			title: 'Acciones rápidas personalizadas',
+			add: 'Agregar acción rápida personalizada',
+			name: 'Nombre',
+			namePlaceholder: 'ej. Revisión de código',
+			prompt: 'Prompt',
+			promptPlaceholder: 'Ingrese el prompt a enviar...',
+			delete: 'Eliminar',
+			deleteConfirm: '¿Está seguro de que desea eliminar "{name}"?',
+			moveUp: 'Subir',
+			moveDown: 'Bajar',
+			empty: 'No hay acciones rápidas personalizadas. Haga clic en "Agregar" para crear una.',
+			noActions: 'Sin acciones rápidas personalizadas',
+			noActionsGuide: 'Haga clic en el botón de abajo para crear una nueva acción rápida.',
+			untitled: 'Sin título',
+		},
+
 		// Plugin Tools
 		pluginTools: 'Herramientas de gestión de plugins',
 		pluginToolsDesc: 'Permitir al agente listar, habilitar y deshabilitar plugins de Obsidian',

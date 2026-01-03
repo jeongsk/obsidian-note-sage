@@ -148,6 +148,24 @@ export const ja: TranslationKeys = {
 		customPromptPlaceholder: 'カスタムプロンプトを入力（デフォルトは空のまま）',
 		resetToDefault: 'デフォルトにリセット',
 
+		// Custom Quick Actions
+		customQuickActions: {
+			title: 'カスタムクイックアクション',
+			add: 'カスタムクイックアクションを追加',
+			name: '名前',
+			namePlaceholder: '例: コードレビュー',
+			prompt: 'プロンプト',
+			promptPlaceholder: '送信するプロンプトを入力...',
+			delete: '削除',
+			deleteConfirm: '「{name}」を削除してもよろしいですか？',
+			moveUp: '上に移動',
+			moveDown: '下に移動',
+			empty: 'カスタムクイックアクションはありません。「追加」をクリックして作成してください。',
+			noActions: 'カスタムクイックアクションなし',
+			noActionsGuide: '下のボタンをクリックして新しいクイックアクションを作成してください。',
+			untitled: '無題',
+		},
+
 		// Plugin Tools
 		pluginTools: 'プラグイン管理ツール',
 		pluginToolsDesc: 'エージェントがObsidianプラグインの一覧表示、有効化、無効化を行うことを許可',

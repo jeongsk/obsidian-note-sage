@@ -182,6 +182,27 @@ export const DEFAULT_QUICK_ACTIONS: QuickActionConfig[] = QUICK_ACTION_DEFINITIO
 	customPrompt: undefined,
 }));
 
+/**
+ * 사용자 정의 빠른 액션
+ * 사용자가 생성한 커스텀 프롬프트 버튼
+ */
+export interface CustomQuickAction {
+	/** 고유 식별자 (UUID) */
+	id: string;
+
+	/** 버튼에 표시될 이름 */
+	name: string;
+
+	/** 클릭 시 전송될 프롬프트 */
+	prompt: string;
+
+	/** 활성화 상태 (채팅 뷰에 표시 여부) */
+	enabled: boolean;
+
+	/** 표시 순서 (0부터 시작, 낮을수록 앞에 표시) */
+	order: number;
+}
+
 
 // ==================== Skills Types ====================
 
@@ -238,6 +259,8 @@ export interface NoteSageSettings {
 	language?: SupportedLanguage;
 	// Quick Actions 설정
 	quickActions?: QuickActionConfig[];
+	// Custom Quick Actions 설정
+	customQuickActions?: CustomQuickAction[];
 	// 플러그인 관리 도구 설정
 	enablePluginTools?: boolean;
 	// MCP 서버 설정
@@ -274,6 +297,8 @@ export const DEFAULT_SETTINGS: NoteSageSettings = {
 	language: 'auto',
 	// Quick Actions 기본값
 	quickActions: DEFAULT_QUICK_ACTIONS,
+	// Custom Quick Actions 기본값
+	customQuickActions: [],
 	// 플러그인 관리 도구 기본값
 	enablePluginTools: false,
 	// MCP 서버 기본값

@@ -148,6 +148,24 @@ export const ar: TranslationKeys = {
 		customPromptPlaceholder: 'أدخل موجهًا مخصصًا (اتركه فارغًا للافتراضي)',
 		resetToDefault: 'إعادة التعيين للافتراضي',
 
+		// Custom Quick Actions
+		customQuickActions: {
+			title: 'إجراءات سريعة مخصصة',
+			add: 'إضافة إجراء سريع مخصص',
+			name: 'الاسم',
+			namePlaceholder: 'مثال: مراجعة الكود',
+			prompt: 'الموجه',
+			promptPlaceholder: 'أدخل الموجه للإرسال...',
+			delete: 'حذف',
+			deleteConfirm: 'هل أنت متأكد من حذف "{name}"؟',
+			moveUp: 'نقل لأعلى',
+			moveDown: 'نقل لأسفل',
+			empty: 'لا توجد إجراءات سريعة مخصصة بعد. انقر على "إضافة" لإنشاء واحدة.',
+			noActions: 'لا توجد إجراءات سريعة مخصصة',
+			noActionsGuide: 'انقر على الزر أدناه لإنشاء إجراء سريع جديد.',
+			untitled: 'بدون عنوان',
+		},
+
 		// Plugin Tools
 		pluginTools: 'أدوات إدارة الإضافات',
 		pluginToolsDesc: 'السماح للوكيل بسرد إضافات Obsidian وتمكينها وتعطيلها',
