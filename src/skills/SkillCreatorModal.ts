@@ -57,9 +57,9 @@ export class SkillTemplateModal extends Modal {
 				const controlEl = text.inputEl.parentElement;
 				if (controlEl) {
 					controlEl.style.flexWrap = 'wrap';
-					this.errorEl = controlEl.createDiv({
-						cls: 'sage-skill-name-error tw-text-red-500 tw-text-xs tw-mt-1 tw-hidden tw-w-full',
-					});
+				this.errorEl = controlEl.createDiv({
+					cls: 'sage-skill-name-error tw-text-obs-text-error tw-text-obs-smallest tw-mt-1 tw-hidden tw-w-full',
+				});
 				}
 
 				// 포커스
@@ -118,7 +118,7 @@ export class SkillTemplateModal extends Modal {
 		});
 
 		this.previewEl = contentEl.createDiv({
-			cls: 'sage-skill-creator-preview tw-p-4 tw-rounded tw-bg-obs-bg-secondary tw-font-mono tw-text-sm tw-whitespace-pre-wrap tw-overflow-auto tw-max-h-48',
+			cls: 'sage-skill-creator-preview tw-p-4 tw-rounded tw-bg-obs-bg-secondary tw-font-obs-mono tw-text-obs-small tw-whitespace-pre-wrap tw-overflow-auto tw-max-h-48',
 		});
 
 		this.updatePreview();

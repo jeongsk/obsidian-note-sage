@@ -26,14 +26,16 @@ export class SkillDetailModal extends Modal {
 		// 경로 표시
 		contentEl.createEl('p', {
 			text: this.skill.path,
-			cls: 'sage-skill-detail-path tw-text-sm tw-text-obs-text-muted tw-mb-4',
+			cls: 'sage-skill-detail-path tw-text-obs-small tw-text-obs-text-muted tw-mb-4',
 		});
 
 		// 에러 상태인 경우 에러 메시지 표시
 		if (this.skill.hasError) {
 			const errorEl = contentEl.createDiv({
-				cls: 'sage-skill-detail-error tw-p-4 tw-rounded tw-bg-red-100 tw-text-red-700 tw-mb-4',
+				cls: 'sage-skill-detail-error tw-p-4 tw-rounded tw-mb-4',
 			});
+			errorEl.style.backgroundColor = 'var(--background-modifier-error)';
+			errorEl.style.color = 'var(--text-error)';
 			errorEl.createEl('strong', { text: t('settings.skills.parseError') });
 			if (this.skill.errorMessage) {
 				errorEl.createEl('p', { text: this.skill.errorMessage });
@@ -53,7 +55,7 @@ export class SkillDetailModal extends Modal {
 				const content = await this.app.vault.adapter.read(this.skill.path);
 				// 원문 그대로 표시 (코드 블록 스타일)
 				const preEl = contentContainer.createEl('pre', {
-					cls: 'sage-skill-detail-pre tw-bg-obs-bg-secondary tw-p-4 tw-rounded tw-overflow-auto tw-text-sm',
+					cls: 'sage-skill-detail-pre tw-bg-obs-bg-secondary tw-p-4 tw-rounded tw-overflow-auto tw-text-obs-small',
 				});
 				preEl.createEl('code', {
 					text: content,
@@ -68,7 +70,7 @@ export class SkillDetailModal extends Modal {
 		} catch (error) {
 			contentContainer.createEl('p', {
 				text: t('settings.skills.loadError'),
-				cls: 'tw-text-red-500',
+				cls: 'tw-text-obs-text-error',
 			});
 		}
 

@@ -91,7 +91,7 @@ export class SkillEditModal extends Modal {
 
 		// 에러 메시지 영역
 		this.errorEl = contentEl.createDiv({
-			cls: 'sage-skill-creator-error tw-text-red-500 tw-text-sm tw-mt-2 tw-hidden',
+			cls: 'sage-skill-creator-error tw-text-obs-text-error tw-text-obs-small tw-mt-2 tw-hidden',
 		});
 
 		// 버튼들

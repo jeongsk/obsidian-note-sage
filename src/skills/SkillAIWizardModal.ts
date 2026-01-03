@@ -80,7 +80,7 @@ export class SkillAIWizardModal extends Modal {
 		// 설명
 		contentEl.createEl('p', {
 			text: t('settings.skills.aiWizardDesc'),
-			cls: 'tw-text-sm tw-text-obs-text-muted tw-mb-4',
+			cls: 'tw-text-obs-small tw-text-obs-text-muted tw-mb-4',
 		});
 
 		// 프롬프트 입력 필드
@@ -126,7 +126,7 @@ export class SkillAIWizardModal extends Modal {
 
 		// 에러 메시지 영역
 		this.errorEl = contentEl.createDiv({
-			cls: 'sage-skill-ai-error tw-text-red-500 tw-text-sm tw-mt-2 tw-hidden',
+			cls: 'sage-skill-ai-error tw-text-obs-text-error tw-text-obs-small tw-mt-2 tw-hidden',
 		});
 
 		// 미리보기 섹션 (초기에는 숨김)
@@ -140,7 +140,7 @@ export class SkillAIWizardModal extends Modal {
 		});
 
 		this.previewContentEl = this.previewContainerEl.createEl('textarea', {
-			cls: 'sage-skill-ai-preview tw-w-full tw-min-h-64 tw-p-4 tw-rounded tw-bg-obs-bg-secondary tw-font-mono tw-text-sm tw-resize-y tw-border tw-border-obs-border',
+			cls: 'sage-skill-ai-preview tw-w-full tw-min-h-64 tw-p-4 tw-rounded tw-bg-obs-bg-secondary tw-font-obs-mono tw-text-obs-small tw-resize-y tw-border tw-border-obs-border',
 			attr: {
 				disabled: 'true',
 				rows: '15',
