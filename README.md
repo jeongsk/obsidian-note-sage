@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> **이 프로젝트는 아카이브되었습니다.**
+>
+> 더 나은 대안으로 [Claudian](https://github.com/YishenTu/claudian) 플러그인을 추천합니다.
+
 # Note Sage
 
 [한국어](README.md) | [English](README_EN.md) | [简体中文](README_ZH.md) | [日本語](README_JA.md) | [Deutsch](README_DE.md) | [Français](README_FR.md) | [Español](README_ES.md) | [Português](README_PT.md) | [Русский](README_RU.md) | [हिन्दी](README_HI.md) | [العربية](README_AR.md)
